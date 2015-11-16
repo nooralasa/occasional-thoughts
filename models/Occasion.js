@@ -1,16 +1,67 @@
 var mongoose = require("mongoose");
 
 var occasionSchema = mongoose.Schema({
-  description: String, 
   title: String,
+  description: String, 
   coverPhoto: String, //not sure what this is for now
-  time: {type: Date, occasionefault: Date.now}, //auto timestamp
-  isPublished: Boolean,
+  time: {type: Date, default: Date.now}, //auto timestamp
+  isPublished: {type: Boolean, default: false},
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
   participants: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
   recipients: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
   thoughts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Thought'}]
 });
+
+occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, email, callback) {
+  this.create(
+    {
+      title: occasionTitle,
+      description: occasionDescription,
+      coverPhoto: occasionCoverPhoto,
+      creator: email,
+      participants: [ ],
+      recipients: [ ],
+      thoughts: [ ]
+    },
+    function (err, occasion) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, tweet);
+      }
+    });
+}
+
+occasionSchema.statics.getOccasion = function (occasionId, callback) {
+  this.findOne({ '_id': occasionId }, function (err, occasion) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, tweet);
+    }
+  });
+}
+
+occasionSchema.methods.addParticipant = function (email, callback) {
+  this.participants.push(email);
+  callback(null);
+}
+
+occasionSchema.methods.addRecepient = function (email, callback) {
+  this.recepients.push(email);
+  callback(null);
+}
+
+occasionSchema.methods.addThought = function (thoughtId, callback) {
+  this.thoughts.push(thoughtId);
+  callback(null);
+}
+
+occasionSchema.methods.publish = function (callback) {
+  this.isPublished = true;
+  callback(null);
+}
+
 /*
 tweetSchema.statics.addTweet = function (tweetContent, userId, retweetedFrom, callback) {
   this.create(
