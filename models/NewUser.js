@@ -5,10 +5,11 @@ var userSchema = mongoose.Schema({
   password: String,
   firstName: String,
   lastName: String,
-  occasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
+  createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
+  viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
-userSchema.statics.createNewUser = function (email, password, callback) {
+userSchema.statics.createNewUser = function (email, password, firstName, lastName, callback) {
   var self = this;
   self.findOne({ 'email': email }, function (err, user) {
     if (err) {
@@ -20,8 +21,10 @@ userSchema.statics.createNewUser = function (email, password, callback) {
         { 
           email: email, 
           password: password, 
-          follows: [],
-          tweets: []
+          firstName: firstName,
+          lastName: lastName,
+          createdOccasions: [],
+          viewableOccasions: []
         }, 
         function (er, record) {
           if (er) {
@@ -59,6 +62,26 @@ userSchema.statics.verifyPassword = function (email, candidatepw, callback) {
       callback(null, false);
     }
   });
+}
+
+userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
+  this.createdOccasions.push(occasionId);
+  this.save();
+  callback(null);
+}
+
+userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
+  this.viewableOccasions.push(occasionId);
+  this.save();
+  callback(null);
+}
+
+userSchema.methods.getCreatedOccasionIds = function (callback) {
+  callback(null, this.addCreatedOccasion);
+}
+
+userSchema.methods.getViewableOccasionIds = function (callback) {
+  callback(null, this.addViewableOccasion);
 }
 
 /*
