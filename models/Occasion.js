@@ -27,7 +27,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
       if (err) {
         callback(err);
       } else {
-        callback(null, tweet);
+        callback(null, occasion);
       }
     });
 }
@@ -37,7 +37,7 @@ occasionSchema.statics.getOccasion = function (occasionId, callback) {
     if (err) {
       callback(err);
     } else {
-      callback(null, tweet);
+      callback(null, occasion);
     }
   });
 }
