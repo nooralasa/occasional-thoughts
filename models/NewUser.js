@@ -3,8 +3,9 @@ var mongoose = require("mongoose");
 var userSchema = mongoose.Schema({
   username: String,
   password: String,
-  follows: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  tweets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Tweet'}]
+  firstName: String,
+  lastName: String,
+  occasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
 userSchema.statics.createNewUser = function (username, password, callback) {
@@ -60,6 +61,7 @@ userSchema.statics.verifyPassword = function (username, candidatepw, callback) {
   });
 }
 
+/*
 userSchema.statics.follow = function (username, followeeName, callback) {
   var self = this
   self.findByUsername(username, function (err, user) {
@@ -143,5 +145,5 @@ userSchema.statics.addTweet = function (username, tweetId, callback) {
     }
   });
 }
-
+*/
 module.exports = mongoose.model("User", userSchema);
