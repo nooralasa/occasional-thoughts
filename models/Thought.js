@@ -1,12 +1,13 @@
 var mongoose = require("mongoose");
 
-var tweetSchema = mongoose.Schema({
-  content: String, 
-  time: {type: Date, default: Date.now},
-  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
-  retweet: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+var thoughtSchema = mongoose.Schema({
+  message: String, 
+  photo: String, //not sure what to do for now
+  time: {type: Date, occasionefault: Date.now}, //auto timestamp
+  isPublic: Boolean
 });
 
+/*
 tweetSchema.statics.addTweet = function (tweetContent, userId, retweetedFrom, callback) {
   this.create(
     { 
@@ -73,9 +74,9 @@ tweetSchema.statics.getTweets = function (username, callback, idList) {
       }
     });
 }
-
+*/
 // When we 'require' this model in another file (e.g. routes),
 // we specify what we are importing form this file via module.exports.
 // Here, we are 'exporting' the mongoose model object created from
 // the specified schema.
-module.exports = mongoose.model("Tweet", tweetSchema);
+module.exports = mongoose.model("Thought", thoughtSchema);
