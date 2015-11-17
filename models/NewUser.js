@@ -1,16 +1,17 @@
 var mongoose = require("mongoose");
 
 var userSchema = mongoose.Schema({
-  username: String,
+  email: String,
   password: String,
   firstName: String,
   lastName: String,
-  occasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
+  createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
+  viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
-userSchema.statics.createNewUser = function (username, password, callback) {
+userSchema.statics.createNewUser = function (email, password, firstName, lastName, callback) {
   var self = this;
-  self.findOne({ 'username': username }, function (err, user) {
+  self.findOne({ 'email': email }, function (err, user) {
     if (err) {
       callback(err);
     } else if (user) {
@@ -18,10 +19,12 @@ userSchema.statics.createNewUser = function (username, password, callback) {
     } else {
       self.create(
         { 
-          username: username, 
+          email: email, 
           password: password, 
-          follows: [],
-          tweets: []
+          firstName: firstName,
+          lastName: lastName,
+          createdOccasions: [],
+          viewableOccasions: []
         }, 
         function (er, record) {
           if (er) {
@@ -35,8 +38,8 @@ userSchema.statics.createNewUser = function (username, password, callback) {
   });
 }
 
-userSchema.statics.findByUsername = function (username, callback) {
-  this.findOne({ 'username': username}, function (err, user) {
+userSchema.statics.findByEmail = function (email, callback) {
+  this.findOne({ 'email': email}, function (err, user) {
     if (err) {
       callback(err);
     } else {
@@ -45,8 +48,8 @@ userSchema.statics.findByUsername = function (username, callback) {
   });
 }
 
-userSchema.statics.verifyPassword = function (username, candidatepw, callback) {
-  this.findByUsername(username, function (err, user) {
+userSchema.statics.verifyPassword = function (email, candidatepw, callback) {
+  this.findByEmail(email, function (err, user) {
     if (err) {
       callback(err);
     } else if (user) {
@@ -59,6 +62,26 @@ userSchema.statics.verifyPassword = function (username, candidatepw, callback) {
       callback(null, false);
     }
   });
+}
+
+userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
+  this.createdOccasions.push(occasionId);
+  this.save();
+  callback(null);
+}
+
+userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
+  this.viewableOccasions.push(occasionId);
+  this.save();
+  callback(null);
+}
+
+userSchema.methods.getCreatedOccasionIds = function (callback) {
+  callback(null, this.addCreatedOccasion);
+}
+
+userSchema.methods.getViewableOccasionIds = function (callback) {
+  callback(null, this.addViewableOccasion);
 }
 
 /*

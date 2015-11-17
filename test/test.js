@@ -1,9 +1,142 @@
 var assert = require("assert");
-var User = require('../models/User');
-var Tweet = require('../models/Tweet');
+var User = require('../models/NewUser');
+var Occasion = require('../models/Occasion');
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/fritter_test');
+mongoose.connect('mongodb://localhost/test');
 
+
+describe('User', function () {
+
+  beforeEach(function (done){ 
+    User.remove({}, function () {
+      User.create(
+        {
+          email: 'user1', 
+          password: 'u1pw',
+          firstName: 'user1',
+          lastName: 'one',
+          createdOccasions: [],
+          viewableOccasions: []
+        }, {
+          email: 'user2', 
+          password: 'u2pw',
+          firstName: 'user2',
+          lastName: 'two',
+          createdOccasions: [],
+          viewableOccasions: []
+        }, 
+        function (err) {
+          done();
+        }
+      );
+    });
+  });
+
+  afterEach(function (done){ 
+    User.remove({}, function () {      
+      done();
+    });  
+  });
+
+  describe('createNewUser()', function () {
+    it('should add a user without error', function (done) {
+      User.createNewUser('user3', 'u3pw', 'hello3', 'three', function (err) {
+        assert.equal(err, null);
+        User.find( { email: 'user3' }, function (err, users) {
+          assert.notEqual(null, users);
+          assert.equal(1, users.length);
+          var user = users[0];
+          assert.equal('user3', user.email);
+          assert.equal('u3pw', user.password);
+          assert.strictEqual(0, user.createdOccasions.length);
+          assert.strictEqual(0, user.viewableOccasions.length);
+          done();
+        });
+      });
+    });
+
+    it('should throw when adding a user of the same email', function (done) {
+      User.createNewUser('user1', 'lasdfj', 'hello', 'hello', function (err) {
+        assert.notEqual(err, null);
+        assert.equal(err.taken, true);
+        done();
+      });
+    });
+  });
+
+  describe('findByEmail()', function () {
+    it('should give null when user not found', function (done) {
+      User.findByEmail('aa', function (err, user) {
+        assert.equal(err, null);
+        assert.equal(user, null);
+        done();
+      });
+    });
+
+    it('should return a user when it exists', function (done) {
+      User.findByEmail('user1', function (err, user) {
+        assert.equal(err, null);
+        assert.equal('user1', user.email);
+        assert.equal('u1pw', user.password);
+        assert.strictEqual(0, user.createdOccasions.length);
+        assert.strictEqual(0, user.viewableOccasions.length);
+        done();
+      });
+    });
+  });
+
+  describe('verifyPassword()', function () {
+    it('should return true for a matching password', function (done) {
+      User.verifyPassword('user1', 'u1pw', function (err, match) {
+        assert.equal(err, null);
+        assert.equal(match, true);
+        done();
+      });
+    });
+
+    it('should return false for a non-matching password', function (done) {
+      User.verifyPassword('user2', 'u3pw', function (err, match) {
+        assert.equal(err, null);
+        assert.equal(match, false);
+        done();
+      });
+    });
+
+    it('should return false for a non-existent user', function (done) {
+      User.verifyPassword('user3', 'u3pw', function (err, match) {
+        assert.equal(err, null);
+        assert.equal(match, false);
+        done();
+      });
+    });
+  });
+
+  describe('addCreatedOccasionId()', function () {
+    it("should add an occasion id to the user's list of created occasions", function (done) {
+      User.findOne({email: 'user1'}, function (err, user1) {
+        Occasion.create(
+          {
+            title: 'aa',
+            creator: user1._id
+          }, function (er, occasion) {
+            user1.addCreatedOccasionId(occasion._id, function (e) {
+              assert.equal(e, null);
+              User.findOne({email: 'user1'}, function (error, user) {
+                assert.equal(error, null); 
+                assert.equal(false, user.createdOccasions.indexOf(occasion._id) < 0);
+                done();
+              });
+            });
+          }
+        );        
+      });
+    });
+  });
+
+});
+
+
+/*
 describe('User', function () {
 
   beforeEach(function (done){ 
@@ -312,5 +445,5 @@ describe('Tweet', function () {
   });
 });
 
-
+*/
 
