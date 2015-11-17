@@ -13,7 +13,7 @@ var getDateStr = function () {
 /* GET home page. */
 router.get('/', function(req, res) {
   var dateStr = getDateStr();
-  res.render('index', { date : dateStr });
+  res.render('index');
 });
 
 module.exports = router;
