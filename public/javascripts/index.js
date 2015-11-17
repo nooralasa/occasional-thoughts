@@ -70,6 +70,10 @@ $(document).on('click', '#home-link', function(evt) {
 	loadHomePage();
 });
 
+$(document).on('click', '#register', function(evt) {
+	console.log("register button clicked")
+});
+
 // $(document).on('click', '#show-all', function(evt) {
 // 	evt.preventDefault();
 // 	loadFeedPage();
@@ -98,4 +102,26 @@ $(document).on('click', '#signin-btn', function(evt) {
 $(document).on('click', '#register-btn', function(evt) {
 	loadPage('register');
 });
+
+(function() {
+  $(document).on('click', '#register', function(evt) {
+  	console.log("button clicked")
+    // var content = $('#new-tweet-input').val();
+    // if (content.trim().length === 0) {
+    //   alert('Input must not be empty');
+    //   return;
+    // }
+    // $.post(
+    //   '/tweets',
+    //   { content: content }
+    // ).done(function(response) {
+    //   loadHomePage();
+    //   $('.error').text('');
+    // }).fail(function(responseObject) {
+    //   var response = $.parseJSON(responseObject.responseText);
+    //   $('.error').text(response.err);
+    // });
+  });
+})();
+
 
