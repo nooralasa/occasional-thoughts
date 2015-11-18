@@ -12,6 +12,7 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var tweets = require('./routes/tweets');
 var follow = require('./routes/follow');
+var register = require('./routes/register');
 
 // Import User model
 var User = require('./models/User')
@@ -69,6 +70,7 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/tweets', tweets);
 app.use('/follow', follow);
+app.use('/register', register);
 
 
 // ERROR HANDLERS
