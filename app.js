@@ -12,6 +12,11 @@ var index = require('./routes/index');
 var users = require('./routes/users');
 var tweets = require('./routes/tweets');
 var follow = require('./routes/follow');
+var register = require('./routes/register');
+<<<<<<< HEAD
+var sign = require('./routes/sign');
+=======
+>>>>>>> 1229bdf39bff50665f8ea5a91311dabc6f641526
 
 // Import User model
 var User = require('./models/User')
@@ -33,6 +38,7 @@ var app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+// app.engine('html', require('ejs').renderFile)
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -68,6 +74,12 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/tweets', tweets);
 app.use('/follow', follow);
+<<<<<<< HEAD
+app.use('/register', register)
+app.use('/sign', sign)
+=======
+app.use('/register', register);
+>>>>>>> 1229bdf39bff50665f8ea5a91311dabc6f641526
 
 
 // ERROR HANDLERS
