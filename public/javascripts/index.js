@@ -70,9 +70,10 @@ $(document).on('click', '#home-link', function(evt) {
 	loadHomePage();
 });
 
-$(document).on('click', '#register', function(evt) {
-	console.log("register button clicked")
-});
+// $(document).on('click', '#register', function(evt) {
+// 	console.log("got a response")
+// 	window.location.replace("register")
+// });
 
 // $(document).on('click', '#show-all', function(evt) {
 // 	evt.preventDefault();
@@ -103,25 +104,25 @@ $(document).on('click', '#register-btn', function(evt) {
 	loadPage('register');
 });
 
-(function() {
-  $(document).on('click', '#register', function(evt) {
-  	console.log("button clicked")
-    // var content = $('#new-tweet-input').val();
-    // if (content.trim().length === 0) {
-    //   alert('Input must not be empty');
-    //   return;
-    // }
-    // $.post(
-    //   '/tweets',
-    //   { content: content }
-    // ).done(function(response) {
-    //   loadHomePage();
-    //   $('.error').text('');
-    // }).fail(function(responseObject) {
-    //   var response = $.parseJSON(responseObject.responseText);
-    //   $('.error').text(response.err);
-    // });
-  });
-})();
+// (function() {
+//   $(document).on('click', '#register', function(evt) {
+//   	loadPage('register')
+//     // var content = $('#new-tweet-input').val();
+//     // if (content.trim().length === 0) {
+//     //   alert('Input must not be empty');
+//     //   return;
+//     // }
+//     // $.post(
+//     //   '/tweets',
+//     //   { content: content }
+//     // ).done(function(response) {
+//     //   loadHomePage();
+//     //   $('.error').text('');
+//     // }).fail(function(responseObject) {
+//     //   var response = $.parseJSON(responseObject.responseText);
+//     //   $('.error').text(response.err);
+//     // });
+//   });
+// })();
 
 
