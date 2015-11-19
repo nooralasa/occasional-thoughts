@@ -14,6 +14,9 @@ var getDateStr = function () {
 router.get('/', function(req, res) {
   var dateStr = getDateStr();
   res.render('index');
+  //res.render('register');
+  console.log("I am in the routes/index file");
 });
+
 
 module.exports = router;
