@@ -26,15 +26,19 @@ describe('User', function () {
           viewableOccasions: []
         }, 
         function (err) {
-          done();
+          Occasion.remove({}, function () {
+            done();
+          });
         }
       );
     });
   });
 
   afterEach(function (done){ 
-    User.remove({}, function () {      
-      done();
+    User.remove({}, function () {
+      Occasion.remove({}, function () {
+        done();
+      });
     });  
   });
 
@@ -124,6 +128,28 @@ describe('User', function () {
               User.findOne({email: 'user1'}, function (error, user) {
                 assert.equal(error, null); 
                 assert.equal(false, user.createdOccasions.indexOf(occasion._id) < 0);
+                done();
+              });
+            });
+          }
+        );        
+      });
+    });
+  });
+
+  describe('addViewableOccasionId()', function () {
+    it("should add an occasion id to the user's list of viewable occasions", function (done) {
+      User.findOne({email: 'user1'}, function (err, user1) {
+        Occasion.create(
+          {
+            title: 'aa',
+            creator: user1._id
+          }, function (er, occasion) {
+            user1.addViewableOccasionId(occasion._id, function (e) {
+              assert.equal(e, null);
+              User.findOne({email: 'user1'}, function (error, user) {
+                assert.equal(error, null); 
+                assert.equal(false, user.viewableOccasions.indexOf(occasion._id) < 0);
                 done();
               });
             });
