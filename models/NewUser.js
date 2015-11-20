@@ -48,6 +48,16 @@ userSchema.statics.findByEmail = function (email, callback) {
   });
 }
 
+userSchema.statics.findAllByEmail = function (emails, callback) {
+  this.find({ 'email': { $in: emails} }, function (err, users) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, users);
+    }
+  });
+}
+
 userSchema.statics.verifyPassword = function (email, candidatepw, callback) {
   this.findByEmail(email, function (err, user) {
     if (err) {

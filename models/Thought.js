@@ -1,22 +1,21 @@
 var mongoose = require("mongoose");
 
 var thoughtSchema = mongoose.Schema({
-  creator: String,
   message: String, 
   photo: String, //not sure what to do for now
-  time: {type: Date, default: Date.now}, //auto timestamp
-  isPublic: Boolean
+  isPublic: Boolean,
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  time: {type: Date, default: Date.now} //auto timestamp
 });
 
-thoughtSchema.statics.createThought = function (email, content, picture, privacySetting, callback) {
+thoughtSchema.statics.createThought = function (message, photo, isPublic, userId, callback) {
   this.create(
     {
-      creator: email,
-      message: content,
-      photo: picture,
-      isPublic: privacySetting
-    },
-    function (err, thought) {
+      message: message,
+      photo: photo,
+      isPublic: isPublic,
+      creator: userId
+    }, function (err, thought) {
       if (err) {
         callback(err);
       } else {

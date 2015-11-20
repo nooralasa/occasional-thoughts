@@ -4,12 +4,12 @@ var occasionSchema = mongoose.Schema({
   title: String,
   description: String, 
   coverPhoto: String, //not sure what this is for now
-  time: {type: Date, default: Date.now}, //auto timestamp
   isPublished: Boolean,
-  creator: String,//{type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
+  creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
   participants: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
   recipients: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
-  thoughts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Thought'}]
+  thoughts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Thought'}],
+  time: {type: Date, default: Date.now} //auto timestamp
 });
 
 occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, callback) {
@@ -23,8 +23,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
       participants: [ ],
       recipients: [ ],
       thoughts: [ ]
-    },
-    function (err, occasion) {
+    }, function (err, occasion) {
       if (err) {
         callback(err);
       } else {
@@ -50,9 +49,27 @@ occasionSchema.methods.addParticipant = function (userId, callback) {
   callback(null);
 }
 
+occasionSchema.methods.addParticipants = function (userIds, callback) {
+  var self = this;
+  userIds.forEach(function (userId) {
+    self.participants.push(userId);
+  });
+  self.save();
+  callback(null);
+}
+
 occasionSchema.methods.addRecipient = function (userId, callback) {
   this.recipients.push(userId);
   this.save();
+  callback(null);
+}
+
+occasionSchema.methods.addRecipients = function (userIds, callback) {
+  var self = this;
+  userIds.forEach(function (userId) {
+    self.recipients.push(userId);
+  });
+  self.save();
   callback(null);
 }
 
