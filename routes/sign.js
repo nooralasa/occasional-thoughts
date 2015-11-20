@@ -17,4 +17,8 @@ router.get('/', function(req, res) {
 	res.render('sign');
 });
 
+router.post('/', function(req, res){
+	console.log("In routes/post");
+});
+
 module.exports = router;

@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-<<<<<<< HEAD
 
 var getDateStr = function () {
   // We've seen that new/this can be a bad, but sometimes you'll see them in JavaScript code. For
@@ -16,17 +15,12 @@ router.get('/', function(req, res) {
 	console.log("inside get register")
 	var dateStr = getDateStr();
 	res.render('register');
-=======
-var utils = require('../utils/utils');
 
-/* GET register page. */
-router.get('/', function(req, res) {
-  console.log("I am in the routes/register file");
-  //utils.sendSuccessResponse(res);
+});
 
-  res.render('register');
-  console.log(" After rendering: I am in the routes/register file");
->>>>>>> 1229bdf39bff50665f8ea5a91311dabc6f641526
+router.post('/', function(req, res){
+	console.log("In routes/register/post");
+	
 });
 
 module.exports = router;
