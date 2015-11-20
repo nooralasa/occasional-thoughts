@@ -2,8 +2,6 @@ $(document).ready(function () {
 	console.log("Document is ready");
 });
 
-
-<<<<<<< HEAD
 // $(document).on('click', '#register', function(evt) {
 // 	console.log("got a response")
 // 	window.location.replace("register")
@@ -59,8 +57,6 @@ $(document).on('click', '#register-btn', function(evt) {
 //   });
 // })();
 
-
-=======
 $(document).on('click', '#register', function(evt) {
 	console.log("register button clicked");
 	$.get('/register', function (response) {
@@ -68,4 +64,3 @@ $(document).on('click', '#register', function(evt) {
 		console.log('Page loaded');
 	});
 });
->>>>>>> 1229bdf39bff50665f8ea5a91311dabc6f641526
