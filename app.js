@@ -10,12 +10,8 @@ require('handlebars/runtime');
 // Import route handlers
 var index = require('./routes/index');
 var users = require('./routes/users');
-var tweets = require('./routes/tweets');
-var follow = require('./routes/follow');
-var register = require('./routes/register');
-
-var sign = require('./routes/sign');
-
+var occasions = require('./routes/occasions');
+var thoughts = require('./routes/thoughts');
 
 // Import User model
 var User = require('./models/User')
@@ -71,14 +67,8 @@ app.use(function (req, res, next) {
 // Map paths to imported route handlers
 app.use('/', index);
 app.use('/users', users);
-app.use('/tweets', tweets);
-app.use('/follow', follow);
-
-app.use('/register', register)
-app.use('/sign', sign)
-
-app.use('/register', register);
-
+app.use('/occasions', occasions);
+app.use('/thoughts', thoughts);
 
 
 // ERROR HANDLERS
