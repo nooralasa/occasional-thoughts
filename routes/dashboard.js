@@ -12,16 +12,9 @@ var getDateStr = function () {
 
 /* GET home page. */
 router.get('/', function(req, res) {
-	console.log("inside get register")
+	console.log("inside get sign")
 	var dateStr = getDateStr();
-	res.render('register');
-
-});
-
-router.post('/', function(req, res){
-	console.log("In routes/register/post");
-  console.log(req.body);
-
+	res.render('dashboard');
 });
 
 module.exports = router;
