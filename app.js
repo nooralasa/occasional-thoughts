@@ -13,13 +13,12 @@ var users = require('./routes/users');
 var tweets = require('./routes/tweets');
 var follow = require('./routes/follow');
 var register = require('./routes/register');
-<<<<<<< HEAD
-var sign = require('./routes/sign');
-var dashboard = require('./routes/dashboard');
-=======
 
 var sign = require('./routes/sign');
->>>>>>> a05fb7dfc2741c8da6b36dfb97851c5bdabe1289
+var dashboard = require('./routes/dashboard');
+
+var sign = require('./routes/sign');
+
 
 
 // Import User model
@@ -78,18 +77,12 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/tweets', tweets);
 app.use('/follow', follow);
-<<<<<<< HEAD
+
 app.use('/register', register);
 app.use('/sign', sign);
 app.use('/dashboard', dashboard);
-=======
 
-app.use('/register', register)
-app.use('/sign', sign)
 
-app.use('/register', register);
-
->>>>>>> a05fb7dfc2741c8da6b36dfb97851c5bdabe1289
 
 
 // ERROR HANDLERS
