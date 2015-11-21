@@ -15,6 +15,15 @@ router.get('/', function(req, res) {
 	console.log("inside get register")
 	var dateStr = getDateStr();
 	res.render('register');
+<<<<<<< HEAD
+=======
+
+});
+
+router.post('/', function(req, res){
+	console.log("In routes/register/post");
+	
+>>>>>>> a05fb7dfc2741c8da6b36dfb97851c5bdabe1289
 });
 
 module.exports = router;

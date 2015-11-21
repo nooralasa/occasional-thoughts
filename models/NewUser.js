@@ -48,6 +48,16 @@ userSchema.statics.findByEmail = function (email, callback) {
   });
 }
 
+userSchema.statics.findAllByEmail = function (emails, callback) {
+  this.find({ 'email': { $in: emails} }, function (err, users) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, users);
+    }
+  });
+}
+
 userSchema.statics.verifyPassword = function (email, candidatepw, callback) {
   this.findByEmail(email, function (err, user) {
     if (err) {
@@ -76,97 +86,12 @@ userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
   callback(null);
 }
 
-userSchema.methods.getCreatedOccasionIds = function (callback) {
-  callback(null, this.addCreatedOccasion);
-}
+// userSchema.methods.getCreatedOccasionIds = function (callback) {
+//   callback(null, this.createdOccasion);
+// }
 
-userSchema.methods.getViewableOccasionIds = function (callback) {
-  callback(null, this.addViewableOccasion);
-}
+// userSchema.methods.getViewableOccasionIds = function (callback) {
+//   callback(null, this.viewableOccasion);
+// }
 
-/*
-userSchema.statics.follow = function (username, followeeName, callback) {
-  var self = this
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid follower', code: 1 });
-    } else {
-      self.findByUsername(followeeName, function (er, followee) {
-        if (er) {
-          callback(er);
-        } else if (!followee) {
-          callback({ msg : 'Invalid followee', code: 1});
-        } else {
-          if (user.follows.indexOf(followee._id) < 0) {
-            user.follows.push(followee._id);
-            user.save();
-            callback(null);
-          } else {
-            callback({ msg: 'User already in following list!', code: 2})
-          }
-        }
-      });
-    }
-  });
-}
-
-userSchema.statics.getFollowingTweetIds = function (username, callback) {
-  var self = this;
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid user' });
-    } else {
-      self.find()
-        .where('_id').in(user.follows)
-        .select('tweets username')
-        .exec(function (er, followees) {
-          if (er) {
-            callback(er);
-          } else {
-            var tweetIds = []
-            followees.forEach(function (followee) {
-              tweetIds = tweetIds.concat(followee.tweets);
-            });
-            callback(null, tweetIds);
-          }
-        }
-      );
-    }
-  });
-}
-
-userSchema.statics.removeTweet = function (username, tweetId, callback) {
-  var self = this;
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid user' });
-    } else {
-      user.tweets.remove(tweetId);
-      user.save();
-      callback(null);
-    }
-  });
-}
-
-userSchema.statics.addTweet = function (username, tweetId, callback) {
-  var self = this;
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid user' });
-    } else {
-      user.tweets.push(tweetId);
-      user.save();
-      callback(null);
-    }
-  });
-}
-*/
 module.exports = mongoose.model("User", userSchema);
