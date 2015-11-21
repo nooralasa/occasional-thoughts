@@ -268,7 +268,7 @@ describe('Occasion', function () {
           assert.equal('photo0', occ.coverPhoto);
           assert.equal('title0', occ.title);
           assert.equal(false, occ.isPublished);
-          assert.deepEqual(user._id, occ.creator);
+          assert.ok(user._id.equals(occ.creator));
           assert.strictEqual(0, occ.participants.length);
           assert.strictEqual(0, occ.recipients.length);
           assert.strictEqual(0, occ.thoughts.length);
@@ -291,6 +291,31 @@ describe('Occasion', function () {
               assert.deepEqual(users[0]._id, occ.participants[0]);
               assert.deepEqual(users[1]._id, occ.participants[1]);
               done();
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('isParticipant()', function () {
+    it('should check if a user is a participant', function (done) {
+      User.findByEmail('user1', function (err, user) {
+        Occasion.getOccasion(user.createdOccasions[0], function (e, occ) {
+          assert.equal(null, e);
+          assert.notEqual(null, occ);
+          User.findAllByEmail(['user2', 'user3'], function (err, users) {
+            occ.addParticipants(users, function (error) {
+              occ.isParticipant(user._id, function (error0, isParticipant0) {
+                occ.isParticipant(users[0]._id, function (error1, isParticipant1) {
+                  occ.isParticipant(users[1]._id, function (error2, isParticipant2) {
+                    assert.ok(!isParticipant0);
+                    assert.ok(isParticipant1);
+                    assert.ok(isParticipant2);
+                    done();
+                  });
+                });
+              });
             });
           });
         });

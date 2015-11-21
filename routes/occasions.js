@@ -3,7 +3,7 @@ var router = express.Router();
 var utils = require('../utils/utils');
 
 var User = require('../models/User');
-var Tweet = require('../models/Tweet');
+var Occasion = require('../models/Occasion');
 
 /*
   Require authentication on ALL access to /notes/*
@@ -13,7 +13,13 @@ var requireAuthentication = function (req, res, next) {
   if (!req.currentUser) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    next();
+    req.occasion.isParticipantOrCreator(req.currentUser._id, function (canView) {
+      if (canView) {
+        next();
+      } else {
+        utils.sendErrResponse(res, 404, 'Resource not found.');
+      }
+    });
   }
 };
 
@@ -28,11 +34,13 @@ var requireAuthentication = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOwnership = function (req, res, next) {
-  if (String(req.currentUser._id) !== String(req.tweet.creator)) {
-    utils.sendErrResponse(res, 404, 'Resource not found.');
-  } else {
-    next();
-  }
+  req.occasion.isCreator(req.currentUser._id, function (isCreator) {
+    if (isCreator) {
+      next();
+    } else {
+      utils.sendErrResponse(res, 404, 'Resource not found.');
+    }
+  });
 };
 
 /*
@@ -51,11 +59,13 @@ var requireContent = function (req, res, next) {
   Grab a note from the store whenever one is referenced with an ID in the
   request path (any routes defined with :note as a paramter).
 */
-router.param('tweet', function (req, res, next, tweetId) {
+
+/*angus*/
+router.param('occasionId', function (req, res, next, occasionId) {
 
   // Tweet.getDescription(function (tweetId)) /*+*/
-  Tweet.getTweet(tweetId, function (err, tweet) {
-    if (tweet) {
+  Occasion.getOccasion(occasionId, function (err, occasion) {
+    if (occasion) {
       req.tweet = tweet;
       next();
     } else {
@@ -66,7 +76,7 @@ router.param('tweet', function (req, res, next, tweetId) {
 
 // Register the middleware handlers above.
 router.all('*', requireAuthentication);
-router.all('/:tweet', requireOwnership);
+router.all('/:occasionId', requireOwnership);
 router.post('*', requireContent);
 
 /*
