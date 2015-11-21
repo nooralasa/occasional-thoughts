@@ -131,7 +131,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // encrypted cookied).
 app.use(function (req, res, next) {
   if (req.session.username) {
-    User.findByUsername(req.session.username, function (err, user) {
+    User.findByEmail(req.session.username, function (err, user) {
       if (user) {
         req.currentUser = user;
       } else {
@@ -140,7 +140,7 @@ app.use(function (req, res, next) {
       next();
     });
   } else {
-      next();
+    next();
   }
 });
 
