@@ -15,6 +15,7 @@ var users = require('./routes/users');
 var occasions = require('./routes/occasions');
 // var thoughts = require('./routes/thoughts');
 
+
 // Import User model
 var User = require('./models/User');
 // var NewUser = require('./models/NewUser');

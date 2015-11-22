@@ -13,14 +13,23 @@ var getDateStr = function () {
 /* GET home page. */
 router.get('/', function(req, res) {
   var dateStr = getDateStr();
+
   //res.render('occasions', {user: {name:"Noor", createdOccasions: [{title: "Birthday", coverPhoto: "http://lorempixum.com/100/100/nature/4", description: "This is a party for a special baby. His name is Esa. "}], viewableOccasions: []}});
-  //res.render('index');
-  res.render('occasion', {occasion: {title:"Noor's Graduation", 
+  /*res.render('occasion', {occasion: {title:"Noor's Graduation", 
     coverPhoto: "http://cdn.images.express.co.uk/img/dynamic/14/590x/champagne-419634.jpg", 
     description: "This is a party for Noor as he enters his final year of college ", 
     creator: "Angus Lai"}});
+*/
+
+  if (!req.session.passport || !req.session.passport.user) {
+    res.render('index');
+  } else {
+    res.render('dashboard', { name: req.session.passport.user.name });
+  }
   console.log("I am in the routes/index file");
 });
+
+
 
 
 module.exports = router;

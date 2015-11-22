@@ -108,6 +108,7 @@ router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
     .findById(req.session.passport.user._id)
+    .select('name createdOccasions')
     .populate('createdOccasions')
     .exec(function (err, user) {
       if (err) {
@@ -115,8 +116,8 @@ router.get('/', function (req, res) {
       } else {
         /*angus*/
         // render ejs
-        // res.render('xx', { createdOccasions: user.createdOccasions });
-        utils.sendSuccessResponse(res, { createdOccasions: user.createdOccasions });
+        res.render('occasions', { user: user });
+        // utils.sendSuccessResponse(res, { user: user });
       }
     }
   );
@@ -140,6 +141,7 @@ router.get('/:occasionId', function (req, res) {
 
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // everything below is a work in progress
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -154,6 +156,7 @@ router.get('/:occasionId', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
+  console.log("Clicked the Create Occasion Button");
   User.findById(req.session.passport.user._id, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
@@ -168,7 +171,9 @@ router.post('/', function (req, res) {
             if (e) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
-              utils.sendSuccessResponse(res);
+              // utils.sendSuccessResponse(res);
+              console.log("herer")
+              res.redirect("/occasions");
             }
           });
         }
@@ -176,6 +181,37 @@ router.post('/', function (req, res) {
     }
   });
 });
+
+
+
+
+// router.post('/:occasionId/thoughts', function (req, res) {
+//   User.findById(req.session.passport.user._id, function (err, user) {
+//     if (err) {
+//       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+//     } else if (!user) {
+//       utils.sendErrResponse(res, 404, 'Invalid user');
+//     } else {
+//       Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, user._id, function (er, occasion) {
+//         if (er) {
+//           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+//         } else {
+//           user.addCreatedOccasionId(occasion._id, function (e) {
+//             if (e) {
+//               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+//             } else {
+//               utils.sendSuccessResponse(res);
+//             }
+//           });
+//         }
+//       });
+//     }
+//   });
+// });
+
+
+
+
 
 /*
   DELETE /notes/:note
