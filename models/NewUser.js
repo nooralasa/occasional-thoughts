@@ -2,14 +2,14 @@ var mongoose = require("mongoose");
 
 var userSchema = mongoose.Schema({
   email: String,
-  password: String,
-  firstName: String,
-  lastName: String,
+  token: String,
+  fbid: String
+  name: String,
   createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
   viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
-userSchema.statics.createNewUser = function (email, password, firstName, lastName, callback) {
+userSchema.statics.createNewUser = function (email, token, fbid, name, callback) {
   var self = this;
   self.findOne({ 'email': email }, function (err, user) {
     if (err) {
@@ -20,9 +20,9 @@ userSchema.statics.createNewUser = function (email, password, firstName, lastNam
       self.create(
         { 
           email: email, 
-          password: password, 
-          firstName: firstName,
-          lastName: lastName,
+          token: token, 
+          fbid: fbid,
+          name: name,
           createdOccasions: [],
           viewableOccasions: []
         }, 
@@ -54,22 +54,6 @@ userSchema.statics.findAllByEmail = function (emails, callback) {
       callback(err);
     } else {
       callback(null, users);
-    }
-  });
-}
-
-userSchema.statics.verifyPassword = function (email, candidatepw, callback) {
-  this.findByEmail(email, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (user) {
-      if (candidatepw === user.password) {
-        callback(null, true); 
-      } else {
-        callback(null, false);
-      }
-    } else {
-      callback(null, false);
     }
   });
 }

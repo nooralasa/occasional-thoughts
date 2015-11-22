@@ -62,16 +62,18 @@ var requireContent = function (req, res, next) {
 
 /*angus*/
 router.param('occasionId', function (req, res, next, occasionId) {
-
-  // Tweet.getDescription(function (tweetId)) /*+*/
-  Occasion.getOccasion(occasionId, function (err, occasion) {
-    if (occasion) {
-      req.tweet = tweet;
-      next();
-    } else {
-      utils.sendErrResponse(res, 404, 'Resource not found.');
+  Occasion
+    .findById(occasionId)
+    .populate('thoughts')
+    .exec(function (err, occasion) {
+      if (occasion) {
+        req.occasion = occasion;
+        next();
+      } else {
+        utils.sendErrResponse(res, 404, 'Resource not found.');
+      }
     }
-  });
+  );
 });
 
 // Register the middleware handlers above.
@@ -87,7 +89,7 @@ router.post('*', requireContent);
 */
 
 /*
-  GET /notes
+  GET /occasion
   No request parameters
   Response:
     - success: true if the server succeeded in getting the user's notes
@@ -95,18 +97,33 @@ router.post('*', requireContent);
     - err: on failure, an error message
 */
 router.get('/', function (req, res) {
-  Tweet.getTweets(req.currentUser.username, function (err, tweets) {
-    if (err) {
-      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-    } else {
-      utils.sendSuccessResponse(res, { tweets: tweets });
+  // res.render('index', { date : dateStr });
+  User
+    .findById(req.currentUser._id)
+    .populate('createdOccasions')
+    .exec(function (err, user) {
+      if (err) {
+        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+      } else {
+        /*angus*/
+        // render ejs
+        res.render('xx', { createdOccasions: user.createdOccasions });
+        // utils.sendSuccessResponse(res, { createdOccasions: user.createdOccasions });
+      }
     }
-  });
+  );
+  // Occasion.getTweets(req.currentUser.username, function (err, tweets) {
+  //   if (err) {
+  //     utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+  //   } else {
+  //     utils.sendSuccessResponse(res, { tweets: tweets });
+  //   }
+  // });
 });
 
 
 /*
-  GET /notes/:note
+  GET /occasion/:occasionId
   Request parameters:
     - note: the unique ID of the note within the logged in user's note collection
   Response:
@@ -114,8 +131,9 @@ router.get('/', function (req, res) {
     - content: on success, the note object with ID equal to the note referenced in the URL
     - err: on failure, an error message
 */
-router.get('/:tweet', function (req, res) {
-  utils.sendSuccessResponse(res, req.tweet);
+router.get('/:occasionId', function (req, res) {
+  res.render('yy', { occasion: req.occasion })
+  // utils.sendSuccessResponse(res, req.occasion);
 });
 
 /*
