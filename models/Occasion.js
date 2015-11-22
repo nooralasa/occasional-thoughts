@@ -43,6 +43,8 @@ occasionSchema.statics.getOccasion = function (occasionId, callback) {
   });
 }
 
+
+// add people
 occasionSchema.methods.addParticipant = function (userId, callback) {
   this.participants.push(userId);
   this.save();
@@ -73,6 +75,62 @@ occasionSchema.methods.addRecipients = function (userIds, callback) {
   callback(null);
 }
 
+
+// checks if is authorized to view
+occasionSchema.methods.isParticipant = function (userId, callback) {
+  var self = this;
+  var strs = self.participants.map(function (id) {
+    return id.toString();
+  });
+  callback(null, strs.indexOf(userId.toString()) >= 0);
+}
+
+occasionSchema.methods.isRecipient = function (userId, callback) {
+  var self = this;
+  var strs = self.recipients.map(function (id) {
+    return id.toString();
+  });
+  callback(null, strs.indexOf(userId.toString()) >= 0);
+}
+
+occasionSchema.methods.isCreator = function (userId, callback) {
+  var self = this;
+  callback(null, self.creator.equals(userId));
+}
+
+occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
+  var self = this;
+  self.isParticipant(userId, function (isParticipant) {
+    if (isParticipant) {
+      callback(null, true);
+    } else {
+      self.isCreator(userId, function (isCreator) {
+        callback(null, isCreator);
+      });
+    }
+  });
+}
+
+occasionSchema.methods.canView = function (userId, callback) {
+  var self = this;
+  self.isParticipant(userId, function (isParticipant) {
+    if (isParticipant) {
+      callback(null, true);
+    } else {
+      self.isRecipient(userId, function (isRecipient) {
+        if (isRecipient) {
+          callback(null, true);
+        } else {
+          self.isCreator(userId, function (isCreator) {
+            callback(null, isCreator);
+          });
+        }
+      });
+    }
+  });
+}
+
+// add thought
 occasionSchema.methods.addThought = function (thoughtId, callback) {
   this.thoughts.push(thoughtId);
   this.save();

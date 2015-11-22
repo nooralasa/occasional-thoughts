@@ -1,15 +1,15 @@
 $(document).on('click', '#registering', function(evt) {
 
 	console.log("registration form CLICKED");
-	var username = document.getElementById('username').value;
+	var firstName = document.getElementById('firstName').value;
+  var lastName = document.getElementById('lastName').value;
 	var password = document.getElementById('password').value;
 	var confirmation = document.getElementById('confirmPassword').value;
 	var email = document.getElementById('email').value;
 
-  console.log(username, password, confirmation, email);
     $.post(
     '/register',
-    {username: username, email: email, password: password, confirmation: confirmation}
+    {first: firstName, last: lastName, email: email, password: password, confirmation: confirmation}
       
     ).done(function(response) {
       console.log("Post req sent");

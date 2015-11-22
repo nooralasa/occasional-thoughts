@@ -1,15 +1,18 @@
 var mongoose = require("mongoose");
 
 var userSchema = mongoose.Schema({
-  username: String,
-  password: String,
-  follows: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
-  tweets: [{type: mongoose.Schema.Types.ObjectId, ref: 'Tweet'}]
+  email: String,
+  token: String,
+  fbid: String,
+  name: String,
+  profilePicture: String,
+  createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
+  viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
-userSchema.statics.createNewUser = function (username, password, callback) {
+userSchema.statics.createNewUser = function (email, token, fbid, name, profilePicture, callback) {
   var self = this;
-  self.findOne({ 'username': username }, function (err, user) {
+  self.findOne({ 'email': email }, function (err, user) {
     if (err) {
       callback(err);
     } else if (user) {
@@ -17,16 +20,19 @@ userSchema.statics.createNewUser = function (username, password, callback) {
     } else {
       self.create(
         { 
-          username: username, 
-          password: password, 
-          follows: [],
-          tweets: []
+          email: email, 
+          token: token, 
+          fbid: fbid,
+          name: name,
+          profilePicture: profilePicture,
+          createdOccasions: [],
+          viewableOccasions: []
         }, 
-        function (er, record) {
+        function (er, newUser) {
           if (er) {
             callback(er);
           } else {
-            callback(null);
+            callback(null, newUser);
           }
         }
       );
@@ -34,8 +40,8 @@ userSchema.statics.createNewUser = function (username, password, callback) {
   });
 }
 
-userSchema.statics.findByUsername = function (username, callback) {
-  this.findOne({ 'username': username}, function (err, user) {
+userSchema.statics.findByEmail = function (email, callback) {
+  this.findOne({ 'email': email }, function (err, user) {
     if (err) {
       callback(err);
     } else {
@@ -44,104 +50,44 @@ userSchema.statics.findByUsername = function (username, callback) {
   });
 }
 
-userSchema.statics.verifyPassword = function (username, candidatepw, callback) {
-  this.findByUsername(username, function (err, user) {
+userSchema.statics.findByFbid = function (fbid, callback) {
+  this.findOne({ 'fbid': fbid }, function (err, user) {
     if (err) {
       callback(err);
-    } else if (user) {
-      if (candidatepw === user.password) {
-        callback(null, true); 
-      } else {
-        callback(null, false);
-      }
     } else {
-      callback(null, false);
+      callback(null, user);
     }
   });
 }
 
-userSchema.statics.follow = function (username, followeeName, callback) {
-  var self = this
-  self.findByUsername(username, function (err, user) {
+userSchema.statics.findAllByEmail = function (emails, callback) {
+  this.find({ 'email': { $in: emails} }, function (err, users) {
     if (err) {
       callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid follower', code: 1 });
     } else {
-      self.findByUsername(followeeName, function (er, followee) {
-        if (er) {
-          callback(er);
-        } else if (!followee) {
-          callback({ msg : 'Invalid followee', code: 1});
-        } else {
-          if (user.follows.indexOf(followee._id) < 0) {
-            user.follows.push(followee._id);
-            user.save();
-            callback(null);
-          } else {
-            callback({ msg: 'User already in following list!', code: 2})
-          }
-        }
-      });
+      callback(null, users);
     }
   });
 }
 
-userSchema.statics.getFollowingTweetIds = function (username, callback) {
-  var self = this;
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid user' });
-    } else {
-      self.find()
-        .where('_id').in(user.follows)
-        .select('tweets username')
-        .exec(function (er, followees) {
-          if (er) {
-            callback(er);
-          } else {
-            var tweetIds = []
-            followees.forEach(function (followee) {
-              tweetIds = tweetIds.concat(followee.tweets);
-            });
-            callback(null, tweetIds);
-          }
-        }
-      );
-    }
-  });
+userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
+  this.createdOccasions.push(occasionId);
+  this.save();
+  callback(null);
 }
 
-userSchema.statics.removeTweet = function (username, tweetId, callback) {
-  var self = this;
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid user' });
-    } else {
-      user.tweets.remove(tweetId);
-      user.save();
-      callback(null);
-    }
-  });
+userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
+  this.viewableOccasions.push(occasionId);
+  this.save();
+  callback(null);
 }
 
-userSchema.statics.addTweet = function (username, tweetId, callback) {
-  var self = this;
-  self.findByUsername(username, function (err, user) {
-    if (err) {
-      callback(err);
-    } else if (!user) {
-      callback({ msg : 'Invalid user' });
-    } else {
-      user.tweets.push(tweetId);
-      user.save();
-      callback(null);
-    }
-  });
-}
+// userSchema.methods.getCreatedOccasionIds = function (callback) {
+//   callback(null, this.createdOccasion);
+// }
 
-module.exports = mongoose.model("User", userSchema);
+// userSchema.methods.getViewableOccasionIds = function (callback) {
+//   callback(null, this.viewableOccasion);
+// }
+
+module.exports = mongoose.model("NewUser", userSchema);
