@@ -62,42 +62,42 @@
 
 
         //
-		* {margin: 0; padding: 0;}
-		body{
-			padding-top: 8%;
-		}
+        * {margin: 0; padding: 0;}
+        body{
+            padding-top: 8%;
+        }
 
-		div {
-		  margin: 20px;
-		}
+        div {
+          margin: 20px;
+        }
 
-		ul {
-		  list-style-type: none;
-		  width: 600px;
-		}
+        ul {
+          list-style-type: none;
+          width: 600px;
+        }
 
-		h3 {
-		  font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
-		}
+        h3 {
+          font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+        }
 
-		li img {
-		  float: left;
-		  margin: 0 15px 0 0;
-		}
+        li img {
+          float: left;
+          margin: 0 15px 0 0;
+        }
 
-		li p {
-		  font: 200 13.5px/1.5 Cambria, Times New Roman, serif;
-		}
+        li p {
+          font: 200 13.5px/1.5 Cambria, Times New Roman, serif;
+        }
 
-		li {
-		  padding: 10px;
-		  overflow: auto;
-		}
+        li {
+          padding: 10px;
+          overflow: auto;
+        }
 
-		li:hover {
-		  background: #eee;
-		  cursor: pointer;
-		}
+        li:hover {
+          background: #eee;
+          cursor: pointer;
+        }
 
 
     </style>
@@ -152,30 +152,24 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
-                        <p class="intro-text">My Occasions</p>
+                        <p class="intro-text"><%=User%>'s Occasions</p>
                         <ul>
-    						<% for(var i=0; i<4; i++) { %>
-    						<div>
-        						    <li>
-      									<img src="http://lorempixum.com/100/100/nature/1" >
-      									<h3>The Grasslands</h3>
-      									<p align= "left" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent euismod ultrices ante, ac laoreet nulla vestibulum adipiscing. Nam quis justo in augue auctor imperdiet. Nam quis justo in augue auctor imperdiet. </p>
-   								 	</li>
-    					    </div>
-    						<% } %>
-						</ul>
+                            <% for(var i=0; i<2; i++) { %>
+                            <div>
+                                    <li>
+                                        <img src="http://lorempixum.com/100/100/nature/4" >
+                                        <h3>The Grasslands</h3>
+                                        <p align= "left" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Present euismod ultrices ante, ac laoreet nulla vestibulum adipiscing. Nam quis justo in augue auctor imperdiet. Nam quis justo in augue auctor imperdiet. </p>
+                                    </li>
+                            </div>
+                            <% } %>
+                        </ul>
                         <a class="btn btn-primary btn-xl">Create New Occasion!</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
-
-
-
-
-
-
   
     <!-- Custom Theme JavaScript -->
     <script src="js/grayscale.js"></script>
