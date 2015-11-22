@@ -122,7 +122,6 @@ app.use(passport.session());
 // Map paths to imported route handlers
 app.use('/', index);
 app.use('/users', users);
-app.use('/dashboard', dashboard);
 app.use('/occasions', occasions);
 // app.use('/thoughts', thoughts);
 
