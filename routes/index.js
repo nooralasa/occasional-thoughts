@@ -23,6 +23,11 @@ router.get('/', function(req, res) {
 
   if (!req.session.passport || !req.session.passport.user) {
     res.render('index');
+//     res.render('occasion', {occasion: {title:"Noor's Graduation", 
+//     coverPhoto: "http://lorempixum.com/100/100/nature/4", 
+//     description: "This is a party for Noor as he enters his final year of college ", 
+//     creator: "Angus Lai"}});
+    
   } else {
     res.render('dashboard', { name: req.session.passport.user.name });
   }

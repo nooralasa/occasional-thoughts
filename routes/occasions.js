@@ -140,6 +140,10 @@ router.get('/:occasionId', function (req, res) {
 });
 
 
+router.get("/occasion", function(req, res){
+  res.render("occasion")
+})
+
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
