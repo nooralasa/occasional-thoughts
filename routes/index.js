@@ -13,8 +13,9 @@ var getDateStr = function () {
 /* GET home page. */
 router.get('/', function(req, res) {
   var dateStr = getDateStr();
+  //res.render('occasions', {User: "Noor"});
   res.render('index');
-  //res.render('register');
+  //res.render('dashboard', {Name: "Angus Lai"});
   console.log("I am in the routes/index file");
 });
 
