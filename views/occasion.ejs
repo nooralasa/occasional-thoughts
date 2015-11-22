@@ -152,17 +152,12 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
-                        <p class="intro-text"><%=user.name%>'s Occasions</p>
+                        <p class="intro-text"><%=User%>'s Occasions</p>
                         <ul>
-                            <% var numOccasions = user.createdOccasions.length %>
-                            <% for(var i=0; i< numOccasions; i++) { %>
+                            <% for(var i=0; i<2; i++) { %>
                             <div>
-                                    <li>
-                                        <!--img src="http://lorempixum.com/100/100/nature/4" -->
-                                        <img src = <%=user.createdOccasions[i].coverPhoto%> >
-                                        <h3><%=user.createdOccasions[i].title%></h3>
-                                        <p align= "left" ><%=user.createdOccasions[i].description%> </p>
-                                    </li>
+                                        <p align= "left" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Present euismod ultrices ante, ac laoreet nulla vestibulum adipiscing. Nam quis justo in augue auctor imperdiet. Nam quis justo in augue auctor imperdiet. </p>
+                                    
                             </div>
                             <% } %>
                         </ul>
