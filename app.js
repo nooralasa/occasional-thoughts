@@ -27,8 +27,6 @@ db.once('open', function (callback) {
     console.log("database connected");
 });
 
-
-
 var app = express();
 
 app.set('views', path.join(__dirname, 'views'));

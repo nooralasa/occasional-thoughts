@@ -7,7 +7,6 @@ $(document).on('click', '#registering', function(evt) {
 	var confirmation = document.getElementById('confirmPassword').value;
 	var email = document.getElementById('email').value;
 
-  console.log(username, password, confirmation, email);
     $.post(
     '/register',
     {first: firstName, last: lastName, email: email, password: password, confirmation: confirmation}
