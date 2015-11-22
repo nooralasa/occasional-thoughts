@@ -141,6 +141,7 @@ router.get('/:occasionId', function (req, res) {
 
 
 
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // everything below is a work in progress
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -155,6 +156,7 @@ router.get('/:occasionId', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
+  console.log("Clicked the Create Occasion Button");
   User.findById(req.session.passport.user._id, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
@@ -169,7 +171,9 @@ router.post('/', function (req, res) {
             if (e) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
-              utils.sendSuccessResponse(res);
+              // utils.sendSuccessResponse(res);
+              console.log("herer")
+              res.redirect("/occasions");
             }
           });
         }
@@ -177,6 +181,7 @@ router.post('/', function (req, res) {
     }
   });
 });
+
 
 
 
