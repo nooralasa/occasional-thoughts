@@ -119,7 +119,7 @@ router.post('/', function (req, res) {
 */
 router.get('/current', function (req, res) {
   if (req.currentUser) {
-    utils.sendSuccessResponse(res, { loggedIn : true, user : req.currentUser.username });
+    utils.sendSuccessResponse(res, { loggedIn : true, user : req.currentUser.email });
   } else {
     utils.sendSuccessResponse(res, { loggedIn : false });
   }

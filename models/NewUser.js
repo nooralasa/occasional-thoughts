@@ -3,8 +3,9 @@ var mongoose = require("mongoose");
 var userSchema = mongoose.Schema({
   email: String,
   token: String,
-  fbid: String
+  fbid: String,
   name: String,
+  photos: String,
   createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
   viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
@@ -78,4 +79,4 @@ userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
 //   callback(null, this.viewableOccasion);
 // }
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("NewUser", userSchema);
