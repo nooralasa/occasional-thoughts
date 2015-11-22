@@ -3,13 +3,14 @@ var mongoose = require("mongoose");
 var userSchema = mongoose.Schema({
   email: String,
   token: String,
-  fbid: String
+  fbid: String,
   name: String,
+  profilePicture: String,
   createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
   viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
-userSchema.statics.createNewUser = function (email, token, fbid, name, callback) {
+userSchema.statics.createNewUser = function (email, token, fbid, name, profilePicture, callback) {
   var self = this;
   self.findOne({ 'email': email }, function (err, user) {
     if (err) {
@@ -23,14 +24,15 @@ userSchema.statics.createNewUser = function (email, token, fbid, name, callback)
           token: token, 
           fbid: fbid,
           name: name,
+          profilePicture: profilePicture,
           createdOccasions: [],
           viewableOccasions: []
         }, 
-        function (er, record) {
+        function (er, newUser) {
           if (er) {
             callback(er);
           } else {
-            callback(null);
+            callback(null, newUser);
           }
         }
       );
@@ -39,7 +41,17 @@ userSchema.statics.createNewUser = function (email, token, fbid, name, callback)
 }
 
 userSchema.statics.findByEmail = function (email, callback) {
-  this.findOne({ 'email': email}, function (err, user) {
+  this.findOne({ 'email': email }, function (err, user) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, user);
+    }
+  });
+}
+
+userSchema.statics.findByFbid = function (fbid, callback) {
+  this.findOne({ 'fbid': fbid }, function (err, user) {
     if (err) {
       callback(err);
     } else {
@@ -78,4 +90,4 @@ userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
 //   callback(null, this.viewableOccasion);
 // }
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("NewUser", userSchema);

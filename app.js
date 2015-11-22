@@ -17,7 +17,7 @@ var occasions = require('./routes/occasions');
 
 // Import User model
 var User = require('./models/User');
-var NewUser = require('./models/NewUser');
+// var NewUser = require('./models/NewUser');
 
 var FACEBOOK_APP_ID = "929113373843865";
 var FACEBOOK_APP_SECRET = "c956f3275cd75946929c1fe2591a9b25";
@@ -38,21 +38,14 @@ db.once('open', function (callback) {
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Facebook profile is serialized
 //   and deserialized.
-passport.serializeUser(function(user, done) {
+passport.serializeUser(function (user, done) {
+  console.log('in serialize user: ', user);
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done) {
-  //need more work 
-  //find user by id?
-  console.log('user',user);
-  NewUser.findOne({ 'fbid' : user.id }, function(err, user) {
-            if (err) {
-              done(err);
-            } else {
-              done(null, user);
-            }
-        });
+passport.deserializeUser(function (user, done) {
+  console.log('in deserialize user: ', user);
+  done(null, user);
 });
 
 // Use the FacebookStrategy within Passport.
@@ -65,45 +58,20 @@ passport.use(new FacebookStrategy({
     callbackURL: "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'emails', 'photos']
   },
-  function(accessToken, refreshToken, profile, done) {
-    // asynchronous verification, for effect...
+  function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-
       console.log('profile', profile);
       console.log("------------");
-      
-      // find the user in the database based on their facebook id
-      NewUser.findOne({ 'fbid' : profile.id }, function(err, user) {
-
-          // if there is an error, stop everything and return that
-          // ie an error connecting to the database
-          if (err)
-              return done(err);
-
-          // if the user is found, then log them in
-          if (user) {
-              return done(null, user); // user found, return that user
-          } else {
-              // if there is no user found with that facebook id, create them
-              var newUser = new NewUser();
-
-              // set all of the facebook information in our user model
-              newUser.fbid    = profile.id; // set the users facebook id                   
-              newUser.token = accessToken; // we will save the token that facebook provides to the user                    
-              newUser.name = profile.displayName;
-              newUser.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-              newUser.photos = profile.photos[0].value;
-
-              // save our user to the database
-              newUser.save(function(err) {
-                  if (err)
-                      throw err;
-
-                  // if successful, return the new user
-                  return done(null, newUser);
-              });
-          }
-
+      User.findByFbid(profile.id, function (err, user) {
+        if (err)
+          done(err);
+        if (user) {
+          done(null, user);
+        } else {
+          User.createNewUser(profile.emails[0].value, accessToken, profile.id, profile.displayName, profile.photos[0].value, function (er, newUser) {
+            done(null, newUser);
+          });
+        }
       });
     });
   }
@@ -133,20 +101,22 @@ app.use(passport.session());
 // user object based off the username provided
 // in the session variable (accessed by the
 // encrypted cookied).
-app.use(function (req, res, next) {
-  if (req.session.username) {
-    User.findByEmail(req.session.username, function (err, user) {
-      if (user) {
-        req.currentUser = user;
-      } else {
-        req.session.destroy();
-      }
-      next();
-    });
-  } else {
-    next();
-  }
-});
+
+// app.use(function (req, res, next) {
+//   if (req.session.passport/*.username*/) {
+//     console.log(req.session);
+//     User.findByEmail(req.session.username, function (err, user) {
+//       if (user) {
+//         req.currentUser = user;
+//       } else {
+//         req.session.destroy();
+//       }
+//       next();
+//     });
+//   } else {
+//     next();
+//   }
+// });
 
 // Map paths to imported route handlers
 app.use('/', index);
@@ -186,16 +156,17 @@ app.get('/auth/facebook/callback',
 // match the requested pathname.
 
 // Catch 404 and forward to error handler.
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
 // Development error handler.
 // Will print stacktraces.
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
+    console.log(err);
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
@@ -206,7 +177,7 @@ if (app.get('env') === 'development') {
 
 // Production error handler.
 // No stacktraces leaked to user.
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500).end();
 });
 

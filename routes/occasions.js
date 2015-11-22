@@ -10,16 +10,24 @@ var Occasion = require('../models/Occasion');
   Clients which are not logged in will receive a 403 error code.
 */
 var requireAuthentication = function (req, res, next) {
-  if (!req.currentUser) {
+  if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    req.occasion.isParticipantOrCreator(req.currentUser._id, function (canView) {
+    req.occasion.isParticipantOrCreator(req.session.passport.user._id, function (canView) {
       if (canView) {
         next();
       } else {
         utils.sendErrResponse(res, 404, 'Resource not found.');
       }
     });
+  }
+};
+
+var requireLogin = function (req, res, next) {
+  if (!req.session.passport || !req.session.passport.user) {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+  } else {
+    next(); 
   }
 };
 
@@ -34,7 +42,7 @@ var requireAuthentication = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.currentUser._id, function (isCreator) {
+  req.occasion.isCreator(req.session.passport.user._id, function (isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -77,7 +85,7 @@ router.param('occasionId', function (req, res, next, occasionId) {
 });
 
 // Register the middleware handlers above.
-router.all('*', requireAuthentication);
+router.all('*', requireLogin);
 router.all('/:occasionId', requireOwnership);
 router.post('*', requireContent);
 
@@ -99,7 +107,7 @@ router.post('*', requireContent);
 router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
-    .findById(req.currentUser._id)
+    .findById(req.session.passport.user._id)
     .populate('createdOccasions')
     .exec(function (err, user) {
       if (err) {
@@ -112,13 +120,6 @@ router.get('/', function (req, res) {
       }
     }
   );
-  // Occasion.getTweets(req.currentUser.username, function (err, tweets) {
-  //   if (err) {
-  //     utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-  //   } else {
-  //     utils.sendSuccessResponse(res, { tweets: tweets });
-  //   }
-  // });
 });
 
 
@@ -153,7 +154,7 @@ router.get('/:occasionId', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
-  User.findByEmail(req.currentUser.username, function (err, user) {
+  User.findById(req.session.passport.user._id, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else if (!user) {
