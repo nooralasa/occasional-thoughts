@@ -108,6 +108,7 @@ router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
     .findById(req.session.passport.user._id)
+    .select('name createdOccasions')
     .populate('createdOccasions')
     .exec(function (err, user) {
       if (err) {
@@ -115,8 +116,8 @@ router.get('/', function (req, res) {
       } else {
         /*angus*/
         // render ejs
-        // res.render('xx', { createdOccasions: user.createdOccasions });
-        utils.sendSuccessResponse(res, { createdOccasions: user.createdOccasions });
+        res.render('occasions', { user: user });
+        // utils.sendSuccessResponse(res, { user: user });
       }
     }
   );
