@@ -24,10 +24,8 @@
     <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="/javascripts/handlebars.runtime-v4.0.2.js"></script>
-    <script src="/javascripts/templates.js"></script>
     <script src="/javascripts/helpers.js"></script>
     <script src="/javascripts/index.js"></script>
-    <script src="/javascripts/register.js"></script>
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -100,6 +98,28 @@
         }
 
 
+
+
+
+
+        .coverContainer {
+            width: 40%;
+            height: 40%;
+            background: #444;
+            margin: 0 auto;
+        }
+        .coverContainer img.wide {
+            max-width: 200%;
+            max-height: 100%;
+            height: auto;
+        }
+        .coverContainer img.tall {
+            max-height: 100%;
+            max-width: 100%;
+            width: auto;
+        }​
+
+
     </style>
 
 </head>
@@ -135,8 +155,8 @@
                     <li>
                         <a class="page-scroll" href="#create">Create New Occasion</a>
                     </li>
-                    <li>
-                        <a class="page-scroll" href="#contact">Contact</a>
+                      <li>
+                        <a class="page-scroll" href="#myOccasions">My Occasions</a>
                     </li>
                 </ul>
             </div>
@@ -147,17 +167,25 @@
 
     <!-- Intro Header -->
     <header class="intro">
+      
         <div class="intro-body">
+               <div class = "coverContainer">
+                        <img src= <%= occasion.coverPhoto%>>
+                </div>
             <div class="container">
                 <div class="row">
+                   
                     <div class="col-md-8 col-md-offset-2">
                         <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
-                        <p class="intro-text"><%=User%>'s Occasions</p>
+                        <p class="intro-text"><%=occasion.title%></p>
                         <ul>
                             <% for(var i=0; i<2; i++) { %>
                             <div>
-                                        <p align= "left" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Present euismod ultrices ante, ac laoreet nulla vestibulum adipiscing. Nam quis justo in augue auctor imperdiet. Nam quis justo in augue auctor imperdiet. </p>
-                                    
+                                     <li>
+                                        <img src="http://lorempixum.com/100/100/nature/4">
+                                        <h3>Hello</h3>
+                                        <p align= "left" > Hey world </p>
+                                    </li>
                             </div>
                             <% } %>
                         </ul>
