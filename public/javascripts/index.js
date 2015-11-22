@@ -57,14 +57,15 @@ $(document).on('click', '#register-btn', function(evt) {
 //   });
 // })();
 
+
 $(document).on('click', '#login', function(evt) {
 	location.href = '/auth/facebook';
 });
 
-$(document).on('click', '#register', function(evt) {
-	console.log("register button clicked");
-	$.get('/register', function (response) {
-		console.log("response is ", response);
+$(document).on('click', '#createOccasionBtn', function(evt) {
+	console.log("occasion button clicked");
+	$.get('/occasion', function (response) {
+		// console.log("response is ", response);
 		console.log('Page loaded');
 	});
 });
