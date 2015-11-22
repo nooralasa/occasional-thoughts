@@ -11,7 +11,7 @@ require('handlebars/runtime');
 var index = require('./routes/index');
 var users = require('./routes/users');
 var occasions = require('./routes/occasions');
-var thoughts = require('./routes/thoughts');
+// var thoughts = require('./routes/thoughts');
 
 // Import User model
 var User = require('./models/User')
@@ -66,7 +66,7 @@ app.use(function (req, res, next) {
 app.use('/', index);
 app.use('/users', users);
 app.use('/occasions', occasions);
-app.use('/thoughts', thoughts);
+// app.use('/thoughts', thoughts);
 
 
 // ERROR HANDLERS

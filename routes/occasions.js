@@ -145,36 +145,36 @@ router.get('/:occasionId', function (req, res) {
 
 
 /*
-  POST /notes
+  POST /occasions
   Request body:
     - content: the content of the note
   Response:
     - success: true if the server succeeded in recording the user's note
     - err: on failure, an error message
 */
-// router.post('/', function (req, res) {
-//   User.findByEmail(req.currentUser.username, function (err, user) {
-//     if (err) {
-//       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//     } else if (!user) {
-//       utils.sendErrResponse(res, 404, 'Invalid user');
-//     } else {
-//       Tweet.addTweet(req.body.content, user._id, req.body.retweetedFrom, function (er, tweet) {
-//         if (er) {
-//           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//         } else {
-//           User.addTweet(req.currentUser.username, tweet._id, function (e) {
-//             if (e) {
-//               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//             } else {
-//               utils.sendSuccessResponse(res);
-//             }
-//           });
-//         }
-//       });
-//     }
-//   });
-// });
+router.post('/', function (req, res) {
+  User.findByEmail(req.currentUser.username, function (err, user) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else if (!user) {
+      utils.sendErrResponse(res, 404, 'Invalid user');
+    } else {
+      Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, user._id, function (er, occasion) {
+        if (er) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+          user.addCreatedOccasionId(occasion._id, function (e) {
+            if (e) {
+              utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+            } else {
+              utils.sendSuccessResponse(res);
+            }
+          });
+        }
+      });
+    }
+  });
+});
 
 /*
   DELETE /notes/:note
