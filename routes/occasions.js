@@ -108,8 +108,8 @@ router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
     .findById(req.session.passport.user._id)
-    .select('name createdOccasions')
-    .populate('createdOccasions')
+    .select('name createdOccasions viewableOccasions')
+    .populate('createdOccasions viewableOccasions')
     .exec(function (err, user) {
       if (err) {
         utils.sendErrResponse(res, 500, 'An unknown error occurred.');
