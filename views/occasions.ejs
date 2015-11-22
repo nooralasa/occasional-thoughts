@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Occasional Thoughts</title>
+
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/css/grayscale.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="/javascripts/handlebars.runtime-v4.0.2.js"></script>
+    <script src="/javascripts/templates.js"></script>
+    <script src="/javascripts/helpers.js"></script>
+    <script src="/javascripts/index.js"></script>
+    <script src="/javascripts/register.js"></script>
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+        <style media="screen" type="text/css">
+
+        
+        .modal-dialog{
+            position: relative;
+            top: 50%;
+        }
+
+        .modal-content{
+            width:60%;
+            margin: auto;
+        }
+
+        #sign{
+            background-color: transparent;
+            background: transparent;
+            border: transparent;
+        }
+
+
+
+
+
+        //
+		* {margin: 0; padding: 0;}
+		body{
+			padding-top: 8%;
+		}
+
+		div {
+		  margin: 20px;
+		}
+
+		ul {
+		  list-style-type: none;
+		  width: 600px;
+		}
+
+		h3 {
+		  font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+		}
+
+		li img {
+		  float: left;
+		  margin: 0 15px 0 0;
+		}
+
+		li p {
+		  font: 200 13.5px/1.5 Cambria, Times New Roman, serif;
+		}
+
+		li {
+		  padding: 10px;
+		  overflow: auto;
+		}
+
+		li:hover {
+		  background: #eee;
+		  cursor: pointer;
+		}
+
+
+    </style>
+
+</head>
+
+<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+
+
+
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">
+                    <span class="light">Occasional</span> Thoughts
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
+                <ul class="nav navbar-nav">
+                    <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <!-- <a id="signOutModal" class="page-scroll" href = "#">Sign Out</a> -->
+                        <a  id = "sign" class="btn btn-primary btn-xl" data-toggle="modal" data-target="#signOutModal">Sign Out</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#about">About</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Intro Header -->
+    <header class="intro">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-md-offset-2">
+                        <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
+                        <p class="intro-text">My Occasions</p>
+                        <ul>
+    						<% for(var i=0; i<4; i++) { %>
+    						<div>
+        						    <li>
+      									<img src="http://lorempixum.com/100/100/nature/1" >
+      									<h3>The Grasslands</h3>
+      									<p align= "left" >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent euismod ultrices ante, ac laoreet nulla vestibulum adipiscing. Nam quis justo in augue auctor imperdiet. Nam quis justo in augue auctor imperdiet. </p>
+   								 	</li>
+    					    </div>
+    						<% } %>
+						</ul>
+                        <a class="btn btn-primary btn-xl">Create New Occasion!</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+
+
+
+
+  
+    <!-- Custom Theme JavaScript -->
+    <script src="js/grayscale.js"></script>
+
+</body>
+
+</html>
+
+
+
+
+
