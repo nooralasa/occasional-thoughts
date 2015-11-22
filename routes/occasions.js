@@ -56,7 +56,7 @@ var requireOwnership = function (req, res, next) {
   contains a 'content' field. Send error code 400 if not.
 */
 var requireContent = function (req, res, next) {
-  if (!req.body.content) {
+  if (!req.body.title) {
     utils.sendErrResponse(res, 400, 'Content required in request.');
   } else {
     next();
@@ -108,8 +108,8 @@ router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
     .findById(req.session.passport.user._id)
-    .select('name createdOccasions')
-    .populate('createdOccasions')
+    .select('name createdOccasions viewableOccasions')
+    .populate('createdOccasions viewableOccasions')
     .exec(function (err, user) {
       if (err) {
         utils.sendErrResponse(res, 500, 'An unknown error occurred.');
@@ -139,6 +139,10 @@ router.get('/:occasionId', function (req, res) {
   utils.sendSuccessResponse(res, req.occasion);
 });
 
+
+router.get("/occasion", function(req, res){
+  res.render("occasion")
+})
 
 
 
@@ -172,7 +176,7 @@ router.post('/', function (req, res) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
               // utils.sendSuccessResponse(res);
-              console.log("herer")
+              console.log("herer");
               res.redirect("/occasions");
             }
           });

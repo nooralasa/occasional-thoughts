@@ -1,6 +1,6 @@
 // Wrap in an immediately invoked function expression.
 (function() {
-  $(document).on('submit', '#createOccasionBtn', function(evt) {
+  $(document).on('submit', '#myOccasionsBtn', function(evt) {
     console.log("CLICKED CREATE OCCASION")
     evt.preventDefault();
     $.get(
