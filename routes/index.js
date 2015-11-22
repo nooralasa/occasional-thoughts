@@ -14,8 +14,12 @@ var getDateStr = function () {
 router.get('/', function(req, res) {
   var dateStr = getDateStr();
   //res.render('occasions', {user: {name:"Noor", createdOccasions: [{title: "Birthday", coverPhoto: "http://lorempixum.com/100/100/nature/4", description: "This is a party for a special baby. His name is Esa. "}]}});
-  res.render('index');
   
+  if (!req.session.passport || !req.session.passport.user) {
+    res.render('index');
+  } else {
+    res.render('dashboard', { name: req.session.passport.user.name });
+  }
   console.log("I am in the routes/index file");
 });
 
