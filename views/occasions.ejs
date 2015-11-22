@@ -152,7 +152,7 @@
                 <div class="row">
                     <div class="col-md-8 col-md-offset-2">
                         <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
-                        <p class="intro-text"><%=user.name%>'s Occasions</p>
+                        <p class="intro-text">Occasions Created By <%=user.name%></p>
                         <ul>
                             <% var numOccasions = user.createdOccasions.length %>
                             <% for(var i=0; i< numOccasions; i++) { %>
@@ -162,6 +162,26 @@
                                         <img src = <%=user.createdOccasions[i].coverPhoto%> >
                                         <h3><%=user.createdOccasions[i].title%></h3>
                                         <p align= "left" ><%=user.createdOccasions[i].description%> </p>
+                                    </li>
+                            </div>
+                            <% } %>
+                        </ul>
+                    
+                    </div>
+                       <div class="col-md-8 col-md-offset-2">
+                        <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
+                        <% var numOccasions = user.viewableOccasions.length%>
+                        <%if (numOccasions != 0){ %>
+                        <p class="intro-text">Other Occasions Viewable By <%=user.name%></p>
+                        <% } %>
+                        <ul>
+                            <% for(var i=0; i< numOccasions; i++) { %>
+                            <div>
+                                    <li>
+                                        <!--img src="http://lorempixum.com/100/100/nature/4" -->
+                                        <img src = <%=user.viewableOccasions[i].coverPhoto%> >
+                                        <h3><%=user.viewableOccasions[i].title%></h3>
+                                        <p align= "left" ><%=user.viewableOccasions[i].description%> </p>
                                     </li>
                             </div>
                             <% } %>
