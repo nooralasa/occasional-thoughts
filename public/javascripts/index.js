@@ -57,6 +57,10 @@ $(document).on('click', '#register-btn', function(evt) {
 //   });
 // })();
 
+$(document).on('click', '#login', function(evt) {
+	location.href = '/auth/facebook';
+});
+
 $(document).on('click', '#register', function(evt) {
 	console.log("register button clicked");
 	$.get('/register', function (response) {
