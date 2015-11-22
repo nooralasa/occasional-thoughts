@@ -13,10 +13,9 @@ var getDateStr = function () {
 /* GET home page. */
 router.get('/', function(req, res) {
   var dateStr = getDateStr();
-
-  //res.render('occasions', {user: {name:"Noor", createdOccasions: [{title: "Birthday", coverPhoto: "http://lorempixum.com/100/100/nature/4", description: "This is a party for a special baby. His name is Esa. "}], viewableOccasions: []}});
+   //res.render('occasions', {user: {name:"Noor", createdOccasions: [{title: "Birthday", coverPhoto: "http://lorempixum.com/100/100/nature/4", description: "This is a party for a special baby. His name is Esa. "}], viewableOccasions: []}});
   /*res.render('occasion', {occasion: {title:"Noor's Graduation", 
-    coverPhoto: "http://cdn.images.express.co.uk/img/dynamic/14/590x/champagne-419634.jpg", 
+    coverPhoto: "http://www.hdwallpaperscool.com/wp-content/uploads/2015/05/mother-nature-widescreen-full-hd-wallpaper.jpg", 
     description: "This is a party for Noor as he enters his final year of college ", 
     creator: "Angus Lai"}});
 */
