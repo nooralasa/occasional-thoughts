@@ -15,6 +15,7 @@ var users = require('./routes/users');
 var occasions = require('./routes/occasions');
 // var thoughts = require('./routes/thoughts');
 
+
 // Import User model
 var User = require('./models/User');
 // var NewUser = require('./models/NewUser');
@@ -121,6 +122,7 @@ app.use(passport.session());
 // Map paths to imported route handlers
 app.use('/', index);
 app.use('/users', users);
+app.use('/dashboard', dashboard);
 app.use('/occasions', occasions);
 // app.use('/thoughts', thoughts);
 
