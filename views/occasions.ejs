@@ -155,14 +155,14 @@
             <p class="intro-text"><%=user.name%>'s Occasions</p>
             <ul>
               <% var numOccasions = user.createdOccasions.length %>
-              <% for(var i=0; i< numOccasions; i++) { %>
+              <% for (var i=0; i< numOccasions; i++) { %>
               <div>
-                  <li>
-                    <!--img src="http://lorempixum.com/100/100/nature/4" -->
-                    <img src = <%=user.createdOccasions[i].coverPhoto%> >
-                    <h3><%=user.createdOccasions[i].title%></h3>
-                    <p align= "left" ><%=user.createdOccasions[i].description%> </p>
-                  </li>
+                <li>
+                  <!--img src="http://lorempixum.com/100/100/nature/4" -->
+                  <img src = <%=user.createdOccasions[i].coverPhoto%> />
+                  <h3><%=user.createdOccasions[i].title%></h3>
+                  <p align= "left" ><%=user.createdOccasions[i].description%> </p>
+                </li>
               </div>
               <% } %>
             </ul>

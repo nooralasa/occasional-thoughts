@@ -56,7 +56,7 @@ var requireOwnership = function (req, res, next) {
   contains a 'content' field. Send error code 400 if not.
 */
 var requireContent = function (req, res, next) {
-  if (!req.body.content) {
+  if (!req.body.title) {
     utils.sendErrResponse(res, 400, 'Content required in request.');
   } else {
     next();
@@ -172,7 +172,7 @@ router.post('/', function (req, res) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
               // utils.sendSuccessResponse(res);
-              console.log("herer")
+              console.log("herer");
               res.redirect("/occasions");
             }
           });
