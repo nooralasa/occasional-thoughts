@@ -11,9 +11,7 @@ require('handlebars/runtime');
 
 // Import route handlers
 var index = require('./routes/index');
-var users = require('./routes/users');
 var occasions = require('./routes/occasions');
-// var thoughts = require('./routes/thoughts');
 
 
 // Import User model
@@ -29,7 +27,7 @@ mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/mymongodb');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
-    console.log("database connected");
+  console.log("database connected");
 });
 
 // Passport session setup.
@@ -39,14 +37,13 @@ db.once('open', function (callback) {
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Facebook profile is serialized
 //   and deserialized.
-passport.serializeUser(function (user, done) {
-  console.log('in serialize user: ', user);
-  done(null, user);
+passport.serializeUser(function (userId, done) {
+  done(null, userId);
 });
 
-passport.deserializeUser(function (user, done) {
-  console.log('in deserialize user: ', user);
-  done(null, user);
+passport.deserializeUser(function (userId, done) {
+  console.log('in deserialize user: ', userId);
+  done(null, userId);
 });
 
 // Use the FacebookStrategy within Passport.
@@ -61,16 +58,15 @@ passport.use(new FacebookStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      console.log('profile', profile);
-      console.log("------------");
       User.findByFbid(profile.id, function (err, user) {
+        console.log('in passport');
         if (err)
           done(err);
         if (user) {
-          done(null, user);
+          done(null, user._id);
         } else {
           User.createNewUser(profile.emails[0].value, accessToken, profile.id, profile.displayName, profile.photos[0].value, function (er, newUser) {
-            done(null, newUser);
+            done(null, newUser._id);
           });
         }
       });
@@ -121,9 +117,7 @@ app.use(passport.session());
 
 // Map paths to imported route handlers
 app.use('/', index);
-app.use('/users', users);
 app.use('/occasions', occasions);
-// app.use('/thoughts', thoughts);
 
 // GET /auth/facebook
 //   Use passport.authenticate() as route middleware to authenticate the
@@ -132,7 +126,7 @@ app.use('/occasions', occasions);
 //   redirect the user back to this application at /auth/facebook/callback
 app.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['user_friends', 'email']}),
-  function(req, res){
+  function (req, res){
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
   }
@@ -145,7 +139,7 @@ app.get('/auth/facebook',
 //   which, in this example, will redirect the user to the home page.
 app.get('/auth/facebook/callback', 
   passport.authenticate('facebook', { failureRedirect: '/' }),
-  function(req, res) {
+  function (req, res) {
     //TODO: Change this to the landing page of logged in users 
     res.redirect('/');
   }

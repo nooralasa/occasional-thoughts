@@ -71,8 +71,9 @@ userSchema.statics.findAllByEmail = function (emails, callback) {
 }
 
 userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
-  this.createdOccasions.push(occasionId);
-  this.save();
+  var self = this;
+  self.createdOccasions.push(occasionId);
+  self.save();
   callback(null);
 }
 

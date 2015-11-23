@@ -4,6 +4,7 @@ var utils = require('../utils/utils');
 
 var User = require('../models/User');
 var Occasion = require('../models/Occasion');
+var Thought = require('../models/Thought');
 
 /*
   Require authentication on ALL access to /notes/*
@@ -13,7 +14,7 @@ var requireAuthentication = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    req.occasion.isParticipantOrCreator(req.session.passport.user._id, function (canView) {
+    req.occasion.isParticipantOrCreator(req.session.passport.user, function (err, canView) {
       if (canView) {
         next();
       } else {
@@ -42,7 +43,7 @@ var requireLogin = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.session.passport.user._id, function (isCreator) {
+  req.occasion.isCreator(req.session.passport.user, function (isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -86,7 +87,7 @@ router.param('occasionId', function (req, res, next, occasionId) {
 
 // Register the middleware handlers above.
 router.all('*', requireLogin);
-router.all('/:occasionId', requireOwnership);
+router.all('/:occasionId', requireAuthentication);
 router.post('*', requireContent);
 
 /*
@@ -107,7 +108,7 @@ router.post('*', requireContent);
 router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
-    .findById(req.session.passport.user._id)
+    .findById(req.session.passport.user)
     .select('name createdOccasions viewableOccasions')
     .populate('createdOccasions viewableOccasions')
     .exec(function (err, user) {
@@ -136,6 +137,7 @@ router.get('/', function (req, res) {
 router.get('/:occasionId', function (req, res) {
   /*angus*/
   // res.render('yy', { occasion: req.occasion })
+  console.log('in get');
   utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
 
@@ -153,8 +155,7 @@ router.get('/:occasionId', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
-  console.log("Clicked the Create Occasion Button");
-  User.findById(req.session.passport.user._id, function (err, user) {
+  User.findById(req.session.passport.user, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else if (!user) {
@@ -169,7 +170,6 @@ router.post('/', function (req, res) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
               // utils.sendSuccessResponse(res);
-              console.log("herer");
               res.redirect("/occasions");
             }
           });
