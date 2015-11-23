@@ -12,6 +12,7 @@ require('handlebars/runtime');
 // Import route handlers
 var index = require('./routes/index');
 var occasions = require('./routes/occasions');
+var users = require('./routes/users');
 
 
 // Import User model
@@ -117,6 +118,7 @@ app.use(passport.session());
 // Map paths to imported route handlers
 app.use('/', index);
 app.use('/occasions', occasions);
+app.use('/users', users);
 
 // GET /auth/facebook
 //   Use passport.authenticate() as route middleware to authenticate the

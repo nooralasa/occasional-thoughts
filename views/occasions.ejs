@@ -100,7 +100,7 @@
       }
 
       li {
-        padding: 10px;
+        padding: 0px;
         overflow: auto;
       }
 
@@ -112,6 +112,26 @@
       h3{
         color:#000000;
       }
+
+      #logo{
+        margin: 0 0px 0;
+        position: absolute;
+        padding: 0px;
+        top:6%;
+      }
+
+      .navbar-brand{
+        height:700px;
+      }
+      #sign{
+        /*position:absolute;*/
+        top:2%;
+      }
+
+      #hidden {
+        background: #000000;
+        color:#000000;
+    }
 
     </style>
 
@@ -125,29 +145,25 @@
     <!-- Navigation -->
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
       <div class="container">
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
-            <i class="fa fa-bars"></i>
-          </button>
-          <a class="navbar-brand page-scroll" href="#page-top">
-            <span class="light">Occasional</span> Thoughts
-          </a>
-        </div>
+        <!-- <div class="navbar-header"> -->
+          <!-- <a class="navbar-brand page-scroll"> -->
+            <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+          <!-- </a> -->
+        <!-- </div> -->
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
           <ul class="nav navbar-nav">
             <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-            <li class="hidden">
-              <a href="#page-top"></a>
+            <li>
+            <a id = "hidden" class="page-scroll">Create New Occasion</a>
+          </li>
+            <li>
+              <a class="page-scroll" href="/">Create New Occasion</a>
             </li>
             <li>
               <!-- <a id="signOutModal" class="page-scroll" href = "#">Sign Out</a> -->
               <a  id = "sign" class="btn btn-primary btn-xl" data-toggle="modal" data-target="#signOutModal">Sign Out</a>
-            </li>
-        
-            <li>
-              <a class="page-scroll" href="#contact">Create New Occasion</a>
             </li>
           </ul>
         </div>
@@ -208,7 +224,7 @@
     </header>
     
     <!-- Custom Theme JavaScript -->
-    <script src="js/grayscale.js"></script>
+    <script src="/js/grayscale.js"></script>
   </body>
 </html>
 
