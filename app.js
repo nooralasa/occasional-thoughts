@@ -146,6 +146,14 @@ app.get('/auth/facebook/callback',
   }
 );
 
+//Logingout
+app.get('/logout', 
+  function (req, res) {
+    req.logout();
+    res.redirect('/');
+  }
+);
+
 // ERROR HANDLERS
 // Note: The methods below are called
 // only if none of the above routes 

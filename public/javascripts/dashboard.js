@@ -15,11 +15,17 @@ $(function () {
 
 
 $(function () {
-  $("noorsBtn").click(function(){
-    
-    $("noorsBtn").get("https://graph.facebook.com/USER_ID/invitable_friends", function(data, status){
+  $("#noorsBtn").click(function(){
+    $.get("/users/current",function(data) {
+      console.log(data);
+      var fbid = data.content.user.fbid;
+      console.log(fbid);
+      $.get("https://graph.facebook.com/"+fbid+"/friends", function(data, status){
         console.log("The call is being called");
+        //console.log(data);
     });
+    })
+    
   });
 })
                       
