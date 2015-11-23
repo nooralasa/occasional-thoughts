@@ -14,3 +14,14 @@ $(function () {
 });
 
 
+$(function () {
+  $("noorsBtn").click(function(){
+    
+    $("noorsBtn").get("https://graph.facebook.com/USER_ID/invitable_friends", function(data, status){
+        console.log("The call is being called");
+    });
+  });
+})
+                      
+
+
