@@ -15,6 +15,7 @@ var requireAuthentication = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     req.occasion.isParticipantOrCreator(req.session.passport.user, function (err, canView) {
+      console.log(canView);
       if (canView) {
         next();
       } else {
@@ -57,7 +58,7 @@ var requireOwnership = function (req, res, next) {
   contains a 'content' field. Send error code 400 if not.
 */
 var requireContent = function (req, res, next) {
-  if (!req.body.title) {
+  if (!req.body.title && !req.body.message) {
     utils.sendErrResponse(res, 400, 'Content required in request.');
   } else {
     next();
@@ -71,6 +72,7 @@ var requireContent = function (req, res, next) {
 
 /*angus*/
 router.param('occasionId', function (req, res, next, occasionId) {
+  console.log('in param');
   Occasion
     .findById(occasionId)
     .populate('thoughts')
@@ -135,6 +137,7 @@ router.get('/', function (req, res) {
 */
 router.get('/:occasionId', function (req, res) {
   /*angus*/
+  console.log("occasion object", req.occasion);
   res.render('occasion', { occasion: req.occasion });
   // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
@@ -181,17 +184,20 @@ router.post('/', function (req, res) {
 
 
 router.post('/:occasionId/thoughts', function (req, res) {
-  User.findById(req.session.passport.user._id, function (err, user) {
+  console.log('in post thoughts');
+  console.log(req.session.passport.user);
+  User.findById(req.session.passport.user, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else if (!user) {
+      console.log('not user');
       utils.sendErrResponse(res, 404, 'Invalid user');
     } else {
       Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, user._id, function (er, thought) {
         if (er) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          Occasion.findById(res.occasion._id, function (error, occasion) {
+          Occasion.findById(req.occasion._id, function (error, occasion) {
             if (error) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {

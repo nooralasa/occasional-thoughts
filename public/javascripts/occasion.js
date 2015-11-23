@@ -8,6 +8,7 @@ $(window).load(function(){
 
 
 $(document).on('click', '#add-thought', function(evt) {
+    evt.preventDefault();
 	var message = document.getElementById('thought-message').value;
 	var id = $("input[name=occasionId]").val();
 	//var photo = document.getElementById().value;
