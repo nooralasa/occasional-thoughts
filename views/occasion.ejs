@@ -194,11 +194,12 @@
                       <div class="input-group">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
                         </span>
-                        <input name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
+                        <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
+                        <input name="occasionId" value="<%=occasion._id%>" type="hidden">
                       </div>
                     </div>
         
-                    <input type = "submit" class="btn btn-sm btn-primary btn-block" role="button" value = "Submit"> 
+                    <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
                   </form>
             
 
@@ -212,7 +213,7 @@
               <div class="thought">
                    <li >
                     <img src="<%=occasion.thoughts[i].photo%>">
-                    <h3 align="left"><%=occasion.thoughts[i].creator.firstName +" "+occasion.thoughts[i].creator.lastName %></h3>
+                    <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
                     <p align= "left" > <%=occasion.thoughts[i].message%></p>
                   </li>
               </div>
