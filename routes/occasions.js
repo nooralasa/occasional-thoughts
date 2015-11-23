@@ -136,15 +136,8 @@ router.get('/', function (req, res) {
 router.get('/:occasionId', function (req, res) {
   /*angus*/
   // res.render('yy', { occasion: req.occasion })
-  utils.sendSuccessResponse(res, req.occasion);
+  utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
-
-
-router.get("/occasion", function(req, res){
-  res.render("occasion")
-})
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // everything below is a work in progress
@@ -189,29 +182,35 @@ router.post('/', function (req, res) {
 
 
 
-// router.post('/:occasionId/thoughts', function (req, res) {
-//   User.findById(req.session.passport.user._id, function (err, user) {
-//     if (err) {
-//       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//     } else if (!user) {
-//       utils.sendErrResponse(res, 404, 'Invalid user');
-//     } else {
-//       Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, user._id, function (er, occasion) {
-//         if (er) {
-//           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//         } else {
-//           user.addCreatedOccasionId(occasion._id, function (e) {
-//             if (e) {
-//               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//             } else {
-//               utils.sendSuccessResponse(res);
-//             }
-//           });
-//         }
-//       });
-//     }
-//   });
-// });
+router.post('/:occasionId/thoughts', function (req, res) {
+  User.findById(req.session.passport.user._id, function (err, user) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else if (!user) {
+      utils.sendErrResponse(res, 404, 'Invalid user');
+    } else {
+      Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, user._id, function (er, thought) {
+        if (er) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+          Occasion.findById(res.occasion._id, function (error, occasion) {
+            if (error) {
+              utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+            } else {
+              occasion.addThought(thought._id, function (e) {
+                if (e) {
+                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+                } else {
+                  utils.sendSuccessResponse(res);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
 
 
 
