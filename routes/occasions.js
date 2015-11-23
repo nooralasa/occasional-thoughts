@@ -136,7 +136,7 @@ router.get('/', function (req, res) {
 */
 router.get('/:occasionId', function (req, res) {
   /*angus*/
-  res.render('occasion', { occasion: req.occasion })
+  res.render('occasion', { occasion: req.occasion });
   // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
 
@@ -168,8 +168,8 @@ router.post('/', function (req, res) {
             if (e) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
-              // utils.sendSuccessResponse(res);
-              res.redirect("/occasions");
+              utils.sendSuccessResponse(res);
+              // res.redirect("/occasions");
             }
           });
         }
@@ -200,6 +200,7 @@ router.post('/:occasionId/thoughts', function (req, res) {
                 if (e) {
                   utils.sendErrResponse(res, 500, 'An unknown error occurred.');
                 } else {
+                  // res.render('occasion', { occasion: req.occasion });
                   utils.sendSuccessResponse(res);
                 }
               });
