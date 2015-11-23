@@ -95,19 +95,16 @@ occasionSchema.methods.isRecipient = function (userId, callback) {
 
 occasionSchema.methods.isCreator = function (userId, callback) {
   var self = this;
-  console.log(userId);
-  console.log(self.creator);
-  console.log(self.creator.equals(userId));
   callback(null, self.creator.equals(userId));
 }
 
 occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
   var self = this;
-  self.isParticipant(userId, function (isParticipant) {
+  self.isParticipant(userId, function (err, isParticipant) {
     if (isParticipant) {
       callback(null, true);
     } else {
-      self.isCreator(userId, function (isCreator) {
+      self.isCreator(userId, function (er, isCreator) {
         callback(null, isCreator);
       });
     }

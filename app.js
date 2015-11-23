@@ -59,7 +59,6 @@ passport.use(new FacebookStrategy({
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
       User.findByFbid(profile.id, function (err, user) {
-        console.log('in passport');
         if (err)
           done(err);
         if (user) {

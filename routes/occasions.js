@@ -136,9 +136,8 @@ router.get('/', function (req, res) {
 */
 router.get('/:occasionId', function (req, res) {
   /*angus*/
-  // res.render('yy', { occasion: req.occasion })
-  console.log('in get');
-  utils.sendSuccessResponse(res, { occasion: req.occasion });
+  res.render('occasion', { occasion: req.occasion })
+  // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
