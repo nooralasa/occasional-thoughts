@@ -100,11 +100,11 @@ occasionSchema.methods.isCreator = function (userId, callback) {
 
 occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
   var self = this;
-  self.isParticipant(userId, function (isParticipant) {
+  self.isParticipant(userId, function (err, isParticipant) {
     if (isParticipant) {
       callback(null, true);
     } else {
-      self.isCreator(userId, function (isCreator) {
+      self.isCreator(userId, function (er, isCreator) {
         callback(null, isCreator);
       });
     }

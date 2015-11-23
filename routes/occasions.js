@@ -4,6 +4,7 @@ var utils = require('../utils/utils');
 
 var User = require('../models/User');
 var Occasion = require('../models/Occasion');
+var Thought = require('../models/Thought');
 
 /*
   Require authentication on ALL access to /notes/*
@@ -13,7 +14,7 @@ var requireAuthentication = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    req.occasion.isParticipantOrCreator(req.session.passport.user._id, function (canView) {
+    req.occasion.isParticipantOrCreator(req.session.passport.user, function (err, canView) {
       if (canView) {
         next();
       } else {
@@ -42,7 +43,7 @@ var requireLogin = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.session.passport.user._id, function (isCreator) {
+  req.occasion.isCreator(req.session.passport.user, function (isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -86,7 +87,7 @@ router.param('occasionId', function (req, res, next, occasionId) {
 
 // Register the middleware handlers above.
 router.all('*', requireLogin);
-router.all('/:occasionId', requireOwnership);
+router.all('/:occasionId', requireAuthentication);
 router.post('*', requireContent);
 
 /*
@@ -107,7 +108,7 @@ router.post('*', requireContent);
 router.get('/', function (req, res) {
   // res.render('index', { date : dateStr });
   User
-    .findById(req.session.passport.user._id)
+    .findById(req.session.passport.user)
     .select('name createdOccasions viewableOccasions')
     .populate('createdOccasions viewableOccasions')
     .exec(function (err, user) {
@@ -135,16 +136,9 @@ router.get('/', function (req, res) {
 */
 router.get('/:occasionId', function (req, res) {
   /*angus*/
-  // res.render('yy', { occasion: req.occasion })
-  utils.sendSuccessResponse(res, req.occasion);
+  res.render('occasion', { occasion: req.occasion })
+  // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
-
-
-router.get("/occasion", function(req, res){
-  res.render("occasion")
-})
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // everything below is a work in progress
@@ -160,8 +154,7 @@ router.get("/occasion", function(req, res){
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
-  console.log("Clicked the Create Occasion Button");
-  User.findById(req.session.passport.user._id, function (err, user) {
+  User.findById(req.session.passport.user, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else if (!user) {
@@ -176,7 +169,6 @@ router.post('/', function (req, res) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
               // utils.sendSuccessResponse(res);
-              console.log("herer");
               res.redirect("/occasions");
             }
           });
@@ -189,29 +181,35 @@ router.post('/', function (req, res) {
 
 
 
-// router.post('/:occasionId/thoughts', function (req, res) {
-//   User.findById(req.session.passport.user._id, function (err, user) {
-//     if (err) {
-//       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//     } else if (!user) {
-//       utils.sendErrResponse(res, 404, 'Invalid user');
-//     } else {
-//       Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, user._id, function (er, occasion) {
-//         if (er) {
-//           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//         } else {
-//           user.addCreatedOccasionId(occasion._id, function (e) {
-//             if (e) {
-//               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//             } else {
-//               utils.sendSuccessResponse(res);
-//             }
-//           });
-//         }
-//       });
-//     }
-//   });
-// });
+router.post('/:occasionId/thoughts', function (req, res) {
+  User.findById(req.session.passport.user._id, function (err, user) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else if (!user) {
+      utils.sendErrResponse(res, 404, 'Invalid user');
+    } else {
+      Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, user._id, function (er, thought) {
+        if (er) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+          Occasion.findById(res.occasion._id, function (error, occasion) {
+            if (error) {
+              utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+            } else {
+              occasion.addThought(thought._id, function (e) {
+                if (e) {
+                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+                } else {
+                  utils.sendSuccessResponse(res);
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+});
 
 
 
