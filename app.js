@@ -117,6 +117,7 @@ app.use(passport.session());
 // Map paths to imported route handlers
 app.use('/', index);
 app.use('/occasions', occasions);
+app.use('/user', user);
 
 // GET /auth/facebook
 //   Use passport.authenticate() as route middleware to authenticate the
