@@ -4,7 +4,7 @@ var router = express.Router();
 var User = require('../models/User');
 
 /* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
 
    //res.render('occasions', {user: {name:"Noor", createdOccasions: [{title: "Birthday", coverPhoto: "http://lorempixum.com/100/100/nature/4", description: "This is a party for a special baby. His name is Esa. "}], viewableOccasions: []}});
   /*res.render('occasion', {occasion: {title:"Noor's Graduation", 

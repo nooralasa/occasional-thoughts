@@ -106,7 +106,6 @@ router.post('*', requireContent);
     - err: on failure, an error message
 */
 router.get('/', function (req, res) {
-  // res.render('index', { date : dateStr });
   User
     .findById(req.session.passport.user)
     .select('name createdOccasions viewableOccasions')
