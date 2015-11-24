@@ -15,7 +15,6 @@ var requireAuthentication = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     req.occasion.isParticipantOrCreator(req.session.passport.user, function (err, canView) {
-      console.log(canView);
       if (canView) {
         next();
       } else {
@@ -75,7 +74,11 @@ router.param('occasionId', function (req, res, next, occasionId) {
   console.log('in param');
   Occasion
     .findById(occasionId)
-    .populate('thoughts')
+    // .populate('thoughts')  
+    .populate({
+      path: 'thoughts',     
+      populate: { path: 'creator', model: User }
+    })
     .exec(function (err, occasion) {
       if (occasion) {
         req.occasion = occasion;
@@ -137,7 +140,7 @@ router.get('/', function (req, res) {
 */
 router.get('/:occasionId', function (req, res) {
   /*angus*/
-  console.log("occasion object", req.occasion);
+  // console.log("occasion object", req.occasion);
   res.render('occasion', { occasion: req.occasion });
   // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
@@ -184,13 +187,10 @@ router.post('/', function (req, res) {
 
 
 router.post('/:occasionId/thoughts', function (req, res) {
-  console.log('in post thoughts');
-  console.log(req.session.passport.user);
   User.findById(req.session.passport.user, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else if (!user) {
-      console.log('not user');
       utils.sendErrResponse(res, 404, 'Invalid user');
     } else {
       Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, user._id, function (er, thought) {
