@@ -60,6 +60,16 @@ userSchema.statics.findByFbid = function (fbid, callback) {
   });
 }
 
+userSchema.statics.findAllByFbid = function (fbids, callback) {
+  this.find({ 'fbid': { $in: fbids} }, function (err, users) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, users);
+    }
+  });
+}
+
 userSchema.statics.findAllByEmail = function (emails, callback) {
   this.find({ 'email': { $in: emails} }, function (err, users) {
     if (err) {

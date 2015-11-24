@@ -176,7 +176,7 @@
     
     <div class="intro-body">
       <div class = "coverContainer">
-        <%if (occasion.coverPhoto != undefined) {%>
+        <%if (occasion.coverPhoto !== undefined) {%>
           <img src= <%= occasion.coverPhoto%>>
         <% } else { %>
           <img src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >
@@ -189,41 +189,39 @@
           <div class="col-md-8 col-md-offset-2">
             <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
             <p class="intro-text"><%=occasion.title%></p>
+            <ul>
+              <% for (var i=0; i<occasion.participants.length; i++) { %>
+                <li>
+                  <p align="left"><%=occasion.participants[i].name %></p>
+                </li>
+              <% } %>
+            </ul>
 
             <%if (!occasion.isPublished) { %>
-                  <form class="form form-signup" role="form" >
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
-                        </span>
-                        <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
-                        <input name="occasionId" value="<%=occasion._id%>" type="hidden">
-                        <input name="userName" value="<%=user.name%>" type="hidden">
-                      </div>
-                    </div>
-        
-                    <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
-                  </form>
-            
-
+              <form class="form form-signup" role="form" >
+                <div class="form-group">
+                  <div class="input-group">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
+                    </span>
+                    <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
+                    <input name="occasionId" value="<%=occasion._id%>" type="hidden">
+                    <input name="userName" value="<%=user.name%>" type="hidden">
+                  </div>
+                </div>
+    
+                <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
+              </form>
             <% } %>
 
-
-
-
-
-
-
-            <ul id = "thought-list" >
-
+            <ul id="thought-list" >
               <% var numThoughts = occasion.thoughts.length%>
               <% for (var i=0; i<numThoughts; i++) { %>
               <div class="thought">
-                   <li >
-                    <img src="<%=occasion.thoughts[i].photo%>">
-                    <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
-                    <p align= "left" > <%=occasion.thoughts[i].message%></p>
-                  </li>
+                <li>
+                  <img src="<%=occasion.thoughts[i].photo%>">
+                  <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
+                  <p align= "left" > <%=occasion.thoughts[i].message%></p>
+                </li>
               </div>
               <% } %>
             </ul>
