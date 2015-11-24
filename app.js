@@ -7,7 +7,6 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
-require('handlebars/runtime');
 
 // Import route handlers
 var index = require('./routes/index');

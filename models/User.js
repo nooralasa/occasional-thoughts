@@ -91,4 +91,4 @@ userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
 //   callback(null, this.viewableOccasion);
 // }
 
-module.exports = mongoose.model("NewUser", userSchema);
+module.exports = mongoose.model("User", userSchema);
