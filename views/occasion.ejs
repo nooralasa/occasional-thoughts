@@ -51,7 +51,7 @@
 
     div {
       margin: 2px;
-      background-color: black
+      background-color: black;
 
     }
 
@@ -80,7 +80,7 @@
     }
 
     .thought{
-      background-color: #396a93;
+      background-color: #9BCE7D;
       /*align: center;*/
       position:relative;
       left:8%;
@@ -179,7 +179,7 @@
         <%if (occasion.coverPhoto != undefined) {%>
           <img src= <%= occasion.coverPhoto%>>
         <% } else { %>
-          <img src = "http://2.bp.blogspot.com/-WxTp19q1Z5w/UcbZp8hkFfI/AAAAAAAAQDc/Ho92XkGevD0/s1600/watermarked_cover333.jpg" >
+          <img src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >
         <%}%>
 
       </div>
@@ -198,6 +198,7 @@
                         </span>
                         <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
                         <input name="occasionId" value="<%=occasion._id%>" type="hidden">
+                        <input name="userName" value="<%=user.name%>" type="hidden">
                       </div>
                     </div>
         
@@ -208,7 +209,12 @@
             <% } %>
 
 
-            <ul>
+
+
+
+
+
+            <ul id = "thought-list" >
 
               <% var numThoughts = occasion.thoughts.length%>
               <% for (var i=0; i<numThoughts; i++) { %>
