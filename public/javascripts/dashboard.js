@@ -30,17 +30,18 @@ $(function () {
 });
 
 $(function () {
+  var friends = [];
   $.get("/users/current",function (data) {
     var fbid = data.content.user.fbid;
     var token = data.content.user.token;
     $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function(obj, status){
-      var friends = [];
       obj.data.forEach(function (friend, friendIndex) {
         friends.push(friend.name);
       });
       console.log(friends);
       $('#share').autocomplete({
-        source: friends
+        source: friends,
+        autoFocus:true
       });
     });
   });
@@ -48,7 +49,14 @@ $(function () {
   $('#share').keypress(function (e) {
     if(e.which == 13) {
       e.preventDefault();
-      console.log($('#share').val());
+      var input = $('#share').val();
+      friends.forEach(function (friend) {
+        if (input==friend) {
+          $('#friends-div').append("<div><label>"+friend+"</label></div>");
+          $('#share').val('');
+          //do stuff
+        }
+      });
     }
   });
 });
