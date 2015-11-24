@@ -80,13 +80,15 @@
     }
 
     .thought{
-      background-color: #9BCE7D;
+      background-color: #16A79D;
       /*align: center;*/
       position:relative;
       left:8%;
     }
 
-
+    .thought-box{
+      padding-top: 40px;
+    }
 
     .coverContainer {
       width: 100%;
@@ -216,8 +218,8 @@
             <ul id="thought-list" >
               <% var numThoughts = occasion.thoughts.length%>
               <% for (var i=0; i<numThoughts; i++) { %>
-              <div class="thought">
-                <li>
+              <div class = "thought-box">
+                <li class ="thought">
                   <img src="<%=occasion.thoughts[i].photo%>">
                   <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
                   <p align= "left" > <%=occasion.thoughts[i].message%></p>
