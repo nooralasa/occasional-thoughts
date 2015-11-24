@@ -139,9 +139,22 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.get('/:occasionId', function (req, res) {
+  User
+    .findById(req.session.passport.user)
+    .select('name')
+    .exec(function (err, user) {
+      if (err) {
+        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+      } else {
+        res.render('occasion', { occasion: req.occasion, user: user });
+        // utils.sendSuccessResponse(res, { user: user });
+      }
+    }
+  );
+
+
   /*angus*/
   // console.log("occasion object", req.occasion);
-  res.render('occasion', { occasion: req.occasion });
   // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
 
