@@ -10,6 +10,7 @@ $(window).load(function(){
 $(document).on('click', '#add-thought', function(evt) {
     evt.preventDefault();
 	var message = document.getElementById('thought-message').value;
+	$('#thought-message').val('');
 	var id = $("input[name=occasionId]").val();
 	var name = $("input[name=userName]").val();
 	//var photo = document.getElementById().value;
@@ -20,13 +21,9 @@ $(document).on('click', '#add-thought', function(evt) {
 			isPublic: true}
 		).done(function(response) {
           $('#thought-list').append( 
-          	"<div class="thought">
-                   <li >
-                    <img src='http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg'>
-                    <h3 align="left">"+ name +"></h3>
-                    <p align= "left" >"+ message +"</p>
-                  </li>
-              </div>");
+          	'<div class= "thought"> <li ><img src="http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg"><h3 align="left">'
+          	+ name +'></h3><p align= "left" >'+ message +'</p></li></div>'
+          	);
      	     
       }).fail(function(responseObject) {
           var response = $.parseJSON(responseObject.responseText);
