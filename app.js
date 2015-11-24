@@ -9,14 +9,14 @@ var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 require('handlebars/runtime');
 
+// Import User model
+var User = require('./models/User');
 // Import route handlers
 var index = require('./routes/index');
 var occasions = require('./routes/occasions');
 var users = require('./routes/users');
 
 
-// Import User model
-var User = require('./models/User');
 // var NewUser = require('./models/NewUser');
 
 var FACEBOOK_APP_ID = "929113373843865";
