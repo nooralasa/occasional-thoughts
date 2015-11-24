@@ -34,7 +34,7 @@ $(function () {
     var fbid = data.content.user.fbid;
     var token = data.content.user.token;
     $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function (obj, status){
-    	console.log(obj);
+    	console.log(obj.data);
       var friends = [];
       obj.data.forEach(function (friend, friendIndex) {
         friends.push(friend.name);
