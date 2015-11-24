@@ -33,7 +33,6 @@ $(function () {
   $.get("/users/current",function (data) {
     var fbid = data.content.user.fbid;
     var token = data.content.user.token;
-    console.log(fbid);
     $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function(obj, status){
       var friends = [];
       obj.data.forEach(function (friend, friendIndex) {
