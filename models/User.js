@@ -112,9 +112,11 @@ userSchema.statics.findAllOccasions = function (userId, callback) {
 }
 
 
-
-
-  
+userSchema.methods.updateProfilePicture = function (newUrl, callback) {
+  this.profilePicture = newUrl;
+  this.save();
+  callback(null);
+}
 
 // userSchema.methods.getCreatedOccasionIds = function (callback) {
 //   callback(null, this.createdOccasion);

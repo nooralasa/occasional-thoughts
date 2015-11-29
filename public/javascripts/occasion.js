@@ -22,7 +22,7 @@ $(document).on('click', '#add-thought', function(evt) {
 		).done(function(response) {
           $('#thought-list').append( 
           	'<div class= "thought"> <li ><img src="http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg"><h3 align="left">'
-          	+ name +'></h3><p align= "left" >'+ message +'</p></li></div>'
+          	+ name +'</h3><p align= "left" >'+ message +'</p></li></div>'
           	);
      	     
       }).fail(function(responseObject) {

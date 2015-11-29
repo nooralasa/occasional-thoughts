@@ -58,11 +58,14 @@ passport.use(new FacebookStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
+      console.log(profile);
       User.findByFbid(profile.id, function (err, user) {
         if (err)
           done(err);
         if (user) {
-          done(null, { id: user._id, name: user.name });
+          user.updateProfilePicture(profile.photos[0].value, function (er) {
+            done(null, { id: user._id, name: user.name });
+          });
         } else {
           User.createNewUser(profile.emails[0].value, accessToken, profile.id, profile.displayName, profile.photos[0].value, function (er, newUser) {
             done(null, { id: newUser._id, name: newUser.name });

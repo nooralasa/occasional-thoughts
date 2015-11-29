@@ -1,0 +1,40 @@
+<!-- Adds thought list items on an occasion page -->
+<!-- @author: Suniyya --> 
+
+<div class="col-md-8 col-md-offset-2">
+  <p class="intro-text"><%=occasion.title%></p>
+
+  <%if (!occasion.isPublished) { %>
+        <form class="form form-signup" role="form" >
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
+              </span>
+              <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
+              <input name="occasionId" value="<%=occasion._id%>" type="hidden">
+              <input name="userName" value="<%=user.name%>" type="hidden">
+            </div>
+          </div>
+
+          <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
+        </form>
+  
+
+  <% } %>
+
+
+  <ul id = "thought-list" >
+
+    <% var numThoughts = occasion.thoughts.length%>
+    <% for (var i=0; i<numThoughts; i++) { %>
+    <div class = "thought-box">
+         <li class ="thought">
+          <img src="<%=occasion.thoughts[i].photo%>">
+          <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
+          <p align= "left" > <%=occasion.thoughts[i].message%></p>
+        </li>
+    </div>
+    <% } %>
+  </ul>
+
+</div>
