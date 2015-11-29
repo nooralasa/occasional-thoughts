@@ -93,6 +93,25 @@ userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
   callback(null);
 }
 
+userSchema.statics.findAllOccasions = function (userId, callback) {
+  this
+    .findById(userId)
+    .select('name createdOccasions viewableOccasions')
+    .populate('createdOccasions viewableOccasions')
+    .exec(function (err, user) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(null, user)
+        /*angus*/
+        // render ejs
+        // utils.sendSuccessResponse(res, { user: user });
+      }
+    }
+  );
+}
+
+
 userSchema.methods.updateProfilePicture = function (newUrl, callback) {
   this.profilePicture = newUrl;
   this.save();

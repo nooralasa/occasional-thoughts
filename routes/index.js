@@ -19,7 +19,7 @@ router.get('/', function (req, res) {
 */   
 
   if (req.session.passport && req.session.passport.user) {
-    User.findById(req.session.passport.user, function (err, user) {
+    User.findById(req.session.passport.user.id, function (err, user) {
       res.render('dashboard', { name: user.name });
     });  
   } else {

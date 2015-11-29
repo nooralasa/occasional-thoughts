@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var User = require('./User');
 
 var occasionSchema = mongoose.Schema({
   title: String,
@@ -12,7 +13,7 @@ var occasionSchema = mongoose.Schema({
   time: {type: Date, default: Date.now} //auto timestamp
 });
 
-occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, callback) {
+occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, callback) {
   this.create(
     {
       title: occasionTitle,
@@ -28,6 +29,72 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
         callback(err);
       } else {
         callback(null, occasion);
+      }
+    }
+  );
+}
+
+occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, userId, callback) {
+  var self = this;
+  User.findById(userId, function (err, user) {
+    if (err) {
+      callback(err);
+    } else if (!user) {
+      callback({code: 404, msg: 'Invalid user'});
+    } else {
+      // then create event
+      self.addOccasion(occasionTitle, occasionDescription, occasionCoverPhoto, user._id, function (er, occasion) {
+        if (er) {
+          callback(er);
+        } else {
+          // then find ids of friends
+          User.findAllByFbid(participants, function (error, friends) {
+            if (error) {
+              callback(error);
+            } else {
+              // then add these ids to the participant list
+              var friendIds = friends.map(function (friend) {
+                return friend._id;
+              });
+              occasion.addParticipants(friendIds, function (error1) {
+                if (error1) {
+                  callback(error1);
+                } else {
+                  // then add that occasion to the user's created list
+                  user.addCreatedOccasionId(occasion._id, function (e) {
+                    if (e) {
+                      callback(e)
+                    } else {
+                      // finally send an ok response if everything is ok
+                      // utils.sendSuccessResponse(res);
+                      callback(null);
+                    }
+                  });
+                }
+              });
+            }
+          });          
+        }
+      });
+    }
+  });
+}
+
+occasionSchema.statics.populateOccasion = function (occasionId, callback) {
+  this
+    .findById(occasionId)
+    .populate({
+      path: 'thoughts',     
+      populate: { path: 'creator', model: User }
+    })
+    .populate('participants')
+    .exec(function (err, occasion) {
+      if (err) {
+        callback(err);
+      } else if (occasion) {
+        callback(null, occasion);
+      } else {
+        callback({code: 404, msg: 'Resource not found.'});
       }
     }
   );
