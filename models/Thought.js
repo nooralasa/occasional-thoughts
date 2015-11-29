@@ -37,6 +37,37 @@ thoughtSchema.statics.getThought = function (thoughtId, callback) {
   });
 }
 
+thoughtSchema.statics.removeThought = function (thoughtId, occasionId, callback) {
+  var self = this;
+  self.getThought(thoughtId, function (err, thought) {
+    if (err) {
+      callback(err);
+    } else {
+      Occasion.findById(occasionId, function (er, occasion) {
+        if (er) {
+          callback(er);
+        } else {
+          occasion.removeThought(thought._id, function (e) {
+            if (e) {
+              callback(e);
+            } else {
+              // soft delete
+              callback(null);
+              // self.remove({ '_id': thoughtId }, function (error) {
+              //   if (error) {
+              //     callback(error);
+              //   } else {
+              //     callback(null);
+              //   }
+              // });
+            }
+          });
+        }
+      });
+    }
+  });
+}
+
 thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, thoughtIsPublic, occasionId, userId, callback) {
   var self = this;
   User.findById(userId, function (err, user) {

@@ -80,6 +80,16 @@ userSchema.statics.findAllByEmail = function (emails, callback) {
   });
 }
 
+userSchema.statics.findAllById = function (ids, callback) {
+  this.find({ '_id': { $in: ids} }, function (err, users) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, users);
+    }
+  });
+}
+
 userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
   var self = this;
   self.createdOccasions.push(occasionId);
@@ -91,6 +101,33 @@ userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
   this.viewableOccasions.push(occasionId);
   this.save();
   callback(null);
+}
+
+userSchema.statics.removeOccasionFromAll = function (occasionId, creatorId, participantIds, callback) {
+  var self = this;
+
+  self.findById(creatorId, function (err, creator) {
+    if (err) {
+      callback(err);
+    } else {
+      var i = creator.createdOccasions.indexOf(occasionId);
+      if (i != -1){
+         creator.createdOccasions.splice(i, 1);
+      }
+      creator.save();
+
+      self.findAllById(participantIds, function (er, participants) {
+        participants.forEach(function (participant) {
+          var index = participant.createdOccasions.indexOf(occasionId);
+          if (index != -1){
+             creator.viewableOccasions.splice(index, 1);
+          }
+          participant.save();
+        });
+        callback(null);
+      });
+    }
+  });
 }
 
 userSchema.statics.findAllOccasions = function (userId, callback) {

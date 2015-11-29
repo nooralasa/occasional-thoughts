@@ -72,13 +72,21 @@ var requireContent = function (req, res, next) {
 router.param('occasionId', function (req, res, next, occasionId) {
   Occasion.populateOccasion(occasionId, function (err, occasion) {
     if (err) {
-      if (err.code) {
-        utils.sendErrResponse(res, err.code, err.msg);
-      } else {
-        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-      }
+      utils.sendErrResponseGivenError(res, err);
     } else {
       req.occasion = occasion;
+      next();
+    }
+  });
+});
+
+
+router.param('thoughtId', function (req, res, next, thoughtId) {
+  Thought.getThought(thoughtId, function (err, thought) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      req.thought = thought;
       next();
     }
   });
@@ -129,11 +137,6 @@ router.get('/:occasionId', function (req, res) {
   res.render('occasion', { occasion: req.occasion, user: req.session.passport.user });
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// everything below is a work in progress
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 /*
   POST /occasions
   Request body:
@@ -145,66 +148,56 @@ router.get('/:occasionId', function (req, res) {
 router.post('/', function (req, res) {
   Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, req.body.participants, req.session.passport.user.id, function (err) {
     if (err) {
-      if (err.code) {
-        utils.sendErrResponse(res, err.code, err.msg);
-      } else {
-        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-      }
+      utils.sendErrResponseGivenError(res, err);
     } else {
       utils.sendSuccessResponse(res);
     }
   });
 });
-
-
-router.post('/:occasionId/thoughts', function (req, res) {
-  Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
-    if (err) {
-      if (err.code) {
-        utils.sendErrResponse(res, err.code, err.msg);
-      } else {
-        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-      }
-    } else {
-      utils.sendSuccessResponse(res);
-    }
-  });
-});
-
-
-
-
 
 /*
-  DELETE /notes/:note
+  DELETE /occasions/:occasionId
   Request parameters:
     - note ID: the unique ID of the note within the logged in user's note collection
   Response:
     - success: true if the server succeeded in deleting the user's note
     - err: on failure, an error message
 */
-// router.delete('/:tweet', function (req, res) {
-//   User.findByUsername(req.currentUser.username, function (err, user) {
-//     if (err) {
-//       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//     } else if (!user) {
-//       utils.sendErrResponse(res, 404, 'Invalid user');
-//     } else {
-//       User.removeTweet(req.currentUser.username, req.tweet._id, function (er) {
-//         if (er) {
-//           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//         } else {
-//           Tweet.removeTweet(req.tweet._id, function (e) {
-//             if (e) {
-//               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//             } else {
-//               utils.sendSuccessResponse(res);
-//             }
-//           });
-//         }
-//       })
-//     }
-//   });
-// });
+router.delete('/:occasionId', function (req, res) {
+  Occasion.removeOccasion(req.occasion._id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+// TODO: edit occasion
+
+// add new thought
+router.post('/:occasionId/thoughts', function (req, res) {
+  Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+// delete thought
+router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
+  Thought.removeThought(req.thought.-id, req.occasion._id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+// TODO: edit thought
+
 
 module.exports = router;
