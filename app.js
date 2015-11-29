@@ -37,13 +37,13 @@ db.once('open', function (callback) {
 //   the user by ID when deserializing.  However, since this example does not
 //   have a database of user records, the complete Facebook profile is serialized
 //   and deserialized.
-passport.serializeUser(function (userId, done) {
-  done(null, userId);
+passport.serializeUser(function (user, done) {
+  done(null, user);
 });
 
-passport.deserializeUser(function (userId, done) {
-  console.log('in deserialize user: ', userId);
-  done(null, userId);
+passport.deserializeUser(function (user, done) {
+  console.log('in deserialize user: ', user);
+  done(null, user);
 });
 
 // Use the FacebookStrategy within Passport.
@@ -62,10 +62,10 @@ passport.use(new FacebookStrategy({
         if (err)
           done(err);
         if (user) {
-          done(null, user._id);
+          done(null, { id: user._id, name: user.name });
         } else {
           User.createNewUser(profile.emails[0].value, accessToken, profile.id, profile.displayName, profile.photos[0].value, function (er, newUser) {
-            done(null, newUser._id);
+            done(null, { id: newUser._id, name: newUser.name });
           });
         }
       });
