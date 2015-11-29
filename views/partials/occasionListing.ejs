@@ -1,0 +1,42 @@
+<!-- Adds occasion list items to the Occasions page-->
+<!-- @author:Suniyya-->
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <p class="intro-text"><%=user.name%>'s Occasions</p>
+    <ul>
+      <% var numOccasions = user.createdOccasions.length %>
+      <% for (var i=0; i< numOccasions; i++) { %>
+
+      <a href="/occasions/<%=user.createdOccasions[i]._id%>">
+
+        <li>
+          <img src="http://lorempixum.com/100/100/nature/4" />
+          <h3><%=user.createdOccasions[i].title%></h3>
+          <p align= "left" ><%=user.createdOccasions[i].description%> </p>
+        </li>
+      </a>
+      <% } %>
+    </ul>
+  
+  </div>
+
+  <div class="col-md-8 col-md-offset-2">
+    <% var numOccasions = user.viewableOccasions.length%>
+    <% if (numOccasions != 0){ %>
+      <p class="intro-text">Other Occasions Viewable By <%=user.name%></p>
+    <% } %>
+    <ul>
+      <% for(var i=0; i< numOccasions; i++) { %>
+
+      <a href="/occasions/<%=user.viewableOccasions[i]._id%>">
+        <li>
+          <img src="http://lorempixum.com/100/100/nature/4"/>
+          <h3><%=user.viewableOccasions[i].title%></h3>
+          <p align= "left" ><%=user.viewableOccasions[i].description%> </p>
+        </li>
+      </a>
+      <% } %>
+    </ul>
+  </div>
+</div>

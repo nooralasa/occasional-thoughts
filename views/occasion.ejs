@@ -3,37 +3,10 @@
 
 <head>
 
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <% include partials/header.ejs %> 
 
-  <title>Occasional Thoughts</title>
-
-
-  <!-- Bootstrap Core CSS -->
-  <link href="/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Custom CSS -->
-  <link href="/css/grayscale.css" rel="stylesheet">
-
-  <!-- Custom Fonts -->
-  <link href="/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-  <link href="http://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
-  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
-  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-  <script src="/javascripts/helpers.js"></script>
   <script src="/javascripts/index.js"></script>
   <script src="/javascripts/occasion.js"></script>
-
-
-  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-  <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-  <![endif]-->
 
 
     <style media="screen" type="text/css">
@@ -131,51 +104,10 @@
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
-
-
-
-  <!-- Navigation -->
-  <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
-    <div class="container">
-      <!-- <div class="navbar-header"> -->
-        <!-- <a class="navbar-brand page-scroll" href="#page-top"> -->
-        <a href = "/">
-          <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
-        </a>
-          <!-- <span class="light">Occasional</span> Thoughts -->
-        <!-- </a> -->
-      <!-- </div> -->
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse navbar-right navbar-main-collapse">
-        <ul class="nav navbar-nav">
-          <!-- Hidden li included to remove active class from about link when scrolled up past about section -->
-          <li class="hidden">
-            <a href="#page-top"></a>
-          </li>
-          <li>
-            <!-- <a id="signOutModal" class="page-scroll" href = "#">Sign Out</a> -->
-            <!-- <a  id = "sign" class="btn btn-primary btn-xl" data-toggle="modal" data-target="#signOutModal">Sign Out</a> -->
-          </li>
-          <li>
-            <a id = "hidden" class="page-scroll" href="#create">Create New Occasion</a>
-          </li>
-          <li>
-            <a class="page-scroll" href="/">Create New Occasion</a>
-          </li>
-            <li>
-            <a class="page-scroll" href="/occasions">My Occasions</a>
-          </li>
-        </ul>
-      </div>
-      <!-- /.navbar-collapse -->
-    </div>
-    <!-- /.container -->
-  </nav>
-
+  <% include partials/nav_occasion.ejs %>
+  
   <!-- Intro Header -->
-  <header class="intro">
-    
+  <header class="intro"> 
     <div class="intro-body">
       <div class = "coverContainer">
         <%if (occasion.coverPhoto != undefined) {%>
@@ -183,54 +115,11 @@
         <% } else { %>
           <img src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >
         <%}%>
-
       </div>
+
       <div  class="container">
         <div class="row">
-           
-          <div class="col-md-8 col-md-offset-2">
-            <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
-            <p class="intro-text"><%=occasion.title%></p>
-
-            <%if (!occasion.isPublished) { %>
-                  <form class="form form-signup" role="form" >
-                    <div class="form-group">
-                      <div class="input-group">
-                        <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
-                        </span>
-                        <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
-                        <input name="occasionId" value="<%=occasion._id%>" type="hidden">
-                        <input name="userName" value="<%=user.name%>" type="hidden">
-                      </div>
-                    </div>
-        
-                    <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
-                  </form>
-            
-
-            <% } %>
-
-
-
-
-
-
-
-            <ul id = "thought-list" >
-
-              <% var numThoughts = occasion.thoughts.length%>
-              <% for (var i=0; i<numThoughts; i++) { %>
-              <div class = "thought-box">
-                   <li class ="thought">
-                    <img src="<%=occasion.thoughts[i].photo%>">
-                    <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
-                    <p align= "left" > <%=occasion.thoughts[i].message%></p>
-                  </li>
-              </div>
-              <% } %>
-            </ul>
-          
-          </div>
+          <% include partials/thoughtListing.ejs %> 
         </div>
       </div>
     </div>
