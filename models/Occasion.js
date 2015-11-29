@@ -36,6 +36,8 @@ occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescriptio
 
 occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, userId, callback) {
   var self = this;
+
+  // check if user id is valid
   User.findById(userId, function (err, user) {
     if (err) {
       callback(err);
@@ -110,6 +112,38 @@ occasionSchema.statics.getOccasion = function (occasionId, callback) {
   });
 }
 
+occasionSchema.statics.removeOccasion = function (occasionId, callback) {
+  var self = this;
+  self.getOccasion(occasionId, function (err, occasion) {
+    if (err) {
+      callback(err);
+    } else {
+      User.removeOccasionFromAll(occasionId, function (er) {
+        if (er) {
+          callback(er);
+        } else {
+          // soft delete 
+          callback(null);
+          // self.remove({ '_id': occasionId }, function (e) {
+          //   if (e) {
+          //     callback(e);
+          //   } else {
+          //     callback(null);
+          //   }
+          // });
+        }
+      })
+    }
+  });
+}
+
+occasionSchema.methods.editOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
+  this.title = occasionTitle;
+  this.description = occasionDescription;
+  this.coverPhoto = occasionDescription;
+  this.save();
+  callback(null);
+}
 
 // add people
 occasionSchema.methods.addParticipant = function (userId, callback) {
@@ -127,6 +161,15 @@ occasionSchema.methods.addParticipants = function (userIds, callback) {
   callback(null);
 }
 
+occasionSchema.methods.removeParticipants = function (userIds, callback) {
+  var self = this;
+  self.participants = self.participants.filter(function (userId, index, arr) {
+    return arr.indexOf(userId) >= 0;
+  });
+  self.save();
+  callback(null);
+}
+
 occasionSchema.methods.addRecipient = function (userId, callback) {
   this.recipients.push(userId);
   this.save();
@@ -137,6 +180,15 @@ occasionSchema.methods.addRecipients = function (userIds, callback) {
   var self = this;
   userIds.forEach(function (userId) {
     self.recipients.push(userId);
+  });
+  self.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeRecipients = function (userIds, callback) {
+  var self = this;
+  self.recipients = self.recipients.filter(function (userId, index, arr) {
+    return arr.indexOf(userId) >= 0;
   });
   self.save();
   callback(null);
@@ -200,6 +252,15 @@ occasionSchema.methods.canView = function (userId, callback) {
 // add thought
 occasionSchema.methods.addThought = function (thoughtId, callback) {
   this.thoughts.push(thoughtId);
+  this.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeThought = function (thoughtId, callback) {
+  var i = this.thoughts.indexOf(thoughtId);
+  if (i != -1){
+     this.thoughts.splice(i, 1);
+  }
   this.save();
   callback(null);
 }
