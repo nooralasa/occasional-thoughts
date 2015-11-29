@@ -188,7 +188,7 @@ router.post('/:occasionId/thoughts', function (req, res) {
 
 // delete thought
 router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
-  Thought.removeThought(req.thought.-id, req.occasion._id, function (err) {
+  Thought.removeThought(req.thought._id, req.occasion._id, function (err) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
