@@ -79,8 +79,10 @@ router.param('occasionId', function (req, res, next, occasionId) {
       path: 'thoughts',     
       populate: { path: 'creator', model: User }
     })
+    .populate('participants')
     .exec(function (err, occasion) {
       if (occasion) {
+        console.log(occasion);
         req.occasion = occasion;
         next();
       } else {
@@ -172,24 +174,48 @@ router.get('/:occasionId', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
+  // find current user
   User.findById(req.session.passport.user, function (err, user) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else if (!user) {
       utils.sendErrResponse(res, 404, 'Invalid user');
     } else {
+      // then create event
       Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, user._id, function (er, occasion) {
         if (er) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          user.addCreatedOccasionId(occasion._id, function (e) {
-            if (e) {
+          // then find ids of friends
+          console.log(req.body.friends);
+          User.findAllByFbid(req.body.friends, function (error, friends) {
+            if (error) {
               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
             } else {
-              utils.sendSuccessResponse(res);
-              // res.redirect("/occasions");
+              // then add these ids to the participant list
+              console.log(friends);
+              var friendIds = friends.map(function (friend) {
+                return friend._id;
+              });
+              console.log(friendIds);
+              occasion.addParticipants(friendIds, function (error1) {
+                if (error1) {
+                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+                } else {
+                  // then add that occasion to the user's created list
+                  user.addCreatedOccasionId(occasion._id, function (e) {
+                    if (e) {
+                      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+                    } else {
+                      // finally send an ok response if everything is ok
+                      utils.sendSuccessResponse(res);
+                      // res.redirect("/occasions");
+                    }
+                  });
+                }
+              });
             }
-          });
+          });          
         }
       });
     }

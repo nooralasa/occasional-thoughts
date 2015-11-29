@@ -60,6 +60,16 @@ userSchema.statics.findByFbid = function (fbid, callback) {
   });
 }
 
+userSchema.statics.findAllByFbid = function (fbids, callback) {
+  this.find({ 'fbid': { $in: fbids} }, function (err, users) {
+    if (err) {
+      callback(err);
+    } else {
+      callback(null, users);
+    }
+  });
+}
+
 userSchema.statics.findAllByEmail = function (emails, callback) {
   this.find({ 'email': { $in: emails} }, function (err, users) {
     if (err) {
@@ -79,6 +89,12 @@ userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
 
 userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
   this.viewableOccasions.push(occasionId);
+  this.save();
+  callback(null);
+}
+
+userSchema.methods.updateProfilePicture = function (newUrl, callback) {
+  this.profilePicture = newUrl;
   this.save();
   callback(null);
 }
