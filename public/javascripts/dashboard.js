@@ -4,6 +4,7 @@ $(function () {
   var addedFriends = [];
 
   $.get("/users/current",function (data) {
+    console.log(data);
     var fbid = data.content.user.fbid;
     var token = data.content.user.token;
     $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function (obj, status){
@@ -47,7 +48,20 @@ $(function () {
       coverPhoto: $('input[name=coverPhoto]').val(),
       friends: addedFriends
     }).done(function () {
-      window.location.replace('/occasions');
+      // $.get('http://www.facebook.com/dialog/send?app_id=929113373843865'
+      //   +'&link=http://www.nytimes.com/interactive/2015/04/15/travel/europe-favorite-streets.html'
+      //   +'&redirect_uri=http://localhost:3000/occasions')
+      //   .done(function () {
+      //     console.log('here');
+      //   })
+      //   .fail(function () {
+      //     console.log('x failed');
+      //   });
+      console.log(addedFriends);
+      window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865&to='
+        +addedFriends
+        +'&link=https://occasionalthoughts.herokuapp.com/'
+        +'&redirect_uri=http://localhost:3000/occasions');
     }).fail(function () {
       alert('failed');
     });
