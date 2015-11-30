@@ -4,6 +4,7 @@ $(function () {
   var addedFriends = [];
 
   $.get("/users/current",function (data) {
+    console.log(data);
     var fbid = data.content.user.fbid;
     var token = data.content.user.token;
     $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function (obj, status){
@@ -47,7 +48,16 @@ $(function () {
       coverPhoto: $('input[name=coverPhoto]').val(),
       friends: addedFriends
     }).done(function () {
-      window.location.replace('/occasions');
+        $.get("/users/current",function (data) {
+          var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+          console.log(occasionId);
+
+          //TODO: fix array passing into messenger
+          window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865&to[]='
+          +addedFriends[0]+'&to[]='+addedFriends[1]
+          +'&link=https://occasionalthoughts.herokuapp.com/occasions/'+occasionId
+          +'&redirect_uri=http://localhost:3000/occasions');
+        });
     }).fail(function () {
       alert('failed');
     });
