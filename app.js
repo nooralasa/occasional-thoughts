@@ -51,7 +51,7 @@ passport.deserializeUser(function (user, done) {
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    callbackURL: process.env.MONGOLAB_URI ? "http://occasionalthoughts.herokuapp.com/auth/facebook/callback" : "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'emails', 'photos']
   },
   function (accessToken, refreshToken, profile, done) {
