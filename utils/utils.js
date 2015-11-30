@@ -31,6 +31,16 @@ var utils = (function () {
     }).end();
   };
 
+  _utils.sendErrResponseGivenError = function(res, e) {
+    var code = 500;
+    var message = 'An unknown error occured.'
+    if (e.code) {
+      code = e.code;
+      message = e.message
+    } 
+    _utils.sendErrResponse(res, code, message);
+  };
+
   Object.freeze(_utils);
   return _utils;
 

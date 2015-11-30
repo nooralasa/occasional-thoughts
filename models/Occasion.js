@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+var User = require('./User');
 
 var occasionSchema = mongoose.Schema({
   title: String,
@@ -12,7 +13,7 @@ var occasionSchema = mongoose.Schema({
   time: {type: Date, default: Date.now} //auto timestamp
 });
 
-occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, callback) {
+occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, callback) {
   this.create(
     {
       title: occasionTitle,
@@ -33,6 +34,74 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
   );
 }
 
+occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, userId, callback) {
+  var self = this;
+
+  // check if user id is valid
+  User.findById(userId, function (err, user) {
+    if (err) {
+      callback(err);
+    } else if (!user) {
+      callback({code: 404, msg: 'Invalid user'});
+    } else {
+      // then create event
+      self.addOccasion(occasionTitle, occasionDescription, occasionCoverPhoto, user._id, function (er, occasion) {
+        if (er) {
+          callback(er);
+        } else {
+          // then find ids of friends
+          User.findAllByFbid(participants, function (error, friends) {
+            if (error) {
+              callback(error);
+            } else {
+              // then add these ids to the participant list
+              var friendIds = friends.map(function (friend) {
+                return friend._id;
+              });
+              occasion.addParticipants(friendIds, function (error1) {
+                if (error1) {
+                  callback(error1);
+                } else {
+                  // then add that occasion to the user's created list
+                  user.addCreatedOccasionId(occasion._id, function (e) {
+                    if (e) {
+                      callback(e)
+                    } else {
+                      // finally send an ok response if everything is ok
+                      // utils.sendSuccessResponse(res);
+                      callback(null);
+                    }
+                  });
+                }
+              });
+            }
+          });          
+        }
+      });
+    }
+  });
+}
+
+occasionSchema.statics.populateOccasion = function (occasionId, callback) {
+  this
+    .findById(occasionId)
+    .populate({
+      path: 'thoughts',     
+      populate: { path: 'creator', model: User }
+    })
+    .populate('participants')
+    .exec(function (err, occasion) {
+      if (err) {
+        callback(err);
+      } else if (occasion) {
+        callback(null, occasion);
+      } else {
+        callback({code: 404, msg: 'Resource not found.'});
+      }
+    }
+  );
+}
+
 occasionSchema.statics.getOccasion = function (occasionId, callback) {
   this.findOne({ '_id': occasionId }, function (err, occasion) {
     if (err) {
@@ -43,6 +112,80 @@ occasionSchema.statics.getOccasion = function (occasionId, callback) {
   });
 }
 
+occasionSchema.statics.removeOccasion = function (occasionId, callback) {
+  var self = this;
+  self.getOccasion(occasionId, function (err, occasion) {
+    if (err) {
+      callback(err);
+    } else {
+      User.removeOccasionFromAll(occasionId, function (er) {
+        if (er) {
+          callback(er);
+        } else {
+          // soft delete 
+          callback(null);
+          // self.remove({ '_id': occasionId }, function (e) {
+          //   if (e) {
+          //     callback(e);
+          //   } else {
+          //     callback(null);
+          //   }
+          // });
+        }
+      })
+    }
+  });
+}
+
+occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occasionDescription, occasionCoverPhoto, removeParticipants, newParticipants, removeRecipients, newRecipients, callback) {
+  var self = this;
+  self.getOccasion(occasionId, function (err, occasion) {
+    if (err) {
+      callback(err);
+    } else {
+      occasion.editOccasionDetails(occasionTitle, occasionDescription, occasionCoverPhoto, function (er) {
+        if (er) {
+          callback(er);
+        } else {
+          occasion.removeParticipants(removeParticipants, function (e) {
+            if (e) {
+              callback(e);
+            } else {
+              occasion.addParticipants(newParticipants, function (error) {
+                if (error) {
+                  callback(error);
+                } else {
+                  occasion.removeRecipients(removeRecipients, function (error1) {
+                    if (error1) {
+                      callback(error1);
+                    } else {
+                      occasion.addRecipients(newRecipients, function (error2) {
+                        if (error2) {
+                          callback(error2);
+                        } else {
+                          callback(null);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+
+    }
+  });
+}
+
+occasionSchema.methods.editOccasionDetails = function (occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
+  this.title = occasionTitle;
+  this.description = occasionDescription;
+  this.coverPhoto = occasionDescription;
+  this.save();
+  callback(null);
+}
 
 // add people
 occasionSchema.methods.addParticipant = function (userId, callback) {
@@ -60,6 +203,22 @@ occasionSchema.methods.addParticipants = function (userIds, callback) {
   callback(null);
 }
 
+occasionSchema.methods.removeAllParticipants = function (callback) {
+  var self = this;
+  self.participants = [];
+  self.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeParticipants = function (userIds, callback) {
+  var self = this;
+  self.participants = self.participants.filter(function (userId, index, arr) {
+    return arr.indexOf(userId) >= 0;
+  });
+  self.save();
+  callback(null);
+}
+
 occasionSchema.methods.addRecipient = function (userId, callback) {
   this.recipients.push(userId);
   this.save();
@@ -71,6 +230,22 @@ occasionSchema.methods.addRecipients = function (userIds, callback) {
   userIds.forEach(function (userId) {
     self.recipients.push(userId);
   });
+  self.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeRecipients = function (userIds, callback) {
+  var self = this;
+  self.recipients = self.recipients.filter(function (userId, index, arr) {
+    return arr.indexOf(userId) >= 0;
+  });
+  self.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeAllRecipients = function (callback) {
+  var self = this;
+  self.recipients = [];
   self.save();
   callback(null);
 }
@@ -133,6 +308,15 @@ occasionSchema.methods.canView = function (userId, callback) {
 // add thought
 occasionSchema.methods.addThought = function (thoughtId, callback) {
   this.thoughts.push(thoughtId);
+  this.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeThought = function (thoughtId, callback) {
+  var i = this.thoughts.indexOf(thoughtId);
+  if (i != -1){
+     this.thoughts.splice(i, 1);
+  }
   this.save();
   callback(null);
 }

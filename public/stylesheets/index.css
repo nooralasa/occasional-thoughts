@@ -1,0 +1,15 @@
+.modal-dialog{
+  position: relative;
+  top: 50%;
+}
+
+.modal-content{
+  width:60%;
+  margin: auto;
+}
+
+#signIn{
+  background-color: transparent;
+  background: transparent;
+  border: transparent;
+}

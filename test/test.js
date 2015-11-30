@@ -1,5 +1,5 @@
 var assert = require("assert");
-var User = require('../models/NewUser');
+var User = require('../models/User');
 var Occasion = require('../models/Occasion');
 var Thought = require('../models/Thought');
 var mongoose = require('mongoose');
@@ -13,16 +13,16 @@ describe('User', function () {
       User.create(
         {
           email: 'user1', 
-          password: 'u1pw',
-          firstName: 'user1',
-          lastName: 'one',
+          token: 'u1pw',
+          fbid: 'user1',
+          name: 'one',
           createdOccasions: [],
           viewableOccasions: []
         }, {
           email: 'user2', 
-          password: 'u2pw',
-          firstName: 'user2',
-          lastName: 'two',
+          token: 'u2pw',
+          fbid: 'user2',
+          name: 'two',
           createdOccasions: [],
           viewableOccasions: []
         }, 
@@ -45,14 +45,14 @@ describe('User', function () {
 
   describe('createNewUser()', function () {
     it('should add a user without error', function (done) {
-      User.createNewUser('user3', 'u3pw', 'hello3', 'three', function (err) {
+      User.createNewUser('user3', 'u3pw', 'hello3', 'three', 'pic', function (err) {
         assert.equal(err, null);
         User.find( { email: 'user3' }, function (err, users) {
           assert.notEqual(null, users);
           assert.equal(1, users.length);
           var user = users[0];
           assert.equal('user3', user.email);
-          assert.equal('u3pw', user.password);
+          assert.equal('u3pw', user.token);
           assert.strictEqual(0, user.createdOccasions.length);
           assert.strictEqual(0, user.viewableOccasions.length);
           done();
@@ -61,7 +61,7 @@ describe('User', function () {
     });
 
     it('should throw when adding a user of the same email', function (done) {
-      User.createNewUser('user1', 'lasdfj', 'hello', 'hello', function (err) {
+      User.createNewUser('user1', 'lasdfj', 'hello', 'hello', 'pic1', function (err) {
         assert.notEqual(err, null);
         assert.equal(err.taken, true);
         done();
@@ -82,7 +82,7 @@ describe('User', function () {
       User.findByEmail('user1', function (err, user) {
         assert.equal(err, null);
         assert.equal('user1', user.email);
-        assert.equal('u1pw', user.password);
+        assert.equal('u1pw', user.token);
         assert.strictEqual(0, user.createdOccasions.length);
         assert.strictEqual(0, user.viewableOccasions.length);
         done();
@@ -98,32 +98,6 @@ describe('User', function () {
         assert.strictEqual(2, users.length);
         assert.equal(true, emails.indexOf(users[0].email) >= 0);
         assert.equal(true, emails.indexOf(users[1].email) >= 0);
-        done();
-      });
-    });
-  });
-
-  describe('verifyPassword()', function () {
-    it('should return true for a matching password', function (done) {
-      User.verifyPassword('user1', 'u1pw', function (err, match) {
-        assert.equal(err, null);
-        assert.equal(match, true);
-        done();
-      });
-    });
-
-    it('should return false for a non-matching password', function (done) {
-      User.verifyPassword('user2', 'u3pw', function (err, match) {
-        assert.equal(err, null);
-        assert.equal(match, false);
-        done();
-      });
-    });
-
-    it('should return false for a non-existent user', function (done) {
-      User.verifyPassword('user3', 'u3pw', function (err, match) {
-        assert.equal(err, null);
-        assert.equal(match, false);
         done();
       });
     });
@@ -174,6 +148,38 @@ describe('User', function () {
     });
   });
 
+
+
+  describe('removeOccasionFromAll()', function () {
+    it("should remove an occasion id to the user's list of created occasions", function (done) {
+      User.findOne({email: 'user1'}, function (err, user1) {
+        Occasion.create(
+          {
+            title: 'aa',
+            creator: user1._id
+          }, function (er, occasion) {
+            user1.addCreatedOccasionId(occasion._id, function (e) {
+              assert.equal(e, null);
+              User.findOne({email: 'user1'}, function (error, user) {
+                assert.equal(error, null); 
+                // console.log(user.createdOccasions.indexOf(occasion._id));
+                assert.equal(false, user.createdOccasions.indexOf(occasion._id) < 0);
+
+                User.removeOccasionFromAll(occasion._id, user._id, [], function (error1) {
+                  assert.equal(null, error1);
+                  User.findByEmail('user1', function (error2, currentUser) {
+                    assert.equal(true, currentUser.createdOccasions.indexOf(occasion._id) < 0);
+                    done();
+                  });
+                });
+              });
+            });
+          }
+        );
+      });
+    });
+  });
+
 });
 
 
@@ -190,30 +196,30 @@ describe('Occasion', function () {
       User.create(
         [{
           email: 'user1', 
-          password: 'u1pw',
-          firstName: 'user1',
-          lastName: 'one',
+          token: 'u1pw',
+          fbid: 'user1',
+          name: 'one',
           createdOccasions: [],
           viewableOccasions: []
         }, {
           email: 'user2', 
-          password: 'u2pw',
-          firstName: 'user2',
-          lastName: 'two',
+          token: 'u2pw',
+          fbid: 'user2',
+          name: 'two',
           createdOccasions: [],
           viewableOccasions: []
         }, {
           email: 'user3', 
-          password: 'u3pw',
-          firstName: 'user3',
-          lastName: 'three',
+          token: 'u3pw',
+          fbid: 'user3',
+          name: 'three',
           createdOccasions: [],
           viewableOccasions: []
         }], 
         function (err) {
           Occasion.remove({}, function () {
             User.findByEmail('user1', function (err, user) {
-              Occasion.createOccasion('title0', 'descr0', 'photo0', user._id, function (er, occasion) {
+              Occasion.addOccasion('title0', 'descr0', 'photo0', user._id, function (er, occasion) {
                 user.addCreatedOccasionId(occasion._id, function () {
                 done();
                 });
@@ -233,10 +239,10 @@ describe('Occasion', function () {
     });  
   });
 
-  describe('createOccasion()', function () {
+  describe('addOccasion()', function () {
     it('should add an occasion without error', function (done) {
       User.findByEmail('user1', function (err, user) {
-        Occasion.createOccasion('title1', 'descr1', 'photo1', user._id, function (er, occasion) {
+        Occasion.addOccasion('title1', 'descr1', 'photo1', user._id, function (er, occasion) {
           assert.equal(er, null);
           Occasion.find( { title: 'title1' }, function (e, occasions) {
             assert.notEqual(null, occasions);
@@ -349,7 +355,7 @@ describe('Occasion', function () {
         Occasion.getOccasion(user.createdOccasions[0], function (e, occ) {
           assert.equal(null, e);
           assert.notEqual(null, occ);
-          Thought.createThought('thoughtcontent', 'thoughtpic', false, user._id, function (er, thought) {
+          Thought.addThought('thoughtcontent', 'thoughtpic', false, user._id, function (er, thought) {
             assert.equal(e, null);
             occ.addThought(thought._id, function (error) {
               assert.equal(error, null);
@@ -375,23 +381,23 @@ describe('Thought', function () {
       User.create(
         [{
           email: 'user1', 
-          password: 'u1pw',
-          firstName: 'user1',
-          lastName: 'one',
+          token: 'u1pw',
+          fbid: 'user1',
+          name: 'one',
           createdOccasions: [],
           viewableOccasions: []
         }, {
           email: 'user2', 
-          password: 'u2pw',
-          firstName: 'user2',
-          lastName: 'two',
+          token: 'u2pw',
+          fbid: 'user2',
+          name: 'two',
           createdOccasions: [],
           viewableOccasions: []
         }, {
           email: 'user3', 
-          password: 'u3pw',
-          firstName: 'user3',
-          lastName: 'three',
+          token: 'u3pw',
+          fbid: 'user3',
+          name: 'three',
           createdOccasions: [],
           viewableOccasions: []
         }], 
@@ -412,10 +418,10 @@ describe('Thought', function () {
     });  
   });
 
-  describe('createThought()', function () {
+  describe('addThought()', function () {
     it('should add an thought without error', function (done) {
       User.findByEmail('user1', function (err, user) {
-        Thought.createThought('message1', 'photo1', false, user._id, function (er, thought) {
+        Thought.addThought('message1', 'photo1', false, user._id, function (er, thought) {
           assert.equal(er, null);
           Thought.find( { message: 'message1' }, function (e, thoughts) {
             assert.notEqual(null, thoughts);

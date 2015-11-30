@@ -12,7 +12,7 @@ var requireAuthentication = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    req.occasion.isParticipantOrCreator(req.session.passport.user, function (err, canView) {
+    req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
       if (canView) {
         next();
       } else {
@@ -41,7 +41,7 @@ var requireLogin = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.session.passport.user, function (isCreator) {
+  req.occasion.isCreator(req.session.passport.user.id, function (isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -82,8 +82,8 @@ router.all('*', requireLogin);
 */
 router.get('/current', function (req, res) {
   User
-    .findById(req.session.passport.user)
-    .select('name fbid token')
+    .findById(req.session.passport.user.id)
+    .select('name fbid token createdOccasions')
     .exec(function (err, user) {
       if (err) {
         utils.sendErrResponse(res, 500, 'An unknown error occurred.');

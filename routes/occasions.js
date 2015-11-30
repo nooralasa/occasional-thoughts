@@ -10,25 +10,25 @@ var Thought = require('../models/Thought');
   Require authentication on ALL access to /notes/*
   Clients which are not logged in will receive a 403 error code.
 */
-var requireAuthentication = function (req, res, next) {
+var requireLogin = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    req.occasion.isParticipantOrCreator(req.session.passport.user, function (err, canView) {
+    next(); 
+  }
+};
+
+var requireViewPermission = function (req, res, next) {
+  if (!req.session.passport || !req.session.passport.user) {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+  } else {
+    req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
       if (canView) {
         next();
       } else {
         utils.sendErrResponse(res, 404, 'Resource not found.');
       }
     });
-  }
-};
-
-var requireLogin = function (req, res, next) {
-  if (!req.session.passport || !req.session.passport.user) {
-    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
-  } else {
-    next(); 
   }
 };
 
@@ -42,8 +42,18 @@ var requireLogin = function (req, res, next) {
   and notes that exist but don't belong to the client. This way a malicious client
   that is brute-forcing urls should not gain any information.
 */
-var requireOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.session.passport.user, function (isCreator) {
+var requireOccasionOwnership = function (req, res, next) {
+  req.occasion.isCreator(req.session.passport.user.id, function (isCreator) {
+    if (isCreator) {
+      next();
+    } else {
+      utils.sendErrResponse(res, 404, 'Resource not found.');
+    }
+  });
+};
+
+var requireThoughtOwnership = function (req, res, next) {
+  req.thought.isCreator(req.session.passport.user.id, function (isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -69,32 +79,45 @@ var requireContent = function (req, res, next) {
   request path (any routes defined with :note as a paramter).
 */
 
-/*angus*/
 router.param('occasionId', function (req, res, next, occasionId) {
-  console.log('in param');
-  Occasion
-    .findById(occasionId)
-    // .populate('thoughts')  
-    .populate({
-      path: 'thoughts',     
-      populate: { path: 'creator', model: User }
-    })
-    .populate('participants')
-    .exec(function (err, occasion) {
-      if (occasion) {
-        console.log(occasion);
-        req.occasion = occasion;
+  Occasion.populateOccasion(occasionId, function (err, occasion) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      req.occasion = occasion;
+      next();
+    }
+  });
+});
+
+
+router.param('thoughtId', function (req, res, next, thoughtId) {
+  Thought.getThought(thoughtId, function (err, thought) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      if (req.occasion.thoughts.indexOf(thought._id) >= 0) {
+        req.thought = thought;
         next();
       } else {
-        utils.sendErrResponse(res, 404, 'Resource not found.');
+        utils.sendErrResponseGivenError(res, { code: 403, msg: "Thought does not belong to Occasion"});
       }
     }
-  );
+  });
 });
 
 // Register the middleware handlers above.
 router.all('*', requireLogin);
-router.all('/:occasionId', requireAuthentication);
+
+router.get('/:occasionId', requireViewPermission);
+router.post('/:occasionId', requireOccasionOwnership);
+router.delete('/:occasionId', requireOccasionOwnership);
+
+router.post('/:occasionId/thought', requireViewPermission);
+
+router.post('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
+router.delete('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
+
 router.post('*', requireContent);
 
 /*
@@ -113,23 +136,38 @@ router.post('*', requireContent);
     - err: on failure, an error message
 */
 router.get('/', function (req, res) {
-  User
-    .findById(req.session.passport.user)
-    .select('name createdOccasions viewableOccasions')
-    .populate('createdOccasions viewableOccasions')
-    .exec(function (err, user) {
-      if (err) {
-        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-      } else {
-        /*angus*/
-        // render ejs
-        res.render('occasions', { user: user });
-        // utils.sendSuccessResponse(res, { user: user });
-      }
+  User.findAllOccasions(req.session.passport.user.id, function (err, user) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else {
+      res.render('occasions', { user: user });
     }
-  );
+  })
 });
 
+/*
+  POST /occasions
+  Request body:
+    - content: the content of the note
+  Response:
+    - success: true if the server succeeded in recording the user's note
+    - err: on failure, an error message
+*/
+router.post('/', function (req, res) {
+  Occasion.createOccasion(req.body.title, 
+                          req.body.description, 
+                          req.body.coverPhoto, 
+                          req.body.participants, 
+                          req.session.passport.user.id, 
+                          function (err) {
+                            if (err) {
+                              utils.sendErrResponseGivenError(res, err);
+                            } else {
+                              utils.sendSuccessResponse(res);
+                            }
+                          }
+  );
+});
 
 /*
   GET /occasion/:occasionId
@@ -141,155 +179,80 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.get('/:occasionId', function (req, res) {
-  User
-    .findById(req.session.passport.user)
-    .select('name')
-    .exec(function (err, user) {
-      if (err) {
-        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-      } else {
-        res.render('occasion', { occasion: req.occasion, user: user });
-        // utils.sendSuccessResponse(res, { user: user });
-      }
-    }
+  //angus TODO change user to user's name
+  res.render('occasion', { occasion: req.occasion, user: req.session.passport.user });
+});
+
+// edit occasion
+router.post('/:occasionId', function (req, res) {
+  Occasion.editOccasion(req.occasion._id, 
+                        req.body.title, 
+                        req.body.description, 
+                        req.body.coverPhoto, 
+                        req.body.removeParticipants, 
+                        req.body.newParticipants, 
+                        req.body.removeRecipients, 
+                        req.body.newRecipients,
+                        function (err) {
+                          if (err) {
+                            utils.sendErrResponseGivenError(res, err);
+                          } else {
+                            utils.sendSuccessResponse(res);
+                          }
+                        }
   );
-
-
-  /*angus*/
-  // console.log("occasion object", req.occasion);
-  // utils.sendSuccessResponse(res, { occasion: req.occasion });
 });
-
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// everything below is a work in progress
-/////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 /*
-  POST /occasions
-  Request body:
-    - content: the content of the note
-  Response:
-    - success: true if the server succeeded in recording the user's note
-    - err: on failure, an error message
-*/
-router.post('/', function (req, res) {
-  // find current user
-  User.findById(req.session.passport.user, function (err, user) {
-    if (err) {
-      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-    } else if (!user) {
-      utils.sendErrResponse(res, 404, 'Invalid user');
-    } else {
-      // then create event
-      Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, user._id, function (er, occasion) {
-        if (er) {
-          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-        } else {
-          // then find ids of friends
-          console.log(req.body.friends);
-          User.findAllByFbid(req.body.friends, function (error, friends) {
-            if (error) {
-              utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-            } else {
-              // then add these ids to the participant list
-              console.log(friends);
-              var friendIds = friends.map(function (friend) {
-                return friend._id;
-              });
-              console.log(friendIds);
-              occasion.addParticipants(friendIds, function (error1) {
-                if (error1) {
-                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-                } else {
-                  // then add that occasion to the user's created list
-                  user.addCreatedOccasionId(occasion._id, function (e) {
-                    if (e) {
-                      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-                    } else {
-                      // finally send an ok response if everything is ok
-                      utils.sendSuccessResponse(res);
-                      // res.redirect("/occasions");
-                    }
-                  });
-                }
-              });
-            }
-          });          
-        }
-      });
-    }
-  });
-});
-
-
-
-
-router.post('/:occasionId/thoughts', function (req, res) {
-  User.findById(req.session.passport.user, function (err, user) {
-    if (err) {
-      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-    } else if (!user) {
-      utils.sendErrResponse(res, 404, 'Invalid user');
-    } else {
-      Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, user._id, function (er, thought) {
-        if (er) {
-          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-        } else {
-          Occasion.findById(req.occasion._id, function (error, occasion) {
-            if (error) {
-              utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-            } else {
-              occasion.addThought(thought._id, function (e) {
-                if (e) {
-                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-                } else {
-                  // res.render('occasion', { occasion: req.occasion });
-                  utils.sendSuccessResponse(res);
-                }
-              });
-            }
-          });
-        }
-      });
-    }
-  });
-});
-
-
-
-
-
-/*
-  DELETE /notes/:note
+  DELETE /occasions/:occasionId
   Request parameters:
     - note ID: the unique ID of the note within the logged in user's note collection
   Response:
     - success: true if the server succeeded in deleting the user's note
     - err: on failure, an error message
 */
-// router.delete('/:tweet', function (req, res) {
-//   User.findByUsername(req.currentUser.username, function (err, user) {
-//     if (err) {
-//       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//     } else if (!user) {
-//       utils.sendErrResponse(res, 404, 'Invalid user');
-//     } else {
-//       User.removeTweet(req.currentUser.username, req.tweet._id, function (er) {
-//         if (er) {
-//           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//         } else {
-//           Tweet.removeTweet(req.tweet._id, function (e) {
-//             if (e) {
-//               utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-//             } else {
-//               utils.sendSuccessResponse(res);
-//             }
-//           });
-//         }
-//       })
-//     }
-//   });
-// });
+router.delete('/:occasionId', function (req, res) {
+  Occasion.removeOccasion(req.occasion._id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+
+// add new thought
+router.post('/:occasionId/thoughts', function (req, res) {
+  Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+// edit thought
+router.post('/:occasionId/thoughts/:thoughtId', function (req, res) {
+  Thought.editThought(req.thought._id, req.body.message, req.body.photo, req.body.isPublic, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+// delete thought
+router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
+  Thought.removeThought(req.thought._id, req.occasion._id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
 
 module.exports = router;
