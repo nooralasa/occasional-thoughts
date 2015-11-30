@@ -14,5 +14,16 @@
       $('.error').text(response.err);
     });
   });
-
 })();
+
+$(document).on('click', '#delete-occasion', function(evt) {
+  evt.preventDefault();
+  console.log("Delete occasion")
+  
+});
+
+$(document).on('click', '#edit-occasion', function(evt) {
+  evt.preventDefault();
+  console.log("Edit occasion")
+});
+

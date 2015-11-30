@@ -30,3 +30,15 @@ $(document).on('click', '#add-thought', function(evt) {
           $('.error').text(response.err);
       });
   });
+
+  $(document).on('click', '#delete-thought', function(evt) {
+    evt.preventDefault();
+    console.log("Delete thought")
+  
+  });
+
+  $(document).on('click', '#edit-thought', function(evt) {
+    evt.preventDefault();
+    console.log("edit thought")
+  
+  });

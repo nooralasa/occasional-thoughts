@@ -75,7 +75,7 @@ $(function () {
           window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865&to[]='
           +addedFriends[0]+'&to[]='+addedFriends[1]
           +'&link=https://occasionalthoughts.herokuapp.com/occasions/'+occasionId
-          +'&redirect_uri=http://localhost:3000/occasions');
+          +'&redirect_uri=http://occasionalthoughts.herokuapp.com/occasions');
         });
     }).fail(function () {
       alert('failed');

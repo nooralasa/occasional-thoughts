@@ -8,6 +8,35 @@
   margin: auto;
 }
 
+span.ui-icon { 
+  float: left; margin: 0 0px;
+}
+
+#edit-occasion{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 20px;
+  width: 20px;
+  background: transparent;
+  border: transparent;
+}
+
+#delete-occasion{
+  position: absolute;
+  top: 16px;
+  right: 0px;
+  height: 20px;
+  width: 20px;
+  background: transparent;
+  border: transparent;
+}
+
+.ui-corner-all:hover {
+  background: #eee;
+  cursor: pointer;
+}
+
 #sign{
   background-color: transparent;
   background: transparent;
