@@ -42,7 +42,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (user, done) {
-  console.log('in deserialize user: ', user);
+  // console.log('in deserialize user: ', user);
   done(null, user);
 });
 
@@ -58,7 +58,7 @@ passport.use(new FacebookStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      console.log(profile);
+      // console.log(profile);
       User.findByFbid(profile.id, function (err, user) {
         if (err)
           done(err);

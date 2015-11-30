@@ -68,6 +68,20 @@ thoughtSchema.statics.removeThought = function (thoughtId, occasionId, callback)
   });
 }
 
+thoughtSchema.statics.editThought = function (thoughtId, newMessage, newPhoto, newIsPublic, callback) {
+  var self = this;
+  self.getThought(thoughtId, function (err, thought) {
+    if (err) {
+      callback(err);
+    } else {
+      thought.message = newMessage;
+      thought.photo = newPhoto;
+      thought.isPublic = newIsPublic;
+      thought.save();
+    }
+  });
+}
+
 thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, thoughtIsPublic, occasionId, userId, callback) {
   var self = this;
   User.findById(userId, function (err, user) {
@@ -97,6 +111,11 @@ thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, th
       });
     }
   });
+}
+
+thoughtSchema.methods.isCreator = function (userId, callback) {
+  var self = this;
+  callback(null, self.creator.equals(userId));
 }
 
 // When we 'require' this model in another file (e.g. routes),
