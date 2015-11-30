@@ -62,5 +62,11 @@ $(function () {
       alert('failed');
     });
   });
+
+  $(document).on('click', '#upload', function(evt) {
+    console.log("upload button clicked")
+      var url = $('#url').val();
+      $('#previewImg').attr('src', url);
+  });
 });
 
