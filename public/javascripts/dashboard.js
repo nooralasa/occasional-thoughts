@@ -1,8 +1,12 @@
 $(function () {
 
-  var friendData = []
+  var friendData = [];
   var addedFriends = [];
+  var fakeAddedFriends = ["10153460608834877", "10207615671607073", "966588576732829"];
+  var addedFriendsEmails = [];
   var currentUser;
+
+  var User = require('./models/User');
 
   $.get("/users/current", function (userData) {
     if (!userData.success) {
@@ -48,14 +52,29 @@ $(function () {
   });
 
   $('#angus-notif').click(function (evt) {
-    console.log('here');    
-    $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
-            { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
-            function (data, status){
-              console.log(data);
-              console.log(status);
-            }
-    );
+    fakeAddedFriends.forEach(function(friendFbid) {
+      User.findByFbid(friendFbid, function (err, user) {
+        if (err)
+          done(err);
+        if (user) {
+          addedFriendsEmails.push(user.email);
+          done(null);
+        } else {
+          done(null);
+        }
+      });
+    });
+
+    console.log(addedFriendsEmails);
+
+    // console.log('here');    
+    // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
+    //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
+    //         function (data, status){
+    //           console.log(data);
+    //           console.log(status);
+    //         }
+    // );
   });
 
   $('form').submit(function (evt) {
