@@ -10,7 +10,15 @@ var Thought = require('../models/Thought');
   Require authentication on ALL access to /notes/*
   Clients which are not logged in will receive a 403 error code.
 */
-var requireAuthentication = function (req, res, next) {
+var requireLogin = function (req, res, next) {
+  if (!req.session.passport || !req.session.passport.user) {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+  } else {
+    next(); 
+  }
+};
+
+var requireViewPermission = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
@@ -24,14 +32,6 @@ var requireAuthentication = function (req, res, next) {
   }
 };
 
-var requireLogin = function (req, res, next) {
-  if (!req.session.passport || !req.session.passport.user) {
-    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
-  } else {
-    next(); 
-  }
-};
-
 /*
   Require ownership whenever accessing a particular note
   This means that the client accessing the resource must be logged in
@@ -42,8 +42,18 @@ var requireLogin = function (req, res, next) {
   and notes that exist but don't belong to the client. This way a malicious client
   that is brute-forcing urls should not gain any information.
 */
-var requireOwnership = function (req, res, next) {
+var requireOccasionOwnership = function (req, res, next) {
   req.occasion.isCreator(req.session.passport.user.id, function (isCreator) {
+    if (isCreator) {
+      next();
+    } else {
+      utils.sendErrResponse(res, 404, 'Resource not found.');
+    }
+  });
+};
+
+var requireThoughtOwnership = function (req, res, next) {
+  req.thought.isCreator(req.session.passport.user.id, function (isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -86,15 +96,28 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
-      req.thought = thought;
-      next();
+      if (req.occasion.thoughts.indexOf(thought._id) >= 0) {
+        req.thought = thought;
+        next();
+      } else {
+        utils.sendErrResponseGivenError(res, { code: 403, msg: "Thought does not belong to Occasion"});
+      }
     }
   });
 });
 
 // Register the middleware handlers above.
 router.all('*', requireLogin);
-router.all('/:occasionId', requireAuthentication);
+
+router.get('/:occasionId', requireViewPermission);
+router.post('/:occasionId', requireOccasionOwnership);
+router.delete('/:occasionId', requireOccasionOwnership);
+
+router.post('/:occasionId/thought', requireViewPermission);
+
+router.post('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
+router.delete('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
+
 router.post('*', requireContent);
 
 /*
@@ -122,6 +145,29 @@ router.get('/', function (req, res) {
   })
 });
 
+/*
+  POST /occasions
+  Request body:
+    - content: the content of the note
+  Response:
+    - success: true if the server succeeded in recording the user's note
+    - err: on failure, an error message
+*/
+router.post('/', function (req, res) {
+  Occasion.createOccasion(req.body.title, 
+                          req.body.description, 
+                          req.body.coverPhoto, 
+                          req.body.participants, 
+                          req.session.passport.user.id, 
+                          function (err) {
+                            if (err) {
+                              utils.sendErrResponseGivenError(res, err);
+                            } else {
+                              utils.sendSuccessResponse(res);
+                            }
+                          }
+  );
+});
 
 /*
   GET /occasion/:occasionId
@@ -137,22 +183,24 @@ router.get('/:occasionId', function (req, res) {
   res.render('occasion', { occasion: req.occasion, user: req.session.passport.user });
 });
 
-/*
-  POST /occasions
-  Request body:
-    - content: the content of the note
-  Response:
-    - success: true if the server succeeded in recording the user's note
-    - err: on failure, an error message
-*/
-router.post('/', function (req, res) {
-  Occasion.createOccasion(req.body.title, req.body.description, req.body.coverPhoto, req.body.participants, req.session.passport.user.id, function (err) {
-    if (err) {
-      utils.sendErrResponseGivenError(res, err);
-    } else {
-      utils.sendSuccessResponse(res);
-    }
-  });
+// edit occasion
+router.post('/:occasionId', function (req, res) {
+  Occasion.editOccasion(req.occasion._id, 
+                        req.body.title, 
+                        req.body.description, 
+                        req.body.coverPhoto, 
+                        req.body.removeParticipants, 
+                        req.body.newParticipants, 
+                        req.body.removeRecipients, 
+                        req.body.newRecipients,
+                        function (err) {
+                          if (err) {
+                            utils.sendErrResponseGivenError(res, err);
+                          } else {
+                            utils.sendSuccessResponse(res);
+                          }
+                        }
+  );
 });
 
 /*
@@ -173,11 +221,21 @@ router.delete('/:occasionId', function (req, res) {
   });
 });
 
-// TODO: edit occasion
 
 // add new thought
 router.post('/:occasionId/thoughts', function (req, res) {
   Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
+    if (err) {
+      utils.sendErrResponseGivenError(res, err);
+    } else {
+      utils.sendSuccessResponse(res);
+    }
+  });
+});
+
+// edit thought
+router.post('/:occasionId/thoughts/:thoughtId', function (req, res) {
+  Thought.editThought(req.thought._id, req.body.message, req.body.photo, req.body.isPublic, function (err) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
@@ -196,8 +254,5 @@ router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
     }
   });
 });
-
-// TODO: edit thought
-
 
 module.exports = router;

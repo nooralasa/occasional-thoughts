@@ -2,21 +2,30 @@ $(function () {
 
   var friendData = []
   var addedFriends = [];
+  var currentUser;
 
-  $.get("/users/current",function (data) {
-    var fbid = data.content.user.fbid;
-    var token = data.content.user.token;
-    $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function (obj, status){
-    	console.log(obj.data);
-    	friendData = obj.data;
-      var friendNames = obj.data.map(function (friend) {
-        return friend.name;
-      });
-      $('#share').autocomplete({
-        source: friendNames,
-        autoFocus: true
-      });
-    });
+  $.get("/users/current", function (userData) {
+    if (!userData.success) {
+      console.log('failed in getting user data');
+      alert('failed in getting user data');
+    } else {
+      currentUser = userData.content.user;
+      console.log(currentUser);
+      $.get("https://graph.facebook.com/v2.5/me/friends", 
+            { access_token: currentUser.token }, 
+            function (fbFriends, status){
+            	console.log(fbFriends.data);
+            	friendData = fbFriends.data;
+              var friendNames = fbFriends.data.map(function (friend) {
+                return friend.name;
+              });
+              $('#share').autocomplete({
+                source: friendNames,
+                autoFocus: true
+              });
+            }
+      );
+    }
   });
 
   $('#share').keypress(function (e) {
@@ -38,6 +47,17 @@ $(function () {
     }
   });
 
+  $('#angus-notif').click(function (evt) {
+    console.log('here');    
+    $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
+            { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
+            function (data, status){
+              console.log(data);
+              console.log(status);
+            }
+    );
+  });
+
   $('form').submit(function (evt) {
     console.log("submit button pressed")
     evt.preventDefault();
@@ -47,7 +67,16 @@ $(function () {
       coverPhoto: $('input[name=coverPhoto]').val(),
       friends: addedFriends
     }).done(function () {
-      window.location.replace('/occasions');
+        $.get("/users/current",function (data) {
+          var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+          console.log(occasionId);
+
+          //TODO: fix array passing into messenger
+          window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865&to[]='
+          +addedFriends[0]+'&to[]='+addedFriends[1]
+          +'&link=https://occasionalthoughts.herokuapp.com/occasions/'+occasionId
+          +'&redirect_uri=http://occasionalthoughts.herokuapp.com/occasions');
+        });
     }).fail(function () {
       alert('failed');
     });

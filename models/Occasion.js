@@ -137,7 +137,49 @@ occasionSchema.statics.removeOccasion = function (occasionId, callback) {
   });
 }
 
-occasionSchema.methods.editOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
+occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occasionDescription, occasionCoverPhoto, removeParticipants, newParticipants, removeRecipients, newRecipients, callback) {
+  var self = this;
+  self.getOccasion(occasionId, function (err, occasion) {
+    if (err) {
+      callback(err);
+    } else {
+      occasion.editOccasionDetails(occasionTitle, occasionDescription, occasionCoverPhoto, function (er) {
+        if (er) {
+          callback(er);
+        } else {
+          occasion.removeParticipants(removeParticipants, function (e) {
+            if (e) {
+              callback(e);
+            } else {
+              occasion.addParticipants(newParticipants, function (error) {
+                if (error) {
+                  callback(error);
+                } else {
+                  occasion.removeRecipients(removeRecipients, function (error1) {
+                    if (error1) {
+                      callback(error1);
+                    } else {
+                      occasion.addRecipients(newRecipients, function (error2) {
+                        if (error2) {
+                          callback(error2);
+                        } else {
+                          callback(null);
+                        }
+                      });
+                    }
+                  });
+                }
+              });
+            }
+          });
+        }
+      });
+
+    }
+  });
+}
+
+occasionSchema.methods.editOccasionDetails = function (occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
   this.title = occasionTitle;
   this.description = occasionDescription;
   this.coverPhoto = occasionDescription;
@@ -157,6 +199,13 @@ occasionSchema.methods.addParticipants = function (userIds, callback) {
   userIds.forEach(function (userId) {
     self.participants.push(userId);
   });
+  self.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeAllParticipants = function (callback) {
+  var self = this;
+  self.participants = [];
   self.save();
   callback(null);
 }
@@ -190,6 +239,13 @@ occasionSchema.methods.removeRecipients = function (userIds, callback) {
   self.recipients = self.recipients.filter(function (userId, index, arr) {
     return arr.indexOf(userId) >= 0;
   });
+  self.save();
+  callback(null);
+}
+
+occasionSchema.methods.removeAllRecipients = function (callback) {
+  var self = this;
+  self.recipients = [];
   self.save();
   callback(null);
 }

@@ -16,13 +16,11 @@ var users = require('./routes/users');
 
 // Import User model
 var User = require('./models/User');
-// var NewUser = require('./models/NewUser');
 
 var FACEBOOK_APP_ID = "929113373843865";
 var FACEBOOK_APP_SECRET = "c956f3275cd75946929c1fe2591a9b25";
 
 var mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost/fritter');
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/mymongodb');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -42,7 +40,7 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (user, done) {
-  console.log('in deserialize user: ', user);
+  // console.log('in deserialize user: ', user);
   done(null, user);
 });
 
@@ -53,12 +51,12 @@ passport.deserializeUser(function (user, done) {
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/callback",
+    callbackURL: process.env.MONGOLAB_URI ? "http://occasionalthoughts.herokuapp.com/auth/facebook/callback" : "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'emails', 'photos']
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      console.log(profile);
+      // console.log(profile);
       User.findByFbid(profile.id, function (err, user) {
         if (err)
           done(err);
@@ -130,6 +128,7 @@ app.use('/users', users);
 app.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['user_friends', 'email']}),
   function (req, res){
+    console.log(res);
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
   }
