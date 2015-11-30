@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
     });
     
     // next step
-    $('.registration-form .btn-next').on('click', function() {
+    $('#next').on('click', function() {
     	var parent_fieldset = $(this).parents('fieldset');
     	var next_step = true;
     	
