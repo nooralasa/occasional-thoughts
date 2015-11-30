@@ -3,9 +3,9 @@
   <head>
 
     <% include partials/header.ejs %> 
-
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="/javascripts/index.js"></script>
-
+    <script src="/javascripts/occasions.js"></script>
 
       <style media="screen" type="text/css">
 
@@ -15,6 +15,31 @@
         top: 50%;
       }
 
+
+      span.ui-icon { 
+        float: left; margin: 0 0px;
+      }
+
+      #edit-occasion{
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        height: 20px;
+        width: 20px;
+        background: transparent;
+        border: transparent;
+      }
+
+      #delete-occasion{
+        position: absolute;
+        top: 16px;
+        right: 0px;
+        height: 20px;
+        width: 20px;
+        background: transparent;
+        border: transparent;
+      }
+        
       .modal-content{
         width:60%;
         margin: auto;
@@ -73,7 +98,7 @@
         overflow: auto;
       }
 
-      li:hover {
+      .ui-corner-all:hover {
         background: #eee;
         cursor: pointer;
       }
@@ -100,6 +125,11 @@
         background: #000000;
         color:#000000;
     }
+
+
+
+
+
 
     </style>
 
