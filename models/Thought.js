@@ -78,18 +78,14 @@ thoughtSchema.statics.editThought = function (thoughtId, newMessage, newPhoto, n
     .exec(function (err, thought) {
       if (err) {
         callback(err);
+      } else if (thought.occasion.isPublished()) {
+        callback({ code: 403, msg: 'Occasion already published' });
       } else {
-        thought.occasion.isPublished(function (er, isPublished) {
-          if (isPublished) {
-            callback({ code: 403, msg: 'Occasion already published' });
-          } else {
-            thought.message = newMessage;
-            thought.photo = newPhoto;
-            thought.isPublic = newIsPublic;
-            thought.save();
-            callback(null);
-          }
-        });
+        thought.message = newMessage;
+        thought.photo = newPhoto;
+        thought.isPublic = newIsPublic;
+        thought.save();
+        callback(null);
       }
     }
   );

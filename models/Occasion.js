@@ -309,38 +309,30 @@ occasionSchema.methods.canView = function (userId, callback) {
 
 // add thought
 occasionSchema.methods.addThought = function (thoughtId, callback) {
-  this.isPublished(function (e, isPublished) {
-    if (e) {
-      callback(e);
-    } else if (isPublished) {
-      callback({code: 403, msg: "Occassion already published."})
-    } else {
-      this.thoughts.push(thoughtId);
-      this.save();
-      callback(null);
-    }
-  }); 
+  if (this.isPublished()) {
+    callback({code: 403, msg: "Occassion already published."})
+  } else {
+    this.thoughts.push(thoughtId);
+    this.save();
+    callback(null);
+  }
 }
 
 occasionSchema.methods.removeThought = function (thoughtId, callback) {
-  this.isPublished(function (e, isPublished) {
-    if (e) {
-      callback(e);
-    } else if (isPublished) {
-      callback({code: 403, msg: "Occassion already published."})
-    } else {
-      var i = this.thoughts.indexOf(thoughtId);
-      if (i != -1){
-         this.thoughts.splice(i, 1);
-      }
-      this.save();
-      callback(null);
+  if (this.isPublished()) {
+    callback({code: 403, msg: "Occassion already published."})
+  } else {
+    var i = this.thoughts.indexOf(thoughtId);
+    if (i != -1){
+       this.thoughts.splice(i, 1);
     }
-  }); 
+    this.save();
+    callback(null);
+  }
 }
 
 occasionSchema.methods.isPublished = function (callback) {
-  callback(null, Date.now() > this.publishTime);
+  return Date.now() > this.publishTime;
 }
 
 // When we 'require' this model in another file (e.g. routes),
