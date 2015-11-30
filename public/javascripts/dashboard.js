@@ -2,22 +2,30 @@ $(function () {
 
   var friendData = []
   var addedFriends = [];
+  var currentUser;
 
-  $.get("/users/current",function (data) {
-    console.log(data);
-    var fbid = data.content.user.fbid;
-    var token = data.content.user.token;
-    $.get("https://graph.facebook.com/v2.5/me/friends?access_token="+token, function (obj, status){
-    	console.log(obj.data);
-    	friendData = obj.data;
-      var friendNames = obj.data.map(function (friend) {
-        return friend.name;
-      });
-      $('#share').autocomplete({
-        source: friendNames,
-        autoFocus: true
-      });
-    });
+  $.get("/users/current", function (userData) {
+    if (!userData.success) {
+      console.log('failed in getting user data');
+      alert('failed in getting user data');
+    } else {
+      currentUser = userData.content.user;
+      console.log(currentUser);
+      $.get("https://graph.facebook.com/v2.5/me/friends", 
+            { access_token: currentUser.token }, 
+            function (fbFriends, status){
+            	console.log(fbFriends.data);
+            	friendData = fbFriends.data;
+              var friendNames = fbFriends.data.map(function (friend) {
+                return friend.name;
+              });
+              $('#share').autocomplete({
+                source: friendNames,
+                autoFocus: true
+              });
+            }
+      );
+    }
   });
 
   $('#share').keypress(function (e) {
@@ -37,6 +45,17 @@ $(function () {
       	alert('name error!');
       }
     }
+  });
+
+  $('#angus-notif').click(function (evt) {
+    console.log('here');    
+    $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
+            { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
+            function (data, status){
+              console.log(data);
+              console.log(status);
+            }
+    );
   });
 
   $('form').submit(function (evt) {

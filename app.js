@@ -16,13 +16,11 @@ var users = require('./routes/users');
 
 // Import User model
 var User = require('./models/User');
-// var NewUser = require('./models/NewUser');
 
 var FACEBOOK_APP_ID = "929113373843865";
 var FACEBOOK_APP_SECRET = "c956f3275cd75946929c1fe2591a9b25";
 
 var mongoose = require('mongoose');
-// mongoose.connect('mongodb://localhost/fritter');
 mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/mymongodb');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
