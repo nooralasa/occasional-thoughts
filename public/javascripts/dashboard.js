@@ -6,8 +6,6 @@ $(function () {
   var addedFriendsEmails = [];
   var currentUser;
 
-  var User = require('./models/User');
-
   $.get("/users/current", function (userData) {
     if (!userData.success) {
       console.log('failed in getting user data');

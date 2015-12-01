@@ -7,8 +7,6 @@ var session = require('express-session');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
-var mandrill = require('mandrill-api/mandrill');
-var mandrill_client = new mandrill.Mandrill('JNFGVolztHUoggyWoUO31Q');
 
 // var mandrill_client = new mandrill.Mandrill('JNFGVolztHUoggyWoUO31Q');
 

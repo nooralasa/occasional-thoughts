@@ -1,6 +1,8 @@
 // @author: Noor
+var mandrill = require('mandrill-api/mandrill');
+var mandrill_client = new mandrill.Mandrill('JNFGVolztHUoggyWoUO31Q');
 
-var sendEmails = function(user_name, user_email, link, emails, mandrill_client) {
+var sendEmails = function(user_name, user_email, link, emails) {
 
 	var message = {
 	    "html": "<p>Hello there!<br>"+user_name+" invited you to add thoughts to an"+
@@ -38,6 +40,5 @@ var sendEmails = function(user_name, user_email, link, emails, mandrill_client) 
 	    console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
 	    // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
 	});
-
-
 }
+
