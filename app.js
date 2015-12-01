@@ -62,11 +62,11 @@ passport.use(new FacebookStrategy({
           done(err);
         if (user) {
           user.updateProfilePicture(profile.photos[0].value, function (er) {
-            done(null, { id: user._id, name: user.name });
+            done(null, { id: user._id, name: user.name, profilePicture: profile.photos[0].value});
           });
         } else {
           User.createNewUser(profile.emails[0].value, accessToken, profile.id, profile.displayName, profile.photos[0].value, function (er, newUser) {
-            done(null, { id: newUser._id, name: newUser.name });
+            done(null, { id: newUser._id, name: newUser.name, profilePicture: profile.photos[0].value });
           });
         }
       });

@@ -13,16 +13,17 @@ $(document).on('click', '#add-thought', function(evt) {
 	$('#thought-message').val('');
 	var id = $("input[name=occasionId]").val();
 	var name = $("input[name=userName]").val();
-	//var photo = document.getElementById().value;
+	var photo = $("input[name=profilePicture]").val();
+  //"http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg"
 	//var isPublic = document.getElementById().value;
 	$.post('/occasions/'+id+"/thoughts", 
 		{message: message, 
-			photo: "http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg",
+			photo:"",
 			isPublic: true}
 		).done(function(response) {
           $('#thought-list').append( 
-          	'<div class= "thought"> <li ><img src="http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg"><h3 align="left">'
-          	+ name +'</h3><p align= "left" >'+ message +'</p></li></div>'
+          	'<div class= "thought-box"> <li style="position:relative" class="thought"><img src='+photo +'><h3 align="left">'
+          	+ name +'</h3><p align= "left">'+ message +'</p>'+'</li></div>'
           	);
      	     
       }).fail(function(responseObject) {
@@ -34,8 +35,19 @@ $(document).on('click', '#add-thought', function(evt) {
   $(document).on('click', '#delete-thought', function(evt) {
     evt.preventDefault();
     console.log("Delete thought")
-  
+    var occasion_id = $("input[name=occasionId]").val();
+    var thought_id  = $("input[name=thoughtId]").val();
+    console.log("thought Id", thought_id);
+    
+    $.ajax({
+      url: '/occasions/'+occasion_id+'/thoughts/'+thought_id,
+      type: 'DELETE',
+      success: function(result) {
+        $('#'+thought_id).remove();
+    }
   });
+
+});
 
   $(document).on('click', '#edit-thought', function(evt) {
     evt.preventDefault();
