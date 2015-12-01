@@ -59,8 +59,8 @@ $(function () {
   });
 
   $('form').submit(function (evt) {
+    console.log("submit button pressed")
     evt.preventDefault();
-    console.log(addedFriends);
     $.post('/occasions', {
       title: $('input[name=title]').val(),
       description: $('input[name=description]').val(),
@@ -85,6 +85,7 @@ $(function () {
   $(document).on('click', '#upload', function(evt) {
     console.log("upload button clicked")
       var url = $('#url').val();
+      console.log(url)
       $('#previewImg').attr('src', url);
   });
 });
