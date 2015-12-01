@@ -1,5 +1,6 @@
 var mongoose = require("mongoose");
 var User = require('./User');
+var email_client = require('../utils/email_client');
 
 var occasionSchema = mongoose.Schema({
   title: String,
@@ -67,10 +68,21 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                     if (e) {
                       callback(e)
                     } else {
+                      console.log("about to send email");
 
-                      //angus send email
-                      // finally reply ok
-                      callback(null);
+                      //then send the emails
+                      var emails = friends.map(function (friend) {
+                        return friend.email;
+                      });
+                      console.log(emails);
+                      email_client.sendEmails(user.name, user.email, "http://occasionalthoughts.herokuapp.com/occasions/"+occasion._id, emails, function (err1, result) {
+                        if (err1) {
+                          callback(err1);
+                        } else {
+                          console.log(result);
+                          callback(null);
+                        }
+                      });
                     }
                   });
                 }
