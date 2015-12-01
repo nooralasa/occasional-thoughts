@@ -96,7 +96,10 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
-      if (req.occasion.thoughts.indexOf(thought._id) >= 0) {
+      var inOccassion = req.occasion.thoughts.filter(function (currentThought) {
+        return currentThought._id === thought._id;
+      });
+      if (inOccassion.length === 1) {
         req.thought = thought;
         next();
       } else {
@@ -154,11 +157,13 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
+  console.log('in post');
   Occasion.createOccasion(req.body.title, 
                           req.body.description, 
                           req.body.coverPhoto, 
                           req.body.participants, 
                           req.session.passport.user.id, 
+                          req.body.publishTime,
                           function (err) {
                             if (err) {
                               utils.sendErrResponseGivenError(res, err);
@@ -246,8 +251,10 @@ router.post('/:occasionId/thoughts/:thoughtId', function (req, res) {
 
 // delete thought
 router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
+  console.log("thought to be deleted", req.thought._id);
   Thought.removeThought(req.thought._id, req.occasion._id, function (err) {
     if (err) {
+      console.log(err);
       utils.sendErrResponseGivenError(res, err);
     } else {
       utils.sendSuccessResponse(res);
