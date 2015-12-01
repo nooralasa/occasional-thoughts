@@ -5,7 +5,7 @@ var email = (function () {
 
   var _email = {};
 
-  _email.sendEmails = function (user_name, user_email, link, emails) {
+  _email.sendEmails = function (user_name, user_email, link, emails, callback) {
 	  var message = {
 	    "html": "<p>Hello there!<br>"+user_name+" invited you to add thoughts to an"+
 	    " upcoming occasion. Follow this link to do so.<br><a href="
@@ -30,9 +30,12 @@ var email = (function () {
 
 	  mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function (result) {
 	    console.log(result);
+	    console.log('in mail');
+	    callback(null, result);
 	  }, function (e) {
 	    // Mandrill returns the error as an object with name and message keys
 	    console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+	    callback(e);
 	    // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
 	  });
 	}

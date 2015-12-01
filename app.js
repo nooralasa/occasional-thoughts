@@ -172,6 +172,7 @@ app.use('/users', users);
 app.get('/auth/facebook',
   passport.authenticate('facebook', { scope: ['user_friends', 'email']}),
   function (req, res){
+    console.log('res');
     console.log(res);
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.

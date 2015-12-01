@@ -78,11 +78,12 @@ $(function () {
   $('form').submit(function (evt) {
     console.log("submit button pressed")
     evt.preventDefault();
+    console.log(addedFriends);
     $.post('/occasions', {
       title: $('input[name=title]').val(),
       description: $('input[name=description]').val(),
       coverPhoto: $('input[name=coverPhoto]').val(),
-      friends: addedFriends
+      participants: addedFriends
     }).done(function () {
       console.log('done');
       window.location.replace('/occasions');
