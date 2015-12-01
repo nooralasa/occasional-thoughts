@@ -53,12 +53,12 @@ passport.deserializeUser(function (user, done) {
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: process.env.MONGOLAB_URI ? "http://occasionalthoughts.herokuapp.com/auth/facebook/callback" : "http://localhost:3000/auth/facebook/callback",
+    // callbackURL: process.env.MONGOLAB_URI ? "http://occasionalthoughts.herokuapp.com/auth/facebook/callback" : "http://localhost:3000/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'emails', 'photos']
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      // console.log(profile);
+      console.log(profile);
       User.findByFbid(profile.id, function (err, user) {
         if (err)
           done(err);
@@ -170,10 +170,8 @@ app.use('/users', users);
 //   redirecting the user to facebook.com.  After authorization, Facebook will
 //   redirect the user back to this application at /auth/facebook/callback
 app.get('/auth/facebook',
-  passport.authenticate('facebook', { scope: ['user_friends', 'email']}),
-  function (req, res){
-    console.log('res');
-    console.log(res);
+  passport.authenticate('facebook', { callbackURL: '/auth/facebook/callback', scope: ['user_friends', 'email'] }),
+  function (req, res) {
     // The request will be redirected to Facebook for authentication, so this
     // function will not be called.
   }
@@ -185,14 +183,58 @@ app.get('/auth/facebook',
 //   login page.  Otherwise, the primary route function function will be called,
 //   which, in this example, will redirect the user to the home page.
 app.get('/auth/facebook/callback', 
-  passport.authenticate('facebook', { failureRedirect: '/' }),
+  passport.authenticate('facebook', 
+    {
+      callbackURL:"/auth/facebook/callback"
+    , successRedirect:"/"
+    , failureRedirect:"/"
+    }
+  ),
   function (req, res) {
     //TODO: Change this to the landing page of logged in users 
     res.redirect('/');
   }
 );
 
-//Logingout
+// handles going to an occasion id
+app.get('/auth/facebook/occasions/:id', function (req,res,next) {
+  passport.authenticate(
+    'facebook', 
+     { callbackURL: '/auth/facebook/callback/occasions/'+req.params.id, scope: ['user_friends', 'email']  }
+  ) (req,res,next);
+});
+
+app.get('/auth/facebook/callback/occasions/:id', function (req,res,next) {
+  passport.authenticate(
+    'facebook',
+    {
+     callbackURL:"/auth/facebook/callback/occasions/"+req.params.id
+    , successRedirect:"/occasions/"+req.params.id
+    , failureRedirect:"/"
+    }
+  ) (req,res,next);
+});
+
+// handles going to occasions page
+app.get('/auth/facebook/occasions', function (req,res,next) {
+  passport.authenticate(
+    'facebook', 
+     { callbackURL: '/auth/facebook/callback/occasions', scope: ['user_friends', 'email']  }
+  ) (req,res,next);
+});
+
+app.get('/auth/facebook/callback/occasions', function (req,res,next) {
+  passport.authenticate(
+    'facebook',
+    {
+     callbackURL:"/auth/facebook/callback/occasions"
+    , successRedirect:"/occasions"
+    , failureRedirect:"/"
+    }
+  ) (req,res,next);
+});
+
+// logging out
 app.get('/logout', 
   function (req, res) {
     req.logout();

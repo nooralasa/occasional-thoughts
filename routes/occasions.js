@@ -12,7 +12,8 @@ var Thought = require('../models/Thought');
 */
 var requireLogin = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
-    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+    res.redirect('/auth/facebook/occasions'+req.params[0]);
+    // utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     next(); 
   }
@@ -48,7 +49,6 @@ var requireOccasionOwnership = function (req, res, next) {
     if (isCreator) {
       next();
     } else {
-      console.log("Do not own occasion");
       utils.sendErrResponse(res, 404, 'Resource not found.');
     }
   });
@@ -82,6 +82,7 @@ var requireContent = function (req, res, next) {
 */
 
 router.param('occasionId', function (req, res, next, occasionId) {
+  console.log('in id');
   Occasion.populateOccasion(occasionId, function (err, occasion) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
