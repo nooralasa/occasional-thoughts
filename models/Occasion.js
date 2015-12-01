@@ -119,7 +119,7 @@ occasionSchema.statics.removeOccasion = function (occasionId, callback) {
     if (err) {
       callback(err);
     } else {
-      User.removeOccasionFromAll(occasionId, function (er) {
+      User.removeOccasionFromAll(occasion._id, occasion.creator, occasion.participants, function (er) {
         if (er) {
           callback(er);
         } else {
@@ -271,7 +271,6 @@ occasionSchema.methods.isRecipient = function (userId, callback) {
 
 occasionSchema.methods.isCreator = function (userId, callback) {
   var self = this;
-  console.log("isCreator", self.creator.equals(userId));
   callback(null, self.creator.equals(userId));
 }
 
