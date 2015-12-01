@@ -68,7 +68,6 @@
                                 
 
                             </div>
-                            <a id="cancel" class="btn btn-primary" style = "position:relative; right:30%; margin:8px">Cancel</a>
                             <a id="next" class="btn btn-primary next" style = "position:relative; left:30%; margin:8px">Next</a>
                           </fieldset>
                           
@@ -86,21 +85,57 @@
                                   
 
                                 <div class="form-group">
-                                  <label class="sr-only" for="form-facebook">Facebook</label>
-                                    <input type="text" name="form-facebook" placeholder="Facebook..." class="form-facebook form-control" id="form-facebook">
+                                  <div class="input-group">
+                                    <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-th"></span><span> Publishing Date</span>
+                                    </span>
+                                    <input type="date" name="date" placeholder="Enter a date" class="form-first-name form-control" id="date">
+                                    
+                                  </div>
                                 </div>
 
                                 <div class="form-group">
-                                  <label class="sr-only" for="form-twitter">Twitter</label>
-                                  <input type="text" name="form-twitter" placeholder="Twitter..." class="form-twitter form-control" id="form-twitter">
+                                  <div class="input-group">
+                                    <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-time"></span><span> Publishing Time</span>
+                                    </span>
+                                    <input type="time" name="date" placeholder="Enter a date" class="form-first-name form-control" id="date">
+                                    
+                                  </div>
                                 </div>
-                                <div class="form-group">
-                                  <label class="sr-only" for="form-google-plus">Google plus</label>
-                                  <input type="text" name="form-google-plus" placeholder="Google plus..." class="form-google-plus form-control" id="form-google-plus">
+
+                                <div>
+                                  <p style="color:#000000; font-size:16px"> Who can view the published occasion?</p> 
+
+                                  <div class="checkbox">
+                                    <label><input type="checkbox" value="">Anyone with a link</label>
+                                  </div>
+                                  <div class="checkbox">
+                                    <label><input type="checkbox" value="">People who have added thoughts</label>
+                                  </div>
+                                  <div class="checkbox disabled">
+                                    <label><input type="checkbox" value="">The following specified people</label>
+                                  </div>
+
+                                  <div class="form-group email">
+                                      <div class="input-group">
+                                        <span class="input-group-addon">
+                                          <span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <input id="recipientShare" type = "text" class="form-control" placeholder="Select Friends" />
+                                      </div>
+                                    </div>
+
+                                    <div id="recipients">
+
+                                    </div>
+
                                 </div>
-                                <button type="button" class="btn btn-primary previous">Previous</button>
-                                <button type="button" class="btn btn-primary next">Next</button>
                             </div>
+
+                            <a class="btn btn-primary next" style = "position:relative; margin:8px; left:40%">Next</a>
+                            <a class="btn btn-primary previous" style = "position:relative; margin:8px; right:40%">Previous</a>
+
                           </fieldset>
 
                           <fieldset>
