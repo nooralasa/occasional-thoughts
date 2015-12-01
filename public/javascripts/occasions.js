@@ -19,7 +19,8 @@
 $(document).on('click', '#delete-occasion', function(evt) {
   evt.preventDefault();
   console.log("Delete occasion")
-  var occasion_id = $("input[name=occasionId]").val();
+  var occasion_id = $(this).parent().attr('id');
+
   console.log("occasion id is", occasion_id);
   $.ajax({
     url: '/occasions/'+occasion_id,

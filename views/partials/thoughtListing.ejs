@@ -32,7 +32,7 @@
       <% var numThoughts = occasion.thoughts.length%>
       <% for (var i=0; i<numThoughts; i++) { %>
       <div id ="<%=occasion.thoughts[i]._id%>" class = "thought-box">
-          <li class ="thought">
+          <li class ="thought" id="<%=occasion.thoughts[i]._id%>">
             <img src="<%=occasion.thoughts[i].creator.profilePicture%>">
             <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
             <p align= "left" > <%=occasion.thoughts[i].message%></p>
@@ -43,8 +43,6 @@
             <div  id = "edit-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-pencil"></span>
             </div>
-
-            <input name="thoughtId" value="<%=occasion.thoughts[i]._id%>" type="hidden">
 
           </li>
       </div>
