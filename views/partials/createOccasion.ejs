@@ -4,6 +4,7 @@
 <!-- @author: Usman--> 
 
  <!-- Register Modal -->
+
             <div id="createOccasionModal" class="modal fade" role="dialog">
               <div class="modal-dialog">
 
@@ -25,6 +26,7 @@
                                 <div class="form-bottom">
 
 
+
                                  <div class="form-group">
                                   <div class="input-group">
                                     <span class="input-group-addon">
@@ -43,7 +45,7 @@
                                   </div>
                                 </div>
 
-                                <div id = "preview" style="width: 100%; height: 200px; border: 3px solid #DDDDDD; margin-bottom:15px">
+                                <div id = "preview"style="display:none; width: 100%; height: 200px; border: 3px solid #DDDDDD; margin-bottom:15px">
                                   <img id = "previewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" style = "max-width:100%; max-height:100%; margin-left:auto; margin-right:auto" class="img-responsive" alt="">
                                 </div>
 
@@ -52,17 +54,53 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-picture"></span>
                                     </span>
-                                    <input type="text" name="coverPhoto" placeholder="Cover Photo URL" class="form-first-name form-control" id="url">
+                                    <input name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
                                   </div>
                                   <a id="upload" class="btn btn-primary btn-block">Upload</a>
                                 </div>
 
+                                <div>
+                                  
+                                </div>
+
+                                
+
                             </div>
-                            <input type="submit" role="button" id="createOccasion" class="btn btn-primary" style = "position:relative; left:50%; margin:8px" value= "Create Occasion">
-                            <a id="cancel" class="btn btn-primary" style = "position:relative; right:45%; margin:8px">Cancel</a>
-                            <a id="next" class="btn btn-primary" style = "position:relative; right:25%; margin:8px">Next</a>
+                            <a id="cancel" class="btn btn-primary" style = "position:relative; right:30%; margin:8px">Cancel</a>
+                            <a id="next" class="btn btn-primary next" style = "position:relative; left:30%; margin:8px">Next</a>
                           </fieldset>
                           
+                          <fieldset>
+                              <div class="form-top">
+                                <div class="form-top-left">
+                                  <h3>Create an Occasion</h3>
+                                </div>
+                                <div class="form-top-right">
+                                  <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+                                </div>
+                                </div>
+
+                                <div class="form-bottom">
+                                  
+
+                                <div class="form-group">
+                                  <label class="sr-only" for="form-facebook">Facebook</label>
+                                    <input type="text" name="form-facebook" placeholder="Facebook..." class="form-facebook form-control" id="form-facebook">
+                                </div>
+
+                                <div class="form-group">
+                                  <label class="sr-only" for="form-twitter">Twitter</label>
+                                  <input type="text" name="form-twitter" placeholder="Twitter..." class="form-twitter form-control" id="form-twitter">
+                                </div>
+                                <div class="form-group">
+                                  <label class="sr-only" for="form-google-plus">Google plus</label>
+                                  <input type="text" name="form-google-plus" placeholder="Google plus..." class="form-google-plus form-control" id="form-google-plus">
+                                </div>
+                                <button type="button" class="btn btn-primary previous">Previous</button>
+                                <button type="button" class="btn btn-primary next">Next</button>
+                            </div>
+                          </fieldset>
+
                           <fieldset>
                               <div class="form-top">
                                 <div class="form-top-left">
@@ -75,8 +113,8 @@
                                 <div class="form-bottom">
                                 <div id = "privacyForm" class="form-group email">
                                   <p style = "color:#000000; font-size:20px"> Who can add a thought? </p>
-                                  <label class="checkbox-inline"><input type="radio" name = "toggler" value="1">Anyone with a link</label>
-                                  <label class="checkbox-inline"><input type="radio" name = "toggler" value="2">Only specific people</label>
+                                  <label id = "tgl1" class="checkbox-inline"><input type="radio" name = "toggler" value="1">Anyone with a link</label>
+                                  <label id = "tgl2" class="checkbox-inline"><input type="radio" name = "toggler" value="2">Only specific people</label>
                                 </div>
 
                                 <div id="blk-1" class="toHide" style="display:none">
@@ -130,38 +168,13 @@
                                     </div>
                             </div>
 
-                            
-                            <a id="cancel" class="btn btn-primary" style = "position:relative; right:50%; margin:8px">Cancel</a>
+                          </div>
+
+                            <a id="finish" class="btn btn-primary" style = "display:none; position:relative; margin:8px; left:40%">Finish</a>
+                            <a id="previous" class="btn btn-primary previous" style = "position:relative; margin:8px; right:40%">Previous</a>
 
                           </fieldset>
                           
-                          <fieldset>
-                              <div class="form-top">
-                                <div class="form-top-left">
-                                  <h3>Step 3 / 3</h3>
-                                    <p>Social media profiles:</p>
-                                </div>
-                                <div class="form-top-right">
-                                  <i class="fa fa-twitter"></i>
-                                </div>
-                                </div>
-                                <div class="form-bottom">
-                              <div class="form-group">
-                                <label class="sr-only" for="form-facebook">Facebook</label>
-                                  <input type="text" name="form-facebook" placeholder="Facebook..." class="form-facebook form-control" id="form-facebook">
-                                </div>
-                                <div class="form-group">
-                                  <label class="sr-only" for="form-twitter">Twitter</label>
-                                  <input type="text" name="form-twitter" placeholder="Twitter..." class="form-twitter form-control" id="form-twitter">
-                                </div>
-                                <div class="form-group">
-                                  <label class="sr-only" for="form-google-plus">Google plus</label>
-                                  <input type="text" name="form-google-plus" placeholder="Google plus..." class="form-google-plus form-control" id="form-google-plus">
-                                </div>
-                                <button type="button" class="btn btn-previous">Previous</button>
-                                <button type="submit" class="btn">Sign me up!</button>
-                            </div>
-                          </fieldset>
                         
                         </form>
 

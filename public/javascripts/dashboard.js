@@ -109,28 +109,44 @@ $(function () {
       $('#previewImg').attr('src', url);
   });
 
-  $(function() {
-    $("[name=toggler]").click(function(){
-            $('.toHide').hide();
-            $("#blk-"+$(this).val()).show('slow');
-    });
- });
+  $("#tgl2").click(function(){
+          $('.toHide').hide();
+          $("#blk-2").show('slow');
+  });
 
-  $(function() {
-    $("#emailBtn").click(function(){
-            $('.email').hide(50);
-            $("#emailSent").show(50);
+  $("#tgl1").click(function(){
+          $('.toHide').hide();
+          $("#finish").show();
+  });
 
-    });
- });
+  $("#finish").click(function(){
+          $('.toHide').hide(50);
+          $('.email').hide(50);
+          $("#blk-1").show(50);
 
-  $(function() {
-    $("#inviteFriends").click(function(){
-            $('#emailSent').hide(50);
-            $(".email").show(50);
+  });
 
-    });
- });
+
+
+  $("#emailBtn").click(function(){
+          $('.email').hide(50);
+          $("#emailSent").show(50);
+
+  });
+
+  $("#inviteFriends").click(function(){
+          $('#emailSent').hide(50);
+          $(".email").show(50);
+
+  });
+
+  $("#upload").click(function(){
+        if($('#url').val()!=""){
+          $("#preview").show(50);
+        }
+          
+
+  });
 
 });
 

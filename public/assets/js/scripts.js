@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
     });
     
     // next step
-    $('#next').on('click', function() {
+    $('.registration-form .next').on('click', function() {
     	var parent_fieldset = $(this).parents('fieldset');
     	var next_step = true;
     	
@@ -46,7 +46,7 @@ jQuery(document).ready(function() {
     });
     
     // previous step
-    $('.registration-form .btn-previous').on('click', function() {
+    $('.registration-form .previous').on('click', function() {
     	$(this).parents('fieldset').fadeOut(400, function() {
     		$(this).prev().fadeIn();
     	});
