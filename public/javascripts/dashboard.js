@@ -49,6 +49,25 @@ $(function () {
     }
   });
 
+  $('#recipientShare').keypress(function (e) {
+    if(e.which == 13) {
+      e.preventDefault();
+      var input = $('#recipientShare').val();
+
+      var result = $.grep(friendData, function (obj){ 
+        return obj.name === input; 
+      });
+
+      if (result.length === 1) {
+        addedFriends.push(result[0].id);
+        $('#recipients').append("<div><label>"+result[0].name+"</label></div>");
+        $('#recipientShare').val('');
+      } else {
+        alert('name error!');
+      }
+    }
+  });
+
   $('#angus-notif').click(function (evt) {
     fakeAddedFriends.forEach(function(friendFbid) {
       User.findByFbid(friendFbid, function (err, user) {
