@@ -68,6 +68,7 @@ $(function () {
       friends: addedFriends
     }).done(function () {
       console.log('done');
+      window.location.replace('/occasions');
         // $.get("/users/current",function (data) {
         //   var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
         //   console.log(occasionId);
