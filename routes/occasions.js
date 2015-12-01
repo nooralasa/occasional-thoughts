@@ -154,11 +154,13 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
+  console.log('in post');
   Occasion.createOccasion(req.body.title, 
                           req.body.description, 
                           req.body.coverPhoto, 
                           req.body.participants, 
                           req.session.passport.user.id, 
+                          req.body.publishTime,
                           function (err) {
                             if (err) {
                               utils.sendErrResponseGivenError(res, err);

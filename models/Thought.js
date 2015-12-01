@@ -103,19 +103,17 @@ thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, th
         if (error) {
           callback(error);
         } else if (occasion.isPublished()) {
-              callback({ code: 403, msg: 'Occasion already published' });
+          callback({ code: 403, msg: 'Occasion already published' });
+        } else {
+          self.addThought(thoughtMessage, thoughtPhoto, thoughtIsPublic, occasion._id, user._id, function (er, thought) {
+            if (er) {
+              callback(er);
             } else {
-              self.addThought(thoughtMessage, thoughtPhoto, thoughtIsPublic, occasion._id, user._id, function (er, thought) {
-                if (er) {
-                  callback(er);
+              occasion.addThought(thought._id, function (e) {
+                if (e) {
+                  callback(e);
                 } else {
-                  occasion.addThought(thought._id, function (e) {
-                    if (e) {
-                      callback(e);
-                    } else {
-                      callback(null);
-                    }
-                  });
+                  callback(null);
                 }
               });
             }
