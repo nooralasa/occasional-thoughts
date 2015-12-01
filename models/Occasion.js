@@ -119,7 +119,7 @@ occasionSchema.statics.removeOccasion = function (occasionId, callback) {
     if (err) {
       callback(err);
     } else {
-      User.removeOccasionFromAll(occasionId, function (er) {
+      User.removeOccasionFromAll(occasion._id, occasion.creator, occasion.participants, function (er) {
         if (er) {
           callback(er);
         } else {

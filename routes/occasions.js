@@ -43,7 +43,7 @@ var requireViewPermission = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOccasionOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.session.passport.user.id, function (isCreator) {
+  req.occasion.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -53,7 +53,7 @@ var requireOccasionOwnership = function (req, res, next) {
 };
 
 var requireThoughtOwnership = function (req, res, next) {
-  req.thought.isCreator(req.session.passport.user.id, function (isCreator) {
+  req.thought.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
       next();
     } else {
