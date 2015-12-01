@@ -88,5 +88,29 @@ $(function () {
       console.log(url)
       $('#previewImg').attr('src', url);
   });
+
+  $(function() {
+    $("[name=toggler]").click(function(){
+            $('.toHide').hide();
+            $("#blk-"+$(this).val()).show('slow');
+    });
+ });
+
+  $(function() {
+    $("#emailBtn").click(function(){
+            $('.email').hide(50);
+            $("#emailSent").show(50);
+
+    });
+ });
+
+  $(function() {
+    $("#inviteFriends").click(function(){
+            $('#emailSent').hide(50);
+            $(".email").show(50);
+
+    });
+ });
+
 });
 

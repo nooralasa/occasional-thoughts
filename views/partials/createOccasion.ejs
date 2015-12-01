@@ -55,9 +55,6 @@
                                   </div>
                                   <a id="upload" class="btn btn-primary btn-block">Upload</a>
                                 </div>
-                                
-                                <button type="button" class="btn btn-next">Next</button>
-                                <button type="button" id="angus-notif">Next</button>
 
                             </div>
                             <input type="submit" role="button" id="createOccasion" class="btn btn-primary" style = "position:relative; left:50%; margin:8px" value= "Create Occasion">
@@ -68,30 +65,73 @@
                           <fieldset>
                               <div class="form-top">
                                 <div class="form-top-left">
-                                  <h3>Step 2 / 3</h3>
-                                    <p>Set up your account:</p>
+                                  <h3>Create an Occasion</h3>
                                 </div>
                                 <div class="form-top-right">
-                                  <i class="fa fa-key"></i>
+                                  <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
                                 </div>
                                 </div>
                                 <div class="form-bottom">
-                                <div class="form-group">
-                                  <label class="sr-only" for="form-email">Email</label>
-                                  <input type="text" name="form-email" placeholder="Email..." class="form-email form-control" id="form-email">
+                                <div id = "privacyForm" class="form-group email">
+                                  <p style = "color:#000000; font-size:20px"> Who can add a thought? </p>
+                                  <label class="checkbox-inline"><input type="radio" name = "toggler" value="1">Anyone with a link</label>
+                                  <label class="checkbox-inline"><input type="radio" name = "toggler" value="2">Only specific people</label>
                                 </div>
-                                <div class="form-group">
-                                <label class="sr-only" for="form-password">Password</label>
-                                  <input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+
+                                <div id="blk-1" class="toHide" style="display:none">
+                                    <p style="color:#000000; font-size:16px"> Here is your public link to the occasion</p> 
+                                    <div class="form-group">
+                                    <div class="input-group">
+                                      <span class="input-group-addon">
+                                        <span> Public Link: </span>
+                                      </span>
+                                      <input type="text" name="publicLink" placeholder="http://doodle.com/poll/hzf2f2igdh3i7p5s" class="form-first-name form-control" id="form-first-name">
+                                    </div>
+                                    </div>
+
+                                    <p style="color:#000000; font-size:16px"> Share it with your facebook friends!</p> 
+
+                                    <a class="btn btn-block btn-social btn-facebook">
+                                      <span class="fa fa-facebook"></span> Share link on Facebook Messenger
+                                    </a>
                                 </div>
-                                <div class="form-group">
-                                  <label class="sr-only" for="form-repeat-password">Repeat password</label>
-                                  <input type="password" name="form-repeat-password" placeholder="Repeat password..." 
-                                        class="form-repeat-password form-control" id="form-repeat-password">
-                                </div>
-                                <button type="button" class="btn btn-previous">Previous</button>
-                                <button type="button" class="btn btn-next">Next</button>
+
+
+                                <div id="blk-2" class="toHide" style="display:none">
+                                    <p style="color:#000000; font-size:16px" class="email"> Select friends to invite to your occasion:</p> 
+                                    <div class="form-group email">
+                                      <div class="input-group">
+                                        <span class="input-group-addon">
+                                          <span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <input id="share" name="friends" type="text" class="form-control" placeholder="Select Friends" />
+                                      </div>
+                                    </div>
+
+                                    <div id="friends-div" class = "email">
+                                    </div>  
+
+                                    <div id="emailSent" class="toHide">
+                                      <p style="color:#000000; font-size:20px; position:relative; left:10%">Your friends have been invited to the occasion!</p>
+
+                                      <input role="button" id="inviteFriends" class="btn btn-primary btn-lg" style = "position:relative; left:25%; margin:8px" value= "Invite More Friends">
+
+                                      <p style="color:#000000; font-size:16px; position:relative; left:48%">Or</p>
+
+                                      <input type="submit" role="button" id="createOccasion" class="btn btn-primary btn-lg" style = "position:relative; left:38%; margin:8px" value= "Finish!">
+
+                                    </div> 
+
+                                    <div id="sendEmail">
+                                      <a id = "emailBtn" class="btn btn-block btn-social btn-google email">
+                                        <span class="fa fa-google"></span> Send Email to Selected Friends
+                                      </a>
+                                    </div>
                             </div>
+
+                            
+                            <a id="cancel" class="btn btn-primary" style = "position:relative; right:50%; margin:8px">Cancel</a>
+
                           </fieldset>
                           
                           <fieldset>
