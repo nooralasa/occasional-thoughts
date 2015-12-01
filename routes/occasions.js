@@ -43,10 +43,13 @@ var requireViewPermission = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOccasionOwnership = function (req, res, next) {
+  console.log("current user", req.session.passport.user.id);
+  console.log("occasion creator", req.occasion.creator);
   req.occasion.isCreator(req.session.passport.user.id, function (isCreator) {
     if (isCreator) {
       next();
     } else {
+      console.log("Do not own occasion");
       utils.sendErrResponse(res, 404, 'Resource not found.');
     }
   });
@@ -157,7 +160,6 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
-  console.log('in post');
   Occasion.createOccasion(req.body.title, 
                           req.body.description, 
                           req.body.coverPhoto, 

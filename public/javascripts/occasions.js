@@ -20,14 +20,14 @@ $(document).on('click', '#delete-occasion', function(evt) {
   evt.preventDefault();
   console.log("Delete occasion")
   var occasion_id = $("input[name=occasionId]").val();
-  /*
+  console.log("occasion id is", occasion_id);
   $.ajax({
     url: '/occasions/'+occasion_id,
     type: 'DELETE',
     success: function(result) {
-      $('#'+thought_id).remove();
+      $('#'+occasion_id).remove();
     }
-  });*/
+  });
 });
 
 $(document).on('click', '#edit-occasion', function(evt) {

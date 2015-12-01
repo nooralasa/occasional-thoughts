@@ -270,6 +270,7 @@ occasionSchema.methods.isRecipient = function (userId, callback) {
 
 occasionSchema.methods.isCreator = function (userId, callback) {
   var self = this;
+  console.log("isCreator", self.creator.equals(userId));
   callback(null, self.creator.equals(userId));
 }
 
