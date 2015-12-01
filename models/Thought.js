@@ -102,9 +102,7 @@ thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, th
       Occasion.findById(occasionId, function (error, occasion) {
         if (error) {
           callback(error);
-        } else {
-          occasion.isPublished(function (error1, isPublished) {
-            if (isPublished) {
+        } else if (occasion.isPublished()) {
               callback({ code: 403, msg: 'Occasion already published' });
             } else {
               self.addThought(thoughtMessage, thoughtPhoto, thoughtIsPublic, occasion._id, user._id, function (er, thought) {
