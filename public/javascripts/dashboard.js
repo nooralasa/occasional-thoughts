@@ -94,8 +94,18 @@ $(function () {
     // );
   });
 
+  // should post these info to /occasions
+    // req.body.title, 
+    // req.body.description, 
+    // req.body.coverPhoto, 
+    // req.body.participants, 
+    // req.body.recipients, 
+    // req.body.publishTime,
+
   $('#finish').click(function (evt) {
     console.log("finish button pressed");
+    console.log($('input[name=pubTime]').val());
+    console.log($('input[name=pubDate]').val());
     evt.preventDefault();
     $.post('/occasions', {
       title: $('input[name=title]').val(),

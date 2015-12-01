@@ -165,6 +165,7 @@ router.post('/', function (req, res) {
                           req.body.description, 
                           req.body.coverPhoto, 
                           req.body.participants, 
+                          req.body.recipients, 
                           req.session.passport.user.id, 
                           req.body.publishTime,
                           function (err) {

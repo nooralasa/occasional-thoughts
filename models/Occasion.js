@@ -93,7 +93,6 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                 } else {
                                   // then schedule to send email at pubdate
                                   //pubTime
-
                                   schedule.scheduleJob(Date.now() + 60*1000, function () {
                                     self
                                       .findById(occasion._id)
