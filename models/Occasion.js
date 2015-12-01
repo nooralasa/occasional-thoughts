@@ -67,8 +67,9 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                     if (e) {
                       callback(e)
                     } else {
-                      // finally send an ok response if everything is ok
-                      // utils.sendSuccessResponse(res);
+
+                      //angus send email
+                      // finally reply ok
                       callback(null);
                     }
                   });
