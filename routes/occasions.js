@@ -100,7 +100,7 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
       utils.sendErrResponseGivenError(res, err);
     } else {
       var inOccassion = req.occasion.thoughts.filter(function (currentThought) {
-        return currentThought._id === thought._id;
+        return currentThought._id.equals(thought._id);
       });
       if (inOccassion.length === 1) {
         req.thought = thought;

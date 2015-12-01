@@ -8,6 +8,8 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var FacebookStrategy = require('passport-facebook').Strategy;
 
+// var mandrill_client = new mandrill.Mandrill('JNFGVolztHUoggyWoUO31Q');
+
 // Import route handlers
 var index = require('./routes/index');
 var occasions = require('./routes/occasions');
@@ -75,6 +77,48 @@ passport.use(new FacebookStrategy({
 ));
 
 var app = express();
+
+
+//Mandrill Emailing test
+
+
+// var message = {
+//     "html": "<p>Hello. This is Noor emailing you.</p>",
+//     "subject": "Mandrill Emailing works",
+//     "from_email": "nooralasa@gmail.com",
+//     "from_name": "Noor Eddin Amer",
+//     "to": [{
+//             "email": "namer@mit.edu",
+//             "name": "Noor Eddin Amer",
+//             "type": "to"
+//         }],
+//     "headers": {
+//         "Reply-To": "nooralasa@gmail.com"
+//     },
+//     "important": false,
+// };
+// var async = false;
+// var ip_pool = null;
+// var send_at = null;
+// mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
+//     console.log(result);
+    
+//     [{
+//             "email": "recipient.email@example.com",
+//             "status": "sent",
+//             "reject_reason": "hard-bounce",
+//             "_id": "abc123abc123abc123abc123abc123"
+//         }]
+    
+// }, function(e) {
+//     // Mandrill returns the error as an object with name and message keys
+//     console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+//     // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
+// });
+
+
+
+//Test is over
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
