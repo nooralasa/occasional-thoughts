@@ -5,25 +5,25 @@ var occasionSchema = mongoose.Schema({
   title: String,
   description: String, 
   coverPhoto: String, //not sure what this is for now
-  isPublished: Boolean,
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
   participants: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
   recipients: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
   thoughts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Thought'}],
-  time: {type: Date, default: Date.now} //auto timestamp
+  publishTime: {type: Date},
+  createTime: {type: Date, default: Date.now} //auto timestamp
 });
 
-occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, callback) {
+occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, pubTime, callback) {
   this.create(
     {
       title: occasionTitle,
       description: occasionDescription,
       coverPhoto: occasionCoverPhoto,
-      isPublished: false,
       creator: userId,
       participants: [ ],
       recipients: [ ],
-      thoughts: [ ]
+      thoughts: [ ],
+      publishTime: pubTime
     }, function (err, occasion) {
       if (err) {
         callback(err);
@@ -34,7 +34,7 @@ occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescriptio
   );
 }
 
-occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, userId, callback) {
+occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, userId, pubTime, callback) {
   var self = this;
 
   // check if user id is valid
@@ -45,7 +45,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
       callback({code: 404, msg: 'Invalid user'});
     } else {
       // then create event
-      self.addOccasion(occasionTitle, occasionDescription, occasionCoverPhoto, user._id, function (er, occasion) {
+      self.addOccasion(occasionTitle, occasionDescription, occasionCoverPhoto, user._id, pubTime, function (er, occasion) {
         if (er) {
           callback(er);
         } else {
@@ -305,26 +305,34 @@ occasionSchema.methods.canView = function (userId, callback) {
   });
 }
 
+
+
 // add thought
 occasionSchema.methods.addThought = function (thoughtId, callback) {
-  this.thoughts.push(thoughtId);
-  this.save();
-  callback(null);
+  if (this.isPublished()) {
+    callback({code: 403, msg: "Occassion already published."})
+  } else {
+    this.thoughts.push(thoughtId);
+    this.save();
+    callback(null);
+  }
 }
 
 occasionSchema.methods.removeThought = function (thoughtId, callback) {
-  var i = this.thoughts.indexOf(thoughtId);
-  if (i != -1){
-     this.thoughts.splice(i, 1);
+  if (this.isPublished()) {
+    callback({code: 403, msg: "Occassion already published."})
+  } else {
+    var i = this.thoughts.indexOf(thoughtId);
+    if (i != -1){
+       this.thoughts.splice(i, 1);
+    }
+    this.save();
+    callback(null);
   }
-  this.save();
-  callback(null);
 }
 
-occasionSchema.methods.publish = function (callback) {
-  this.isPublished = true;
-  this.save();
-  callback(null);
+occasionSchema.methods.isPublished = function (callback) {
+  return Date.now() > this.publishTime;
 }
 
 // When we 'require' this model in another file (e.g. routes),
