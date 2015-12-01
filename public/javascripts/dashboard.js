@@ -1,7 +1,9 @@
 $(function () {
 
-  var friendData = []
+  var friendData = [];
   var addedFriends = [];
+  var fakeAddedFriends = ["10153460608834877", "10207615671607073", "966588576732829"];
+  var addedFriendsEmails = [];
   var currentUser;
 
   $.get("/users/current", function (userData) {
@@ -48,14 +50,29 @@ $(function () {
   });
 
   $('#angus-notif').click(function (evt) {
-    console.log('here');    
-    $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
-            { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
-            function (data, status){
-              console.log(data);
-              console.log(status);
-            }
-    );
+    fakeAddedFriends.forEach(function(friendFbid) {
+      User.findByFbid(friendFbid, function (err, user) {
+        if (err)
+          done(err);
+        if (user) {
+          addedFriendsEmails.push(user.email);
+          done(null);
+        } else {
+          done(null);
+        }
+      });
+    });
+
+    console.log(addedFriendsEmails);
+
+    // console.log('here');    
+    // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
+    //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
+    //         function (data, status){
+    //           console.log(data);
+    //           console.log(status);
+    //         }
+    // );
   });
 
   $('form').submit(function (evt) {
@@ -67,16 +84,18 @@ $(function () {
       coverPhoto: $('input[name=coverPhoto]').val(),
       friends: addedFriends
     }).done(function () {
-        $.get("/users/current",function (data) {
-          var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-          console.log(occasionId);
+      console.log('done');
+      window.location.replace('/occasions');
+        // $.get("/users/current",function (data) {
+        //   var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+        //   console.log(occasionId);
 
-          //TODO: fix array passing into messenger
-          window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865&to[]='
-          +addedFriends[0]+'&to[]='+addedFriends[1]
-          +'&link=https://occasionalthoughts.herokuapp.com/occasions/'+occasionId
-          +'&redirect_uri=http://occasionalthoughts.herokuapp.com/occasions');
-        });
+        //   //TODO: fix array passing into messenger
+        //   window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865&to[]='
+        //   +addedFriends[0]+'&to[]='+addedFriends[1]
+        //   +'&link=https://occasionalthoughts.herokuapp.com/occasions/'+occasionId
+        //   +'&redirect_uri=http://occasionalthoughts.herokuapp.com/occasions');
+        // });
     }).fail(function () {
       alert('failed');
     });

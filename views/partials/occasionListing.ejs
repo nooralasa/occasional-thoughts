@@ -12,7 +12,7 @@
 
       <a href="/occasions/<%=user.createdOccasions[i]._id%>">
 
-        <li style = "position:relative">
+        <li style = "position:relative" id="<%=user.createdOccasions[i]._id%>">
           <img src="http://lorempixum.com/100/100/nature/4" />
           <h3><%=user.createdOccasions[i].title%></h3>
           <p align= "left" ><%=user.createdOccasions[i].description%> </p>
@@ -22,6 +22,7 @@
           <div  id = "edit-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
             <span class="ui-icon ui-icon-pencil"></span>
           </div>
+
         </li>
       </a>
       <% } %>
@@ -38,12 +39,18 @@
       <% for(var i=0; i< numOccasions; i++) { %>
 
       <a href="/occasions/<%=user.viewableOccasions[i]._id%>">
-        <li>
+      
+        <li style = "position:relative" id="<%=user.viewableOccasions[i]._id%>">
           <img src="http://lorempixum.com/100/100/nature/4"/>
           <h3><%=user.viewableOccasions[i].title%></h3>
           <p align= "left" ><%=user.viewableOccasions[i].description%> </p>
-          <button type="button">Delete</button>
-          <button type="button">Edit</button>
+          <div id="delete-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+            <span class="ui-icon ui-icon-trash"></span>
+          </div>
+          <div  id = "edit-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+            <span class="ui-icon ui-icon-pencil"></span>
+          </div>
+
         </li>
       </a>
       <% } %>

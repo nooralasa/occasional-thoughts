@@ -7,16 +7,18 @@ var thoughtSchema = mongoose.Schema({
   photo: String, //not sure what to do for now
   isPublic: Boolean,
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  occasion: {type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'},
   time: {type: Date, default: Date.now} //auto timestamp
 });
 
-thoughtSchema.statics.addThought = function (message, photo, isPublic, userId, callback) {
+thoughtSchema.statics.addThought = function (message, photo, isPublic, occasionId, userId, callback) {
   this.create(
     {
       message: message,
       photo: photo,
       isPublic: isPublic,
-      creator: userId
+      creator: userId,
+      occasion: occasionId
     }, function (err, thought) {
       if (err) {
         callback(err);
@@ -70,16 +72,23 @@ thoughtSchema.statics.removeThought = function (thoughtId, occasionId, callback)
 
 thoughtSchema.statics.editThought = function (thoughtId, newMessage, newPhoto, newIsPublic, callback) {
   var self = this;
-  self.getThought(thoughtId, function (err, thought) {
-    if (err) {
-      callback(err);
-    } else {
-      thought.message = newMessage;
-      thought.photo = newPhoto;
-      thought.isPublic = newIsPublic;
-      thought.save();
+  self
+    .findById(thoughtId)
+    .populate('occasion')
+    .exec(function (err, thought) {
+      if (err) {
+        callback(err);
+      } else if (thought.occasion.isPublished()) {
+        callback({ code: 403, msg: 'Occasion already published' });
+      } else {
+        thought.message = newMessage;
+        thought.photo = newPhoto;
+        thought.isPublic = newIsPublic;
+        thought.save();
+        callback(null);
+      }
     }
-  });
+  );
 }
 
 thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, thoughtIsPublic, occasionId, userId, callback) {
@@ -88,15 +97,17 @@ thoughtSchema.statics.createThought = function (thoughtMessage, thoughtPhoto, th
     if (err) {
       callback(err);
     } else if (!user) {
-      callbacl({ code: 404, msg: 'Invalid user' });
+      callback({ code: 404, msg: 'Invalid user' });
     } else {
-      self.addThought(thoughtMessage, thoughtPhoto, thoughtIsPublic, user._id, function (er, thought) {
-        if (er) {
-          callback(er);
+      Occasion.findById(occasionId, function (error, occasion) {
+        if (error) {
+          callback(error);
+        } else if (occasion.isPublished()) {
+          callback({ code: 403, msg: 'Occasion already published' });
         } else {
-          Occasion.findById(occasionId, function (error, occasion) {
-            if (error) {
-              callback(error);
+          self.addThought(thoughtMessage, thoughtPhoto, thoughtIsPublic, occasion._id, user._id, function (er, thought) {
+            if (er) {
+              callback(er);
             } else {
               occasion.addThought(thought._id, function (e) {
                 if (e) {

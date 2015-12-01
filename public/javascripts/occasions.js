@@ -19,7 +19,16 @@
 $(document).on('click', '#delete-occasion', function(evt) {
   evt.preventDefault();
   console.log("Delete occasion")
-  
+  var occasion_id = $(this).parent().attr('id');
+
+  console.log("occasion id is", occasion_id);
+  $.ajax({
+    url: '/occasions/'+occasion_id,
+    type: 'DELETE',
+    success: function(result) {
+      $('#'+occasion_id).remove();
+    }
+  });
 });
 
 $(document).on('click', '#edit-occasion', function(evt) {

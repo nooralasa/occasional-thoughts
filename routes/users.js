@@ -83,7 +83,7 @@ router.all('*', requireLogin);
 router.get('/current', function (req, res) {
   User
     .findById(req.session.passport.user.id)
-    .select('name fbid token createdOccasions')
+    .select('name fbid token email createdOccasions')
     .exec(function (err, user) {
       if (err) {
         utils.sendErrResponse(res, 500, 'An unknown error occurred.');

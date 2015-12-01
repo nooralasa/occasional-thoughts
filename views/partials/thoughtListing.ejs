@@ -7,7 +7,7 @@
 <div class="col-md-8 col-md-offset-2">
   <p class="intro-text"><%=occasion.title%></p>
 
-  <%if (!occasion.isPublished) { %>
+  <%if (!occasion.isPublished()) { %>
         <form class="form form-signup" role="form" >
           <div class="form-group">
             <div class="input-group">
@@ -16,6 +16,7 @@
               <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
               <input name="occasionId" value="<%=occasion._id%>" type="hidden">
               <input name="userName" value="<%=user.name%>" type="hidden">
+              <input name="profilePicture" value="<%=user.profilePicture%>" type="hidden">
             </div>
           </div>
 
@@ -25,27 +26,27 @@
 
   <% } %>
 
+  <div id= "thoughts">
+    <ul id = "thought-list" >
 
-  <ul id = "thought-list" >
+      <% var numThoughts = occasion.thoughts.length%>
+      <% for (var i=0; i<numThoughts; i++) { %>
+      <div id ="<%=occasion.thoughts[i]._id%>" class = "thought-box">
+          <li class ="thought" id="<%=occasion.thoughts[i]._id%>">
+            <img src="<%=occasion.thoughts[i].creator.profilePicture%>">
+            <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
+            <p align= "left" > <%=occasion.thoughts[i].message%></p>
 
-    <% var numThoughts = occasion.thoughts.length%>
-    <% for (var i=0; i<numThoughts; i++) { %>
-    <div class = "thought-box">
-        <li class ="thought">
-          <img src="<%=occasion.thoughts[i].photo%>">
-          <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
-          <p align= "left" > <%=occasion.thoughts[i].message%></p>
+            <div id="delete-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+              <span class="ui-icon ui-icon-trash"></span>
+            </div>
+            <div  id = "edit-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+              <span class="ui-icon ui-icon-pencil"></span>
+            </div>
 
-          <div id="delete-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-trash"></span>
-          </div>
-          <div  id = "edit-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-pencil"></span>
-          </div>
-
-        </li>
-    </div>
-    <% } %>
-  </ul>
-
+          </li>
+      </div>
+      <% } %>
+    </ul>
+  </div>
 </div>

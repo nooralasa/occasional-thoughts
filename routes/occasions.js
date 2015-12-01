@@ -43,17 +43,19 @@ var requireViewPermission = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOccasionOwnership = function (req, res, next) {
-  req.occasion.isCreator(req.session.passport.user.id, function (isCreator) {
+
+  req.occasion.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
       next();
     } else {
+      console.log("Do not own occasion");
       utils.sendErrResponse(res, 404, 'Resource not found.');
     }
   });
 };
 
 var requireThoughtOwnership = function (req, res, next) {
-  req.thought.isCreator(req.session.passport.user.id, function (isCreator) {
+  req.thought.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
       next();
     } else {
@@ -96,7 +98,10 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
-      if (req.occasion.thoughts.indexOf(thought._id) >= 0) {
+      var inOccassion = req.occasion.thoughts.filter(function (currentThought) {
+        return currentThought._id.equals(thought._id);
+      });
+      if (inOccassion.length === 1) {
         req.thought = thought;
         next();
       } else {
@@ -159,6 +164,7 @@ router.post('/', function (req, res) {
                           req.body.coverPhoto, 
                           req.body.participants, 
                           req.session.passport.user.id, 
+                          req.body.publishTime,
                           function (err) {
                             if (err) {
                               utils.sendErrResponseGivenError(res, err);
@@ -246,8 +252,10 @@ router.post('/:occasionId/thoughts/:thoughtId', function (req, res) {
 
 // delete thought
 router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
+  console.log("thought to be deleted", req.thought._id);
   Thought.removeThought(req.thought._id, req.occasion._id, function (err) {
     if (err) {
+      console.log(err);
       utils.sendErrResponseGivenError(res, err);
     } else {
       utils.sendSuccessResponse(res);
