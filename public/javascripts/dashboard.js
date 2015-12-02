@@ -141,7 +141,8 @@ $(function () {
 
   $("#tgl2").click(function(){
           $('.toHide').hide();
-          $("#blk-2").show('slow');
+          $("#blk-2").show('fast');
+          $("#finish").show();
   });
 
   $("#tgl1").click(function(){
@@ -152,7 +153,16 @@ $(function () {
   $("#finish").click(function(){
           $('.toHide').hide(50);
           $('.email').hide(50);
-          $("#blk-1").show(50);
+          if($('input[name="toggler"]:checked').val() === 1){
+            $("#blk-1").show(50);
+          }
+
+          if($('input[name="toggler"]:checked').val() === 2){
+            $("#blk-2").show(50);
+          }
+
+
+          
 
   });
 
