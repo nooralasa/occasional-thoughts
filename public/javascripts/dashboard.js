@@ -21,7 +21,11 @@ $(function () {
               var friendNames = fbFriends.data.map(function (friend) {
                 return friend.name;
               });
-              $('#share').autocomplete({
+              $('#participantShare').autocomplete({
+                source: friendNames,
+                autoFocus: true
+              });
+              $('#recipientShare').autocomplete({
                 source: friendNames,
                 autoFocus: true
               });
@@ -30,7 +34,7 @@ $(function () {
     }
   });
 
-  $('#share').keypress(function (e) {
+  $('#participantShare').keypress(function (e) {
     if(e.which == 13) {
       e.preventDefault();
       var input = $('#participantShare').val();
@@ -43,8 +47,8 @@ $(function () {
       console.log(result);
       if (result.length === 1) {
       	addedFriends.push(result[0].id);
-        $('#friends-div').append("<div><label>"+result[0].name+"</label></div>");
-        $('#share').val('');
+        $('#participants').append("<div><label>"+result[0].name+"</label></div>");
+        $('#participantShare').val('');
       } else {
       	alert('name error!');
       }
