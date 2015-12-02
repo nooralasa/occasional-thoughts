@@ -2,6 +2,8 @@ $(function () {
 
   var friendData = [];
   var addedFriends = [];
+  var fakeAddedFriends = ["10153460608834877", "10207615671607073", "966588576732829"];
+  var addedFriendsEmails = [];
   var currentUser;
 
   $.get("/users/current", function (userData) {
@@ -19,11 +21,7 @@ $(function () {
               var friendNames = fbFriends.data.map(function (friend) {
                 return friend.name;
               });
-              $('#participantShare').autocomplete({
-                source: friendNames,
-                autoFocus: true
-              });
-              $('#recipientShare').autocomplete({
+              $('#share').autocomplete({
                 source: friendNames,
                 autoFocus: true
               });
@@ -32,7 +30,7 @@ $(function () {
     }
   });
 
-  $('#participantShare').keypress(function (e) {
+  $('#share').keypress(function (e) {
     if(e.which == 13) {
       e.preventDefault();
       var input = $('#share').val();
@@ -43,8 +41,8 @@ $(function () {
 
       if (result.length === 1) {
       	addedFriends.push(result[0].id);
-        $('#participants').append("<div><label>"+result[0].name+"</label></div>");
-        $('#participantShare').val('');
+        $('#friends-div').append("<div><label>"+result[0].name+"</label></div>");
+        $('#share').val('');
       } else {
       	alert('name error!');
       }
@@ -96,18 +94,18 @@ $(function () {
     // );
   });
 
-  // should post these info to /occasions
-    // req.body.title, 
-    // req.body.description, 
-    // req.body.coverPhoto, 
-    // req.body.participants, 
-    // req.body.recipients, 
-    // req.body.publishTime,
-
   $('#finish').click(function (evt) {
+
+    if($('[name="toggler1"]').is(':checked')) {
+        $("#previous").hide(50);
+        $("#finish").hide(50);
+        $("#privacyForm").hide(50);
+
+        $("#blk-1").show(50);
+        $("#done").show(50);
+    }
+    
     console.log("finish button pressed");
-    console.log($('input[name=pubTime]').val());
-    console.log($('input[name=pubDate]').val());
     evt.preventDefault();
     $.post('/occasions', {
       title: $('input[name=title]').val(),
@@ -158,27 +156,13 @@ $(function () {
   });
 
   $("#tgl1").click(function(){
-          $('.toHide').hide();
+          // $('.toHide').hide();
           $("#finish").show();
   });
 
-  $("#finish").click(function(){
-          $('.toHide').hide(50);
-          $('.email').hide(50);
-          if($('input[name="toggler"]:checked').val() === 1){
-            $("#blk-1").show(50);
-          }
-
-          if($('input[name="toggler"]:checked').val() === 2){
-            $("#blk-2").show(50);
-          }
-
-
-          
-
+  $("#done").click(function(){
+          $('#createOccasionModal').modal('hide');
   });
-
-
 
   $("#emailBtn").click(function(){
           $('.email').hide(50);
