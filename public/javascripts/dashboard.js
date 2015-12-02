@@ -141,18 +141,24 @@ $(function () {
 
     // if($('[id="tgl1"]').is(':checked')) {
       // if(document.getElementById("tgl1").checked){
-      console.log("USMAN: ", $('input[name=toggler]:checked').val())
-      checkedButton = $('input[name=toggler]:checked').val()
-      console.log("CheckedButton: ", checkedButton)
-      if(checkedButton===1){
+    checkedButton = $('input[name=toggler]:checked').val()
+    if(checkedButton==1){
+      $("#previous").hide(10);
+      $("#finish").hide(10);
+      $("#privacyForm").hide(10);
 
-        console.log("inside the if condition")
-        $("#previous").hide(50);
-        $("#finish").hide(50);
-        $("#privacyForm").hide(50);
+      $("#blk-1").show(50);
+      $("#done").show(50);
+    }
 
-        $("#blk-1").show(50);
-        $("#done").show(50);
+    if(checkedButton==2){
+      $("#previous").hide(10);
+      $("#finish").hide(10);
+      $("#blk-2").hide(10);
+      $("#privacyForm").hide(10);
+
+      $("#blk-3").show(50);
+      $("#done").show(50);
     }
     
     console.log("finish button pressed");
