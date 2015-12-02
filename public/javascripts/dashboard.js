@@ -218,6 +218,10 @@ $(function () {
 
   $("#done").click(function(){
           $('#createOccasionModal').modal('hide');
+          $('#createOccasionModal').on('hidden.bs.modal', function(){
+    $(this).find('form')[0].reset();
+    window.location.replace('/');
+});
   });
 
   $("#emailBtn").click(function(){
