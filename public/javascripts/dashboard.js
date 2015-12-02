@@ -2,8 +2,8 @@ $(function () {
 
   var friendData = [];
   var addedFriends = [];
-  var fakeAddedFriends = ["10153460608834877", "10207615671607073", "966588576732829"];
-  var addedFriendsEmails = [];
+  var participantsList = [];
+  var recipientsList = [];
   var currentUser;
 
   $.get("/users/current", function (userData) {
@@ -46,7 +46,7 @@ $(function () {
 
       console.log(result);
       if (result.length === 1) {
-      	addedFriends.push(result[0].id);
+      	participantsList.push(result[0].id);
         $('#participants').append("<div><label>"+result[0].name+"</label></div>");
         $('#participantShare').val('');
       } else {
@@ -65,7 +65,7 @@ $(function () {
       });
 
       if (result.length === 1) {
-        addedFriends.push(result[0].id);
+        recipientsList.push(result[0].id);
         $('#recipients').append("<div><label>"+result[0].name+"</label></div>");
         $('#recipientShare').val('');
       } else {
@@ -106,6 +106,9 @@ $(function () {
   });
 
   $('#finish').click(function (evt) {
+    console.log("finish button pressed");
+    var checkedButton = $('input[name=toggler]:checked').val()
+
     //check if public participants
       //check if public recipients
         //post with participants:["public"],recipients:["public"]
@@ -117,34 +120,49 @@ $(function () {
       //else private recipients
          //post with participants: List of participants,recipients:List of recipients
 
-    // if($('[name="toggler1"]').is(':checked')) {
-    //     if($('[name="Rtoggler1"]').is(':checked')) {
-    //       $.post('/occasions', {
-    //         title: $('input[name=title]').val(),
-    //         description: $('#description').val(),
-    //         coverPhoto: $('input[name=coverPhoto]').val(),
-            
-    //       }).done(function () {
-    //         console.log('done');
-    //         $.get("/users/current",function (data) {
-    //           var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-    //           console.log(occasionId);
-    //           $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-    //         });
+    if(checkedButton==1) {
+        $.post('/occasions', {
+          title: $('input[name=title]').val(),
+          description: $('#description').val(),
+          coverPhoto: $('input[name=coverPhoto]').val(),
+          participants: ["public"],
+          recipients: ["public"],
+          publishTime: $('#pubDate').val()
+        }).done(function () {
+            console.log('done');
+            $.get("/users/current",function (data) {
+              var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+              console.log(occasionId);
+              $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+            }); 
+          });
+    };
 
-    //         //window.location.replace('/occasions');
-    //       }).fail(function () {
-    //         alert('failed');
-    //       });
-    //     }
-    // }
+    if(checkedButton==2) {
+        $.post('/occasions', {
+          title: $('input[name=title]').val(),
+          description: $('#description').val(),
+          coverPhoto: $('input[name=coverPhoto]').val(),
+          participants: participantsList,
+          recipients: ["public"],
+          publishTime: $('#pubDate').val()
+        }).done(function () {
+            console.log('done');
+            $.get("/users/current",function (data) {
+              var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+              console.log(occasionId);
+              $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+            }); 
+          }).fail(function () {
+              alert('failed');
+            });
+    };
 
     // if($('[id="tgl1"]').is(':checked')) {
       // if(document.getElementById("tgl1").checked){
       console.log("USMAN: ", $('input[name=toggler]:checked').val())
-      checkedButton = $('input[name=toggler]:checked').val()
       console.log("CheckedButton: ", checkedButton)
-      if(checkedButton===1){
+      if(checkedButton==1){
 
         console.log("inside the if condition")
         $("#previous").hide(50);
@@ -155,24 +173,6 @@ $(function () {
         $("#done").show(50);
     }
     
-    console.log("finish button pressed");
-    evt.preventDefault();
-    $.post('/occasions', {
-      title: $('input[name=title]').val(),
-      description: $('#description').val(),
-      coverPhoto: $('input[name=coverPhoto]').val(),
-    }).done(function () {
-      console.log('done');
-      $.get("/users/current",function (data) {
-        var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-        console.log(occasionId);
-        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-      });
-
-      //window.location.replace('/occasions');
-    }).fail(function () {
-      alert('failed');
-    });
   });
 
   $('#fb-share').click(function (evt) {
