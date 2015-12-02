@@ -54,10 +54,14 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-picture"></span>
                                     </span>
+
                                     <input name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
                                     <span class="input-group-btn">
                                       <a id="upload" class="btn btn-primary">Upload</a>
                                     </span>
+
+                                    <!-- <button id="upload" class="btn btn-primary btn-xs" type="button">Upload</button> -->
+                                      
                                   </div>
                                 </div>
 
@@ -150,8 +154,8 @@
                                 <div class="form-bottom">
                                 <div id = "privacyForm" class="form-group email">
                                   <p style = "color:#000000; font-size:20px"> Who can add a thought? </p>
-                                  <label id = "tgl1" class="checkbox-inline"><input type="radio" name = "toggler" value="1">Anyone with a link</label>
-                                  <label id = "tgl2" class="checkbox-inline"><input type="radio" name = "toggler" value="2">Only specific people</label>
+                                  <label id = "tgl1" class="checkbox-inline"><input type="radio" name = "toggler1" value="1">Anyone with a link</label>
+                                  <label id = "tgl2" class="checkbox-inline"><input type="radio" name = "toggler2 " value="2">Only specific people</label>
                                 </div>
 
                                 <div id="blk-1" class="toHide" style="display:none">
@@ -186,23 +190,12 @@
 
                                     <div id="participants" class = "email">
                                     </div>  
-
-                                    <div id="emailSent" class="toHide">
-                                      <p style="color:#000000; font-size:20px; position:relative; left:10%">Your friends have been invited to the occasion!</p>
-
-                                      <input role="button" id="inviteFriends" class="btn btn-primary btn-lg" style = "position:relative; left:25%; margin:8px" value= "Invite More Friends">
-
-                                      <p style="color:#000000; font-size:16px; position:relative; left:48%">Or</p>
-
-                                      <input type="submit" role="button" id="createOccasion" class="btn btn-primary btn-lg" style = "position:relative; left:38%; margin:8px" value= "Finish!">
-
-                                    </div> 
-
                             </div>
 
                           </div>
 
                             <a id="finish" class="btn btn-primary" style = "display:none; position:relative; margin:8px; left:40%">Finish</a>
+                            <a id="done" class="btn btn-primary" style = "display:none; position:relative; margin:8px;">Done!</a>
                             <a id="previous" class="btn btn-primary previous" style = "position:relative; margin:8px; right:40%">Previous</a>
 
                           </fieldset>
