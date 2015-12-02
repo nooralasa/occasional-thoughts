@@ -74,36 +74,36 @@ $(function () {
     }
   });
 
-  $('#angus-notif').click(function (evt) {
-    console.log("submit post request for specific friends");
-    $.post('/occasions', {
-      title: $('input[name=title]').val(),
-      description: $('input[name=description]').val(),
-      coverPhoto: $('input[name=coverPhoto]').val(),
-      participants: addedFriends
-    }).done(function () {
-      console.log('done');
-      $.get("/users/current",function (data) {
-        var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-        console.log(occasionId);
-        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-      });
+  // $('#angus-notif').click(function (evt) {
+  //   console.log("submit post request for specific friends");
+  //   $.post('/occasions', {
+  //     title: $('input[name=title]').val(),
+  //     description: $('input[name=description]').val(),
+  //     coverPhoto: $('input[name=coverPhoto]').val(),
+  //     participants: addedFriends
+  //   }).done(function () {
+  //     console.log('done');
+  //     $.get("/users/current",function (data) {
+  //       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+  //       console.log(occasionId);
+  //       $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+  //     });
 
-      //window.location.replace('/occasions');
-    }).fail(function () {
-      alert('failed');
-    });
+  //     //window.location.replace('/occasions');
+  //   }).fail(function () {
+  //     alert('failed');
+  //   });
 
 
-    // console.log('here');    
-    // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
-    //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
-    //         function (data, status){
-    //           console.log(data);
-    //           console.log(status);
-    //         }
-    // );
-  });
+  //   // console.log('here');    
+  //   // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
+  //   //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
+  //   //         function (data, status){
+  //   //           console.log(data);
+  //   //           console.log(status);
+  //   //         }
+  //   // );
+  // });
 
   $('#finish').click(function (evt) {
     console.log("finish button pressed");
