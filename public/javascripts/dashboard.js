@@ -33,12 +33,14 @@ $(function () {
   $('#share').keypress(function (e) {
     if(e.which == 13) {
       e.preventDefault();
-      var input = $('#share').val();
+      var input = $('#participantShare').val();
 
+      console.log(friendData);
       var result = $.grep(friendData, function (obj){ 
       	return obj.name === input; 
       });
 
+      console.log(result);
       if (result.length === 1) {
       	addedFriends.push(result[0].id);
         $('#friends-div').append("<div><label>"+result[0].name+"</label></div>");
@@ -69,20 +71,25 @@ $(function () {
   });
 
   $('#angus-notif').click(function (evt) {
-    fakeAddedFriends.forEach(function(friendFbid) {
-      User.findByFbid(friendFbid, function (err, user) {
-        if (err)
-          done(err);
-        if (user) {
-          addedFriendsEmails.push(user.email);
-          done(null);
-        } else {
-          done(null);
-        }
+    console.log("submit post request for specific friends");
+    $.post('/occasions', {
+      title: $('input[name=title]').val(),
+      description: $('input[name=description]').val(),
+      coverPhoto: $('input[name=coverPhoto]').val(),
+      participants: addedFriends
+    }).done(function () {
+      console.log('done');
+      $.get("/users/current",function (data) {
+        var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+        console.log(occasionId);
+        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       });
+
+      //window.location.replace('/occasions');
+    }).fail(function () {
+      alert('failed');
     });
 
-    console.log(addedFriendsEmails);
 
     // console.log('here');    
     // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
@@ -95,6 +102,38 @@ $(function () {
   });
 
   $('#finish').click(function (evt) {
+    //check if public participants
+      //check if public recipients
+        //post with participants:["public"],recipients:["public"]
+      //else private recipients
+         //post with participants:["public"],recipients:List of recipients
+    //else private participants
+      //check if public recipients
+        //post with participants: List of participants,recipients:["public"]
+      //else private recipients
+         //post with participants: List of participants,recipients:List of recipients
+
+    // if($('[name="toggler1"]').is(':checked')) {
+    //     if($('[name="Rtoggler1"]').is(':checked')) {
+    //       $.post('/occasions', {
+    //         title: $('input[name=title]').val(),
+    //         description: $('#description').val(),
+    //         coverPhoto: $('input[name=coverPhoto]').val(),
+            
+    //       }).done(function () {
+    //         console.log('done');
+    //         $.get("/users/current",function (data) {
+    //           var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+    //           console.log(occasionId);
+    //           $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+    //         });
+
+    //         //window.location.replace('/occasions');
+    //       }).fail(function () {
+    //         alert('failed');
+    //       });
+    //     }
+    // }
 
     // if($('[id="tgl1"]').is(':checked')) {
       // if(document.getElementById("tgl1").checked){
@@ -116,7 +155,7 @@ $(function () {
     evt.preventDefault();
     $.post('/occasions', {
       title: $('input[name=title]').val(),
-      description: $('input[name=description]').val(),
+      description: $('#description').val(),
       coverPhoto: $('input[name=coverPhoto]').val(),
     }).done(function () {
       console.log('done');
