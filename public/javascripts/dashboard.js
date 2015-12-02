@@ -229,15 +229,20 @@ $(function () {
   $("#inviteFriends").click(function(){
           $('#emailSent').hide(50);
           $(".email").show(50);
-
   });
 
   $("#upload").click(function(){
         if($('#url').val()!=""){
           $("#preview").show(50);
         }
-          
+  });
 
+  $("#r2").click(function(){
+          $(".specific").show(50);
+  });
+
+  $("#r1").click(function(){
+          $(".specific").hide(50);
   });
 
 });
