@@ -31,7 +31,7 @@ $(document).on('click', '#add-thought', function(evt) {
     });
   });
 
-  $(document).on('click', '#delete-thought', function(evt) {
+  $(document).on('click', '.delete-thought', function(evt) {
     evt.preventDefault();
     console.log("Delete thought")
     var occasion_id = $("input[name=occasionId]").val();
