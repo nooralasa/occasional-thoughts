@@ -96,7 +96,14 @@ $(function () {
 
   $('#finish').click(function (evt) {
 
-    if($('[name="toggler1"]').is(':checked')) {
+    // if($('[id="tgl1"]').is(':checked')) {
+      // if(document.getElementById("tgl1").checked){
+      console.log("USMAN: ", $('input[name=toggler]:checked').val())
+      checkedButton = $('input[name=toggler]:checked').val()
+      console.log("CheckedButton: ", checkedButton)
+      if(checkedButton===1){
+
+        console.log("inside the if condition")
         $("#previous").hide(50);
         $("#finish").hide(50);
         $("#privacyForm").hide(50);
@@ -156,7 +163,7 @@ $(function () {
   });
 
   $("#tgl1").click(function(){
-          // $('.toHide').hide();
+          $('.toHide').hide();
           $("#finish").show();
   });
 
