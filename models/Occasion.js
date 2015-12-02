@@ -1,6 +1,8 @@
 var mongoose = require("mongoose");
 var User = require('./User');
 var email_client = require('../utils/email_client');
+var schedule = require('node-schedule');
+var baselink = 'http://localhost:3000';
 
 var occasionSchema = mongoose.Schema({
   title: String,
@@ -35,7 +37,7 @@ occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescriptio
   );
 }
 
-occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, userId, pubTime, callback) {
+occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, recipients, userId, pubTime, callback) {
   var self = this;
 
   // check if user id is valid
@@ -50,7 +52,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
         if (er) {
           callback(er);
         } else {
-          // then find ids of friends
+          // then find ids of participants
           User.findAllByFbid(participants, function (error, friends) {
             if (error) {
               callback(error);
@@ -63,28 +65,64 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                 if (error1) {
                   callback(error1);
                 } else {
-                  // then add that occasion to the user's created list
-                  user.addCreatedOccasionId(occasion._id, function (e) {
-                    if (e) {
-                      callback(e)
+                  // then find ids of recipients
+                  User.findAllByFbid(recipients, function (error0, recipientFriends) {
+                    if (error0) {
+                      callback(error0);
                     } else {
-                      console.log("about to send email");
-
-                      //then send the emails
-                      var emails = friends.map(function (friend) {
-                        return friend.email;
+                      // then add these ids to the recipients list
+                      var recipientFriendIds = recipientFriends.map(function (recp) {
+                        return recp._id;
                       });
-                      console.log(emails);
-                      email_client.sendEmails(user.name, user.email, "http://occasionalthoughts.herokuapp.com/occasions/"+occasion._id, emails, function (err1, result) {
-                        if (err1) {
-                          callback(err1);
+                      occasion.addRecipients(recipientFriendIds, function (error2) {
+                        if (error2) {
+                          callback(error2);
                         } else {
-                          console.log(result);
-                          callback(null);
+                          // then add that occasion to the user's created list
+                          user.addCreatedOccasionId(occasion._id, function (e) {
+                            if (e) {
+                              callback(e)
+                            } else {
+                              // then send the emails
+                              var invitationEmails = friends.map(function (friend) {
+                                return friend.email;
+                              });
+                              email_client.sendInvitationEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, invitationEmails, function (err1, result) {
+                                if (err1) {
+                                  callback(err1);
+                                } else {
+                                  // then schedule to send email at pubdate
+                                  //pubTime
+                                  schedule.scheduleJob(Date.now() + 60*1000, function () {
+                                    self
+                                      .findById(occasion._id)
+                                      .populate('recipients')
+                                      .exec(function (error3, updatedOccasion) {
+                                        if (error3) {
+                                          console.log(error3);
+                                        } else {
+                                          var recipientEmails = updatedOccasion.recipients.map(function (recp) {
+                                            return recp.email;
+                                          });
+                                          email_client.sendPublishEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, [user.email] + recipientEmails, function (err2, result) {
+                                            console.log('email sent');
+                                            console.log(err2);
+                                            console.log(result);
+                                          });
+                                        }
+                                      }
+                                    );
+                                  });
+                                  //then send back ok
+                                  callback(null);
+                                }
+                              });
+                            }
+                          });
                         }
                       });
                     }
-                  });
+                  });         
                 }
               });
             }
@@ -204,6 +242,7 @@ occasionSchema.methods.editOccasionDetails = function (occasionTitle, occasionDe
 occasionSchema.methods.addParticipant = function (userId, callback) {
   this.participants.push(userId);
   this.save();
+  console.log(this.participants);
   callback(null);
 }
 
@@ -267,18 +306,18 @@ occasionSchema.methods.removeAllRecipients = function (callback) {
 // checks if is authorized to view
 occasionSchema.methods.isParticipant = function (userId, callback) {
   var self = this;
-  var strs = self.participants.map(function (id) {
-    return id.toString();
+  var strs = self.participants.filter(function (id) {
+    return id.equals(userId);
   });
-  callback(null, strs.indexOf(userId.toString()) >= 0);
+  callback(null, strs.length === 1);
 }
 
 occasionSchema.methods.isRecipient = function (userId, callback) {
   var self = this;
-  var strs = self.recipients.map(function (id) {
-    return id.toString();
+  var strs = self.recipients.filter(function (id) {
+    return id.equals(userId);
   });
-  callback(null, strs.indexOf(userId.toString()) >= 0);
+  callback(null, strs.length === 1);
 }
 
 occasionSchema.methods.isCreator = function (userId, callback) {
@@ -289,6 +328,7 @@ occasionSchema.methods.isCreator = function (userId, callback) {
 occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
   var self = this;
   self.isParticipant(userId, function (err, isParticipant) {
+    console.log(isParticipant);
     if (isParticipant) {
       callback(null, true);
     } else {
@@ -323,7 +363,7 @@ occasionSchema.methods.canView = function (userId, callback) {
 // add thought
 occasionSchema.methods.addThought = function (thoughtId, callback) {
   if (this.isPublished()) {
-    callback({code: 403, msg: "Occassion already published."})
+    callback({code: 403, msg: "Occasion already published."})
   } else {
     this.thoughts.push(thoughtId);
     this.save();
@@ -333,7 +373,7 @@ occasionSchema.methods.addThought = function (thoughtId, callback) {
 
 occasionSchema.methods.removeThought = function (thoughtId, callback) {
   if (this.isPublished()) {
-    callback({code: 403, msg: "Occassion already published."})
+    callback({code: 403, msg: "Occasion already published."})
   } else {
     var i = this.thoughts.indexOf(thoughtId);
     if (i != -1){

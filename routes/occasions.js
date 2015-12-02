@@ -24,9 +24,11 @@ var requireViewPermission = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
+      console.log(canView);
       if (canView) {
         next();
       } else {
+        console.log('in 404');
         utils.sendErrResponse(res, 404, 'Resource not found.');
       }
     });
@@ -44,7 +46,6 @@ var requireViewPermission = function (req, res, next) {
   that is brute-forcing urls should not gain any information.
 */
 var requireOccasionOwnership = function (req, res, next) {
-
   req.occasion.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
       next();
@@ -99,10 +100,10 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
-      var inOccassion = req.occasion.thoughts.filter(function (currentThought) {
+      var inOccasion = req.occasion.thoughts.filter(function (currentThought) {
         return currentThought._id.equals(thought._id);
       });
-      if (inOccassion.length === 1) {
+      if (inOccasion.length === 1) {
         req.thought = thought;
         next();
       } else {
@@ -165,6 +166,7 @@ router.post('/', function (req, res) {
                           req.body.description, 
                           req.body.coverPhoto, 
                           req.body.participants, 
+                          req.body.recipients, 
                           req.session.passport.user.id, 
                           req.body.publishTime,
                           function (err) {

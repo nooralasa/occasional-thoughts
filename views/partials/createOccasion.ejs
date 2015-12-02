@@ -30,7 +30,7 @@
                                  <div class="form-group">
                                   <div class="input-group">
                                     <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-th"></span>
+                                      <span class="glyphicon glyphicon-gift"></span>
                                     </span>
                                     <input type="text" name="title" placeholder="Title" class="form-first-name form-control" id="form-first-name">
                                   </div>
@@ -41,7 +41,7 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-pencil"></span>
                                     </span>
-                                    <input type="text" name="description" placeholder="Description" style = "height:150px; width: 100%" class="form-first-name form-control" id="form-first-name">
+                                    <textarea id="description" placeholder="Description (Optional)" cols="50" rows="20" class="form-first-name form-control" id="form-first-name"></textarea>
                                   </div>
                                 </div>
 
@@ -54,9 +54,14 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-picture"></span>
                                     </span>
+
                                     <input name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
+                                    <span class="input-group-btn">
+                                      <a id="upload" class="btn btn-primary">Preview</a>
+                                    </span>
+                              
+                              
                                   </div>
-                                  <a id="upload" class="btn btn-primary btn-block">Upload</a>
                                 </div>
 
                                 <div>
@@ -66,7 +71,6 @@
                                 
 
                             </div>
-                            <a id="cancel" class="btn btn-primary" style = "position:relative; right:30%; margin:8px">Cancel</a>
                             <a id="next" class="btn btn-primary next" style = "position:relative; left:30%; margin:8px">Next</a>
                           </fieldset>
                           
@@ -84,21 +88,57 @@
                                   
 
                                 <div class="form-group">
-                                  <label class="sr-only" for="form-facebook">Facebook</label>
-                                    <input type="text" name="form-facebook" placeholder="Facebook..." class="form-facebook form-control" id="form-facebook">
+                                  <div class="input-group">
+                                    <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-th"></span><span> Publishing Date</span>
+                                    </span>
+                                    <input type="date" name="pubDate" placeholder="Enter a date" class="form-first-name form-control" id="pubDate">
+                                    
+                                  </div>
                                 </div>
 
                                 <div class="form-group">
-                                  <label class="sr-only" for="form-twitter">Twitter</label>
-                                  <input type="text" name="form-twitter" placeholder="Twitter..." class="form-twitter form-control" id="form-twitter">
+                                  <div class="input-group">
+                                    <span class="input-group-addon">
+                                      <span class="glyphicon glyphicon-time"></span><span> Publishing Time</span>
+                                    </span>
+                                    <input type="time" name="pubTime" placeholder="Enter a date" class="form-first-name form-control" id="pubTime">
+                                    
+                                  </div>
                                 </div>
-                                <div class="form-group">
-                                  <label class="sr-only" for="form-google-plus">Google plus</label>
-                                  <input type="text" name="form-google-plus" placeholder="Google plus..." class="form-google-plus form-control" id="form-google-plus">
+
+                                <div>
+                                  <p style="color:#000000; font-size:16px"> Who can view the published occasion?</p> 
+
+                                  <div class="checkbox">
+                                    <label><input type="checkbox" name="Rtogler" value="1">Anyone with a link</label>
+                                  </div>
+                                  <div class="checkbox">
+                                    <label><input type="checkbox" name="Rtogler" value="2">People who have added thoughts</label>
+                                  </div>
+                                  <div class="checkbox">
+                                    <label><input type="checkbox" name="Rtogler" value="3">The following specified people</label>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <div class="input-group">
+                                        <span class="input-group-addon">
+                                          <span class="glyphicon glyphicon-user"></span>
+                                        </span>
+                                        <input id="recipientShare" class="form-control" placeholder="Select Friends" />
+                                      </div>
+                                    </div>
+
+                                    <div id="recipients">
+
+                                    </div>
+
                                 </div>
-                                <button type="button" class="btn btn-primary previous">Previous</button>
-                                <button type="button" class="btn btn-primary next">Next</button>
                             </div>
+
+                            <a class="btn btn-primary next" style = "position:relative; margin:8px; left:40%">Next</a>
+                            <a class="btn btn-primary previous" style = "position:relative; margin:8px; right:40%">Previous</a>
+
                           </fieldset>
 
                           <fieldset>
@@ -124,14 +164,14 @@
                                       <span class="input-group-addon">
                                         <span> Public Link: </span>
                                       </span>
-                                      <input type="text" name="publicLink" placeholder="http://doodle.com/poll/hzf2f2igdh3i7p5s" class="form-first-name form-control" id="form-first-name">
+                                      <input id="copy-link" name="publicLink"  class="form-first-name form-control" id="form-first-name">
                                     </div>
                                     </div>
 
                                     <p style="color:#000000; font-size:16px"> Share it with your facebook friends!</p> 
 
-                                    <a class="btn btn-block btn-social btn-facebook">
-                                      <span class="fa fa-facebook"></span> Share link on Facebook Messenger
+                                    <a id="fb-share" class="btn btn-block btn-social btn-facebook">
+                                      <span class="fa fa-facebook"></span> Share link with Facebook Messenger
                                     </a>
                                 </div>
 
@@ -143,34 +183,18 @@
                                         <span class="input-group-addon">
                                           <span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <input id="share" name="friends" type="text" class="form-control" placeholder="Select Friends" />
+                                        <input id="participantShare" name="friends" class="form-control" placeholder="Select Friends" />
                                       </div>
                                     </div>
 
-                                    <div id="friends-div" class = "email">
+                                    <div id="participants" class = "email">
                                     </div>  
-
-                                    <div id="emailSent" class="toHide">
-                                      <p style="color:#000000; font-size:20px; position:relative; left:10%">Your friends have been invited to the occasion!</p>
-
-                                      <input role="button" id="inviteFriends" class="btn btn-primary btn-lg" style = "position:relative; left:25%; margin:8px" value= "Invite More Friends">
-
-                                      <p style="color:#000000; font-size:16px; position:relative; left:48%">Or</p>
-
-                                      <input type="submit" role="button" id="createOccasion" class="btn btn-primary btn-lg" style = "position:relative; left:38%; margin:8px" value= "Finish!">
-
-                                    </div> 
-
-                                    <div id="sendEmail">
-                                      <a id = "emailBtn" class="btn btn-block btn-social btn-google email">
-                                        <span class="fa fa-google"></span> Send Email to Selected Friends
-                                      </a>
-                                    </div>
                             </div>
 
                           </div>
 
                             <a id="finish" class="btn btn-primary" style = "display:none; position:relative; margin:8px; left:40%">Finish</a>
+                            <a id="done" class="btn btn-primary" style = "display:none; position:relative; margin:8px;">Done!</a>
                             <a id="previous" class="btn btn-primary previous" style = "position:relative; margin:8px; right:40%">Previous</a>
 
                           </fieldset>

@@ -54,6 +54,7 @@ passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
     // callbackURL: process.env.MONGOLAB_URI ? "http://occasionalthoughts.herokuapp.com/auth/facebook/callback" : "http://localhost:3000/auth/facebook/callback",
+    // callbackURL: "http://occasionalthoughts.herokuapp.com/auth/facebook/callback",
     profileFields: ['id', 'displayName', 'emails', 'photos']
   },
   function (accessToken, refreshToken, profile, done) {
@@ -272,15 +273,5 @@ if (app.get('env') === 'development') {
 app.use(function (err, req, res, next) {
   res.status(err.status || 500).end();
 });
-
-// var schedule = require('node-schedule');
-// var date = new Date(2015, 10, 30, 15, 56, 0);
-// console.log(date);
-// console.log(date.getTime());
-// console.log(Date.now());
-
-// var j = schedule.scheduleJob(date, function(){
-//   console.log('The world is going to end today.');
-// });
 
 module.exports = app;
