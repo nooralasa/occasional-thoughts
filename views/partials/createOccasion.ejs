@@ -41,7 +41,7 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-pencil"></span>
                                     </span>
-                                    <textarea name="description" placeholder="Description" cols="50" rows="20" class="form-first-name form-control" id="form-first-name"></textarea>
+                                    <textarea name="description" placeholder="Description (Optional)" cols="50" rows="20" class="form-first-name form-control" id="form-first-name"></textarea>
                                   </div>
                                 </div>
 
@@ -54,11 +54,10 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-picture"></span>
                                     </span>
-                                    <input style="width:100px"name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
 
-                                    <span class="input-group-addon">
-
-                                      <a id="upload" style="background:#2e6da4; ">Preview</a>
+                                    <input name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
+                                    <span class="input-group-btn">
+                                      <a id="upload" class="btn btn-primary">Upload</a>
                                     </span>
 
                                     <!-- <button id="upload" class="btn btn-primary btn-xs" type="button">Upload</button> -->
@@ -94,7 +93,7 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-th"></span><span> Publishing Date</span>
                                     </span>
-                                    <input type="date" name="date" placeholder="Enter a date" class="form-first-name form-control" id="date">
+                                    <input type="date" name="pubDate" placeholder="Enter a date" class="form-first-name form-control" id="date">
                                     
                                   </div>
                                 </div>
@@ -104,7 +103,7 @@
                                     <span class="input-group-addon">
                                       <span class="glyphicon glyphicon-time"></span><span> Publishing Time</span>
                                     </span>
-                                    <input type="time" name="date" placeholder="Enter a date" class="form-first-name form-control" id="date">
+                                    <input type="time" name="pubTime" placeholder="Enter a date" class="form-first-name form-control" id="date">
                                     
                                   </div>
                                 </div>
@@ -127,7 +126,7 @@
                                         <span class="input-group-addon">
                                           <span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <input id="recipientShare" type = "text" class="form-control" placeholder="Select Friends" />
+                                        <input id="recipientShare" class="form-control" placeholder="Select Friends" />
                                       </div>
                                     </div>
 
@@ -166,7 +165,7 @@
                                       <span class="input-group-addon">
                                         <span> Public Link: </span>
                                       </span>
-                                      <input id="copy-link" type="text" name="publicLink"  class="form-first-name form-control" id="form-first-name">
+                                      <input id="copy-link" name="publicLink"  class="form-first-name form-control" id="form-first-name">
                                     </div>
                                     </div>
 
@@ -185,11 +184,11 @@
                                         <span class="input-group-addon">
                                           <span class="glyphicon glyphicon-user"></span>
                                         </span>
-                                        <input id="share" name="friends" type="text" class="form-control" placeholder="Select Friends" />
+                                        <input id="participantShare" name="friends" class="form-control" placeholder="Select Friends" />
                                       </div>
                                     </div>
 
-                                    <div id="friends-div" class = "email">
+                                    <div id="participants" class = "email">
                                     </div>  
                             </div>
 

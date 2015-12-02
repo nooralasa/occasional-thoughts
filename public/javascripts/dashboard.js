@@ -2,8 +2,6 @@ $(function () {
 
   var friendData = [];
   var addedFriends = [];
-  var fakeAddedFriends = ["10153460608834877", "10207615671607073", "966588576732829"];
-  var addedFriendsEmails = [];
   var currentUser;
 
   $.get("/users/current", function (userData) {
@@ -21,7 +19,11 @@ $(function () {
               var friendNames = fbFriends.data.map(function (friend) {
                 return friend.name;
               });
-              $('#share').autocomplete({
+              $('#participantShare').autocomplete({
+                source: friendNames,
+                autoFocus: true
+              });
+              $('#recipientShare').autocomplete({
                 source: friendNames,
                 autoFocus: true
               });
@@ -30,7 +32,7 @@ $(function () {
     }
   });
 
-  $('#share').keypress(function (e) {
+  $('#participantShare').keypress(function (e) {
     if(e.which == 13) {
       e.preventDefault();
       var input = $('#share').val();
@@ -41,8 +43,8 @@ $(function () {
 
       if (result.length === 1) {
       	addedFriends.push(result[0].id);
-        $('#friends-div').append("<div><label>"+result[0].name+"</label></div>");
-        $('#share').val('');
+        $('#participants').append("<div><label>"+result[0].name+"</label></div>");
+        $('#participantShare').val('');
       } else {
       	alert('name error!');
       }
@@ -94,8 +96,18 @@ $(function () {
     // );
   });
 
+  // should post these info to /occasions
+    // req.body.title, 
+    // req.body.description, 
+    // req.body.coverPhoto, 
+    // req.body.participants, 
+    // req.body.recipients, 
+    // req.body.publishTime,
+
   $('#finish').click(function (evt) {
     console.log("finish button pressed");
+    console.log($('input[name=pubTime]').val());
+    console.log($('input[name=pubDate]').val());
     evt.preventDefault();
     $.post('/occasions', {
       title: $('input[name=title]').val(),
