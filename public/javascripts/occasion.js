@@ -35,7 +35,7 @@ $(document).on('click', '#add-thought', function(evt) {
     evt.preventDefault();
     console.log("Delete thought")
     var occasion_id = $("input[name=occasionId]").val();
-    var thought_id = $(this).parent().attr('id');
+    var thought_id = $(this).parent().parent().attr('id');
     console.log("thought Id", thought_id);
     
     $.ajax({
@@ -51,10 +51,7 @@ $(document).on('click', '#add-thought', function(evt) {
   $(document).on('click', '.edit-thought', function(evt) {
     evt.preventDefault();
     console.log("edit thought")
-    $(this).parent().append('<label>Password</label>
-          <input> type = "text"
-                  id = "myPwd"
-                  value = "secret" />')
+    $(this).parent().append('<input type="text">')
 
   
   });
