@@ -84,6 +84,7 @@ var requireContent = function (req, res, next) {
 router.param('occasionId', function (req, res, next, occasionId) {
   Occasion.populateOccasion(occasionId, function (err, occasion) {
     if (err) {
+      console.log(err);
       utils.sendErrResponseGivenError(res, err);
     } else {
       req.occasion = occasion;
