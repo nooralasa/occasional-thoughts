@@ -40,6 +40,8 @@ occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescriptio
 occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, recipients, userId, pubTime, callback) {
   var self = this;
 
+  console.log("Recipients are: "+recipients);
+
   // check if user id is valid
   User.findById(userId, function (err, user) {
     if (err) {
@@ -61,6 +63,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
               var friendIds = friends.map(function (friend) {
                 return friend._id;
               });
+              console.log('friendIds: ', friendIds);
               occasion.addParticipants(friendIds, function (error1) {
                 if (error1) {
                   callback(error1);
@@ -99,7 +102,8 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                         } else {
                                           // then schedule to send email at pubdate
                                           //pubTime
-                                          schedule.scheduleJob(Date.now() + 60*1000, function () {
+                                          schedule.scheduleJob(Date.now() + 600000*1000, function () {
+                                            console.log("I'm definitely in here");
                                             self
                                               .findById(occasion._id)
                                               .populate('recipients')
@@ -110,10 +114,18 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                                   var recipientEmails = updatedOccasion.recipients.map(function (recp) {
                                                     return recp.email;
                                                   });
-                                                  email_client.sendPublishEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, [user.email] + recipientEmails, function (err2, result) {
+                                                  email_client.sendPublishEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, [user.email].concat(recipientEmails), function (err2, result) {
                                                     console.log('email sent');
                                                     console.log(err2);
                                                     console.log(result);
+                                                  });
+                                                  updatedOccasion.recipients.forEach( function (recfriend) {
+                                                    console.log('recfriend: ', recfriend);
+                                                    recfriend.addViewableOccasionId(occasion._id, function (error5) {
+                                                      if (error5) {
+                                                        callback(error5);
+                                                      } 
+                                                    });
                                                   });
                                                 }
                                               }
@@ -316,18 +328,21 @@ occasionSchema.methods.removeAllRecipients = function (callback) {
 // checks if is authorized to view
 occasionSchema.methods.isParticipant = function (userId, callback) {
   var self = this;
+  // console.log('userId: ',userId);
+  // console.log('participants: ',self.participants);
   var strs = self.participants.filter(function (id) {
-    return id.equals(userId);
+    console.log('id: ',id._id);
+    return id._id.equals(userId);
   });
-  callback(null, strs.length === 1);
+  callback(null, strs.length >= 1);
 }
 
 occasionSchema.methods.isRecipient = function (userId, callback) {
   var self = this;
   var strs = self.recipients.filter(function (id) {
-    return id.equals(userId);
+    return id._id.equals(userId);
   });
-  callback(null, strs.length === 1);
+  callback(null, strs.length >= 1);
 }
 
 occasionSchema.methods.isCreator = function (userId, callback) {
@@ -351,15 +366,15 @@ occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
 
 occasionSchema.methods.canView = function (userId, callback) {
   var self = this;
-  self.isParticipant(userId, function (isParticipant) {
+  self.isParticipant(userId, function (err, isParticipant) {
     if (isParticipant) {
       callback(null, true);
     } else {
-      self.isRecipient(userId, function (isRecipient) {
+      self.isRecipient(userId, function (errr, isRecipient) {
         if (isRecipient) {
           callback(null, true);
         } else {
-          self.isCreator(userId, function (isCreator) {
+          self.isCreator(userId, function (er, isCreator) {
             callback(null, isCreator);
           });
         }
