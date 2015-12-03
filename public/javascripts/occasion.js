@@ -48,8 +48,13 @@ $(document).on('click', '#add-thought', function(evt) {
 
 });
 
-  $(document).on('click', '#edit-thought', function(evt) {
+  $(document).on('click', '.edit-thought', function(evt) {
     evt.preventDefault();
     console.log("edit thought")
+    $(this).parent().append('<label>Password</label>
+          <input> type = "text"
+                  id = "myPwd"
+                  value = "secret" />')
+
   
   });

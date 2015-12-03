@@ -1,3 +1,4 @@
+
 var express = require('express');
 var router = express.Router();
 var utils = require('../utils/utils');
@@ -24,11 +25,9 @@ var requireViewPermission = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
-      console.log(canView);
       if (canView) {
         next();
       } else {
-        console.log('in 404');
         utils.sendErrResponse(res, 404, 'Resource not found.');
       }
     });
@@ -83,7 +82,6 @@ var requireContent = function (req, res, next) {
 */
 
 router.param('occasionId', function (req, res, next, occasionId) {
-  console.log('in id');
   Occasion.populateOccasion(occasionId, function (err, occasion) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
@@ -144,7 +142,6 @@ router.post('*', requireContent);
 */
 router.get('/', function (req, res) {
   User.findAllOccasions(req.session.passport.user.id, function (err, user) {
-    console.log(user);
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else {
@@ -256,10 +253,8 @@ router.post('/:occasionId/thoughts/:thoughtId', function (req, res) {
 
 // delete thought
 router.delete('/:occasionId/thoughts/:thoughtId', function (req, res) {
-  console.log("thought to be deleted", req.thought._id);
   Thought.removeThought(req.thought._id, req.occasion._id, function (err) {
     if (err) {
-      console.log(err);
       utils.sendErrResponseGivenError(res, err);
     } else {
       utils.sendSuccessResponse(res);

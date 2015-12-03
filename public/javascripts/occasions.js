@@ -34,9 +34,8 @@ $(document).on('click', '.delete-occasion', function(evt) {
 $(document).on('click', '.edit-occasion', function(evt) {
   evt.preventDefault();
   console.log("Edit occasion");
-  /*
   var modal = document.getElementById('createOccasionModal');
-  console.log(modal);
+  //console.log(modal);
     $.get(
     '/occasions',
     helpers.getFormData(modal)
@@ -45,7 +44,7 @@ $(document).on('click', '.edit-occasion', function(evt) {
   }).fail(function(responseObject) {
     var response = $.parseJSON(responseObject.responseText);
     $('.error').text(response.err);
+
   });
-*/
 });
 
