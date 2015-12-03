@@ -15,6 +15,10 @@ var email = (function () {
     };
 
     console.log(toAddresses);
+    if (toAddresses.length==0 || !(toAddresses instanceof Array)) {
+    	toAddresses = ["noemail@idk.com"];
+    };
+
     toAddresses.forEach( function (em) {
       message.to.push({
         email: em,

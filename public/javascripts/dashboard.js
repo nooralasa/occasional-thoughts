@@ -2,8 +2,8 @@ $(function () {
 
   var friendData = [];
   var addedFriends = [];
-  var fakeAddedFriends = ["10153460608834877", "10207615671607073", "966588576732829"];
-  var addedFriendsEmails = [];
+  var participantsList = [];
+  var recipientsList = [];
   var currentUser;
 
   $.get("/users/current", function (userData) {
@@ -46,7 +46,7 @@ $(function () {
 
       console.log(result);
       if (result.length === 1) {
-      	addedFriends.push(result[0].id);
+      	participantsList.push(result[0].id);
         $('#participants').append("<div><label>"+result[0].name+"</label></div>");
         $('#participantShare').val('');
       } else {
@@ -65,7 +65,7 @@ $(function () {
       });
 
       if (result.length === 1) {
-        addedFriends.push(result[0].id);
+        recipientsList.push(result[0].id);
         $('#recipients').append("<div><label>"+result[0].name+"</label></div>");
         $('#recipientShare').val('');
       } else {
@@ -74,38 +74,41 @@ $(function () {
     }
   });
 
-  $('#angus-notif').click(function (evt) {
-    console.log("submit post request for specific friends");
-    $.post('/occasions', {
-      title: $('input[name=title]').val(),
-      description: $('input[name=description]').val(),
-      coverPhoto: $('input[name=coverPhoto]').val(),
-      participants: addedFriends
-    }).done(function () {
-      console.log('done');
-      $.get("/users/current",function (data) {
-        var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-        console.log(occasionId);
-        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-      });
+  // $('#angus-notif').click(function (evt) {
+  //   console.log("submit post request for specific friends");
+  //   $.post('/occasions', {
+  //     title: $('input[name=title]').val(),
+  //     description: $('input[name=description]').val(),
+  //     coverPhoto: $('input[name=coverPhoto]').val(),
+  //     participants: addedFriends
+  //   }).done(function () {
+  //     console.log('done');
+  //     $.get("/users/current",function (data) {
+  //       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+  //       console.log(occasionId);
+  //       $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+  //     });
 
-      //window.location.replace('/occasions');
-    }).fail(function () {
-      alert('failed');
-    });
+  //     //window.location.replace('/occasions');
+  //   }).fail(function () {
+  //     alert('failed');
+  //   });
 
 
-    // console.log('here');    
-    // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
-    //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
-    //         function (data, status){
-    //           console.log(data);
-    //           console.log(status);
-    //         }
-    // );
-  });
+  //   // console.log('here');    
+  //   // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
+  //   //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
+  //   //         function (data, status){
+  //   //           console.log(data);
+  //   //           console.log(status);
+  //   //         }
+  //   // );
+  // });
 
   $('#finish').click(function (evt) {
+    console.log("finish button pressed");
+    var checkedButton = $('input[name=toggler]:checked').val()
+
     //check if public participants
       //check if public recipients
         //post with participants:["public"],recipients:["public"]
@@ -117,62 +120,65 @@ $(function () {
       //else private recipients
          //post with participants: List of participants,recipients:List of recipients
 
-    // if($('[name="toggler1"]').is(':checked')) {
-    //     if($('[name="Rtoggler1"]').is(':checked')) {
-    //       $.post('/occasions', {
-    //         title: $('input[name=title]').val(),
-    //         description: $('#description').val(),
-    //         coverPhoto: $('input[name=coverPhoto]').val(),
-            
-    //       }).done(function () {
-    //         console.log('done');
-    //         $.get("/users/current",function (data) {
-    //           var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-    //           console.log(occasionId);
-    //           $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-    //         });
+    if(checkedButton==1) {
+        $.post('/occasions', {
+          title: $('input[name=title]').val(),
+          description: $('#description').val(),
+          coverPhoto: $('input[name=coverPhoto]').val(),
+          participants: ["public"],
+          recipients: ["public"],
+          publishTime: $('#pubDate').val()
+        }).done(function () {
+            console.log('done');
+            $.get("/users/current",function (data) {
+              var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+              console.log(occasionId);
+              $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+            }); 
+          });
+    };
 
-    //         //window.location.replace('/occasions');
-    //       }).fail(function () {
-    //         alert('failed');
-    //       });
-    //     }
-    // }
+    if(checkedButton==2) {
+        $.post('/occasions', {
+          title: $('input[name=title]').val(),
+          description: $('#description').val(),
+          coverPhoto: $('input[name=coverPhoto]').val(),
+          participants: participantsList,
+          recipients: ["public"],
+          publishTime: $('#pubDate').val()
+        }).done(function () {
+            console.log('done');
+            $.get("/users/current",function (data) {
+              var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+              console.log(occasionId);
+              $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+            }); 
+          }).fail(function () {
+              alert('failed');
+            });
+    };
 
     // if($('[id="tgl1"]').is(':checked')) {
       // if(document.getElementById("tgl1").checked){
-      console.log("USMAN: ", $('input[name=toggler]:checked').val())
-      checkedButton = $('input[name=toggler]:checked').val()
-      console.log("CheckedButton: ", checkedButton)
-      if(checkedButton===1){
+    if(checkedButton==1){
+      $("#previous").hide(10);
+      $("#finish").hide(10);
+      $("#privacyForm").hide(10);
 
-        console.log("inside the if condition")
-        $("#previous").hide(50);
-        $("#finish").hide(50);
-        $("#privacyForm").hide(50);
+      $("#blk-1").show(50);
+      $("#done").show(50);
+    }
 
-        $("#blk-1").show(50);
-        $("#done").show(50);
+    if(checkedButton==2){
+      $("#previous").hide(10);
+      $("#finish").hide(10);
+      $("#blk-2").hide(10);
+      $("#privacyForm").hide(10);
+
+      $("#blk-3").show(50);
+      $("#done").show(50);
     }
     
-    console.log("finish button pressed");
-    evt.preventDefault();
-    $.post('/occasions', {
-      title: $('input[name=title]').val(),
-      description: $('#description').val(),
-      coverPhoto: $('input[name=coverPhoto]').val(),
-    }).done(function () {
-      console.log('done');
-      $.get("/users/current",function (data) {
-        var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-        console.log(occasionId);
-        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-      });
-
-      //window.location.replace('/occasions');
-    }).fail(function () {
-      alert('failed');
-    });
   });
 
   $('#fb-share').click(function (evt) {
@@ -212,6 +218,10 @@ $(function () {
 
   $("#done").click(function(){
           $('#createOccasionModal').modal('hide');
+          $('#createOccasionModal').on('hidden.bs.modal', function(){
+    $(this).find('form')[0].reset();
+    window.location.replace('/');
+});
   });
 
   $("#emailBtn").click(function(){
@@ -223,15 +233,20 @@ $(function () {
   $("#inviteFriends").click(function(){
           $('#emailSent').hide(50);
           $(".email").show(50);
-
   });
 
   $("#upload").click(function(){
         if($('#url').val()!=""){
           $("#preview").show(50);
         }
-          
+  });
 
+  $("#r2").click(function(){
+          $(".specific").show(50);
+  });
+
+  $("#r1").click(function(){
+          $(".specific").hide(50);
   });
 
 });

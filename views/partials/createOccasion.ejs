@@ -71,7 +71,7 @@
                                 
 
                             </div>
-                            <a id="next" class="btn btn-primary next" style = "position:relative; left:30%; margin:8px">Next</a>
+                            <a id="next" class="btn btn-primary next" style = "position:relative; left:40%; margin:8px">Next</a>
                           </fieldset>
                           
                           <fieldset>
@@ -109,18 +109,21 @@
 
                                 <div>
                                   <p style="color:#000000; font-size:16px"> Who can view the published occasion?</p> 
-
-                                  <div class="checkbox">
-                                    <label><input type="checkbox" name="Rtogler" value="1">Anyone with a link</label>
-                                  </div>
-                                  <div class="checkbox">
-                                    <label><input type="checkbox" name="Rtogler" value="2">People who have added thoughts</label>
-                                  </div>
-                                  <div class="checkbox">
-                                    <label><input type="checkbox" name="Rtogler" value="3">The following specified people</label>
+                                  <div>
+                                    <div class="checkbox">
+                                      <label><input id="r1" type="radio" name="Rtogler" value="1">Anyone with a link</label>
+                                      <label><input id="r2" type="radio" name="Rtogler" value="2">Only Specific People</label>
+                                    </div>
                                   </div>
 
-                                  <div class="form-group">
+                                  <div class= "specific" style="display:none; position:relative; left:10%">
+                                    <div class="checkbox">
+                                      <label><input type="checkbox" name="Ctogler" value="3">All Participants (People who added thoughts)</label>
+                                      <label><input type="checkbox" name="Ctogler" value="3">Only the following recipients</label>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group specific" style="display:none;">
                                       <div class="input-group">
                                         <span class="input-group-addon">
                                           <span class="glyphicon glyphicon-user"></span>
@@ -189,7 +192,12 @@
 
                                     <div id="participants" class = "email">
                                     </div>  
-                            </div>
+                              </div>
+
+                              <div id="blk-3" class="toHide" style="display:none">
+                                    <p style="color:#000000; font-size:20px"> Congratulations!</p> 
+                                    <p style="color:#000000; font-size:16px"> Your occasion has been created and the specified people have been invited to add their thoughts.</p> 
+                              </div>
 
                           </div>
 
