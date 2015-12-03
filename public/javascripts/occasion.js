@@ -25,6 +25,8 @@ $(document).on('click', '#add-thought', function(evt) {
         '<div class= "thought-box"> <li style="position:relative" class="thought"><img src='+photo +'><h3 align="left">'
         + name +'</h3><p align= "left">'+ message +'</p>'+'</li></div>'
       ); 
+
+      window.location.replace("/occasions/"+id)
     }).fail(function(responseObject) {
         var response = $.parseJSON(responseObject.responseText);
         $('.error').text(response.err);

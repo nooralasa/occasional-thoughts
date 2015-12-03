@@ -35,13 +35,13 @@ $(document).on('click', '.edit-occasion', function(evt) {
   evt.preventDefault();
   console.log("Edit occasion");
   
-  var modal = document.getElementById('createOccasionModal');
+  var modal = document.getElementById('editOccasionModal');
   console.log(modal);
     $.get(
     '/occasions',
     helpers.getFormData(modal)
   ).done(function(response) {
-    $('#createOccasionModal').modal('show')
+    $('#editOccasionModal').modal('show')
   }).fail(function(responseObject) {
     var response = $.parseJSON(responseObject.responseText);
     $('.error').text(response.err);
