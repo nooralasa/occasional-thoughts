@@ -184,6 +184,8 @@ router.post('/', function (req, res) {
                           req.body.coverPhoto, 
                           req.body.participants, 
                           req.body.recipients, 
+                          req.body.participantIsPublic,
+                          req.body.recipientIsPublic,
                           req.session.passport.user.id, 
                           req.body.publishTime,
                           function (err) {

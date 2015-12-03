@@ -132,29 +132,33 @@ $(function () {
       recipientsList = ["966588576732829"];
     };
     console.log('part: ', participantsList);
-    console.log($('#pubDate').val());
 
+    var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
+    console.log(datetime);
+    console.log(datetime.toLocaleString());
     //create the occasion
     $.post('/occasions', {
-          title: $('input[name=title]').val(),
-          description: $('#description').val(),
-          coverPhoto: $('input[name=coverPhoto]').val(),
-          participants: participantsList,
-          recipients: recipientsList,
-          publishTime: $('#pubDate').val()
-        }).done(function () {
-            console.log('done');
-            console.log("I'm here here here here");
-            $.get("/users/current",function (data) {
-              var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-              console.log(occasionId);
-              //ToDo: edit to specific occasion
-              $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-            }); 
-          }).fail(function () {
-              console.log("It failed miserably");
-              alert('failed yo');
-            });
+      title: $('input[name=title]').val(),
+      description: $('#description').val(),
+      coverPhoto: $('input[name=coverPhoto]').val(),
+      participants: participantsList,
+      recipients: recipientsList,
+      publishTime: datetime,
+      participantIsPublic: false,
+      recipientIsPublic: false
+    }).done(function () {
+      console.log('done');
+      console.log("I'm here here here here");
+      $.get("/users/current",function (data) {
+        var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
+        console.log(occasionId);
+        //ToDo: edit to specific occasion
+        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+      }); 
+    }).fail(function () {
+      console.log("It failed miserably");
+      alert('failed yo');
+    });
 
     // if($('[id="tgl1"]').is(':checked')) {
       // if(document.getElementById("tgl1").checked){
