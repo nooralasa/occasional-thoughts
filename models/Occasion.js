@@ -102,7 +102,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                         } else {
                                           // then schedule to send email at pubdate
                                           //pubTime
-                                          schedule.scheduleJob(Date.now() + 600000*1000, function () {
+                                          schedule.scheduleJob(Date.now() , function () {
                                             console.log("I'm definitely in here");
                                             self
                                               .findById(occasion._id)
@@ -339,8 +339,11 @@ occasionSchema.methods.isParticipant = function (userId, callback) {
 
 occasionSchema.methods.isRecipient = function (userId, callback) {
   var self = this;
+  console.log('userId: ',userId);
+  console.log('recipients: ',self.recipients);
   var strs = self.recipients.filter(function (id) {
-    return id._id.equals(userId);
+    console.log('id: ',id);
+    return id.equals(userId);
   });
   callback(null, strs.length >= 1);
 }
@@ -357,8 +360,14 @@ occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
     if (isParticipant) {
       callback(null, true);
     } else {
-      self.isCreator(userId, function (er, isCreator) {
-        callback(null, isCreator);
+      self.isRecipient(userId, function (errr, isRecipient) {
+        if (isRecipient) {
+          callback(null, true);
+        } else {
+          self.isCreator(userId, function (er, isCreator) {
+            callback(null, isCreator);
+          });
+        }
       });
     }
   });
