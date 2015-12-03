@@ -34,14 +34,22 @@ $(document).on('click', '.delete-occasion', function(evt) {
 $(document).on('click', '.edit-occasion', function(evt) {
   evt.preventDefault();
   console.log("Edit occasion");
-  
+  var description= $(this).parent().find('p').text();
+  var title = $(this).parent().find('h3').text();
+  var url = $(this).parent().find('img src').text();
+
   var modal = document.getElementById('editOccasionModal');
   console.log(modal);
     $.get(
     '/occasions',
     helpers.getFormData(modal)
   ).done(function(response) {
-    $('#editOccasionModal').modal('show')
+    $('#editOccasionModal').modal('show');
+    document.getElementById('edited-description').value = description;
+    document.getElementById('edited-title').value = title;
+    console.log(document.getElementById('url').value, "val url");
+
+
   }).fail(function(responseObject) {
     var response = $.parseJSON(responseObject.responseText);
     $('.error').text(response.err);
