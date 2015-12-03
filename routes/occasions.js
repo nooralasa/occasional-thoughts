@@ -24,6 +24,22 @@ var requireViewPermission = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
+    req.occasion.canView(req.session.passport.user.id, function (err, canView) {
+      console.log(canView);
+      if (canView) {
+        next();
+      } else {
+        console.log('in 404');
+        utils.sendErrResponse(res, 404, 'Resource not found.');
+      }
+    });
+  }
+};
+
+var requireParticipationPermission = function (req, res, next) {
+  if (!req.session.passport || !req.session.passport.user) {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+  } else {
     req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
       if (canView) {
         next();
@@ -119,7 +135,7 @@ router.get('/:occasionId', requireViewPermission);
 router.post('/:occasionId', requireOccasionOwnership);
 router.delete('/:occasionId', requireOccasionOwnership);
 
-router.post('/:occasionId/thought', requireViewPermission);
+router.post('/:occasionId/thought', requireParticipationPermission);
 
 router.post('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
 router.delete('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
@@ -165,6 +181,8 @@ router.post('/', function (req, res) {
                           req.body.coverPhoto, 
                           req.body.participants, 
                           req.body.recipients, 
+                          req.body.participantIsPublic,
+                          req.body.recipientIsPublic,
                           req.session.passport.user.id, 
                           req.body.publishTime,
                           function (err) {

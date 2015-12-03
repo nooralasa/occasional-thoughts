@@ -4,7 +4,7 @@
 
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.theme.css" type="text/css" />
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.base.css" type="text/css" />
-
+<% include editThought.ejs %>
 <div class="col-md-8 col-md-offset-2">
   <p class="intro-text"><%=occasion.title%></p>
 
@@ -14,7 +14,11 @@
             <div class="input-group">
               <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
               </span>
-              <input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />
+              <textarea id="thought-message" name = "message" placeholder="Add a thought!" cols="50" rows="5" class="form-first-name form-control"></textarea>
+
+
+              <!--<input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />-->
+              
               <input name="occasionId" value="<%=occasion._id%>" type="hidden">
               <input name="userName" value="<%=user.name%>" type="hidden">
               <input name="profilePicture" value="<%=user.profilePicture%>" type="hidden">

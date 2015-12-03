@@ -6,11 +6,10 @@
 
 * {margin: 0; padding: 0;}
 body{
-  padding-top: 5%;
 }
 
 div {
-  margin: 2px;
+  margin: px;
   background-color: black;
 
 }
@@ -19,6 +18,7 @@ ul {
   list-style-type: none;
   width: 650px;
 }
+
 .edit-thought{
   position: absolute;
   top: 0px;
@@ -45,16 +45,23 @@ ul {
 
 h3 {
   font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
+  margin: 10px;
+  padding-right:11px;
+  padding-left: 55px;
 }
 
 li img {
   float: left;
-  margin: 0 15px 0 0;
+  margin: 10px;
 }
 
 li p {
   font: 200 15px/1.5 Cambria, Times New Roman, serif;
   font color;
+  padding-top: 10px;
+  margin-right:20px;
+  margin-left: 20px;
+  margin-bottom: 15px;
 }
 
 li {
@@ -62,15 +69,15 @@ li {
   overflow: auto;
 }
 
+
 .thought{
   background-color: #16A79D;
-  /*align: center;*/
   position:relative;
-  left:8%;
+
 }
 
 .thought-box{
-  padding-top: 40px;
+  padding: 10px;
 }
 
 .coverContainer {
@@ -90,6 +97,12 @@ li {
   max-width: 100%;
   width: auto;
 }​
+
+.textarea {
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+}
 
 .page-scroll{
     position:absolute;
