@@ -86,6 +86,7 @@ router.param('occasionId', function (req, res, next, occasionId) {
   console.log('in id');
   Occasion.populateOccasion(occasionId, function (err, occasion) {
     if (err) {
+      console.log(err);
       utils.sendErrResponseGivenError(res, err);
     } else {
       req.occasion = occasion;
