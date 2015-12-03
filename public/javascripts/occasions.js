@@ -16,7 +16,7 @@
   });
 })();
 
-$(document).on('click', '#delete-occasion', function(evt) {
+$(document).on('click', '.delete-occasion', function(evt) {
   evt.preventDefault();
   console.log("Delete occasion")
   var occasion_id = $(this).parent().attr('id');
@@ -31,8 +31,21 @@ $(document).on('click', '#delete-occasion', function(evt) {
   });
 });
 
-$(document).on('click', '#edit-occasion', function(evt) {
+$(document).on('click', '.edit-occasion', function(evt) {
   evt.preventDefault();
-  console.log("Edit occasion")
+  console.log("Edit occasion");
+  /*
+  var modal = document.getElementById('createOccasionModal');
+  console.log(modal);
+    $.get(
+    '/occasions',
+    helpers.getFormData(modal)
+  ).done(function(response) {
+    $('#createOccasionModal').modal('show')
+  }).fail(function(responseObject) {
+    var response = $.parseJSON(responseObject.responseText);
+    $('.error').text(response.err);
+  });
+*/
 });
 

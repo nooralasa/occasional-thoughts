@@ -12,7 +12,7 @@ span.ui-icon {
   float: left; margin: 0 0px;
 }
 
-#edit-occasion{
+.edit-occasion{
   position: absolute;
   top: 0px;
   right: 0px;
@@ -22,7 +22,7 @@ span.ui-icon {
   border: transparent;
 }
 
-#delete-occasion{
+.delete-occasion{
   position: absolute;
   top: 16px;
   right: 0px;

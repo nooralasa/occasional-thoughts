@@ -2,6 +2,10 @@
 <!-- @author:Suniyya-->
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.theme.css" type="text/css" />
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.base.css" type="text/css" />
+<script src="/javascripts/dashboard.js"></script>
+<script src="assets/js/scripts.js"></script>
+
+<% include createOccasion.ejs %>
 
 <div class="row">
   <div class="col-md-8 col-md-offset-2">
@@ -16,19 +20,22 @@
           <img src="http://lorempixum.com/100/100/nature/4" />
           <h3><%=user.createdOccasions[i].title%></h3>
           <p align= "left" ><%=user.createdOccasions[i].description%> </p>
-          <div id="delete-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+          <div class="delete-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
             <span class="ui-icon ui-icon-trash"></span>
           </div>
-          <div  id = "edit-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-pencil"></span>
+          <div class="edit-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+          
+          <span class="ui-icon ui-icon-pencil"></span>
           </div>
 
-        </li>
+        </li> 
       </a>
       <% } %>
     </ul>
   
   </div>
+
+
 
   <div class="col-md-8 col-md-offset-2">
     <% var numOccasions = user.viewableOccasions.length%>
@@ -44,13 +51,6 @@
           <img src="http://lorempixum.com/100/100/nature/4"/>
           <h3><%=user.viewableOccasions[i].title%></h3>
           <p align= "left" ><%=user.viewableOccasions[i].description%> </p>
-          <div id="delete-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-trash"></span>
-          </div>
-          <div  id = "edit-occasion" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-pencil"></span>
-          </div>
-
         </li>
       </a>
       <% } %>

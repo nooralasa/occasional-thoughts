@@ -145,6 +145,7 @@ router.post('*', requireContent);
 */
 router.get('/', function (req, res) {
   User.findAllOccasions(req.session.passport.user.id, function (err, user) {
+    console.log(user);
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else {

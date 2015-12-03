@@ -1,5 +1,6 @@
 <!-- Adds thought list items on an occasion page -->
 <!-- @author: Suniyya --> 
+<!-- To DO change repeated ids to classes --> 
 
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.theme.css" type="text/css" />
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.base.css" type="text/css" />
@@ -37,10 +38,10 @@
             <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
             <p align= "left" > <%=occasion.thoughts[i].message%></p>
 
-            <div id="delete-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+            <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-trash"></span>
             </div>
-            <div  id = "edit-thought" class="ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+            <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-pencil"></span>
             </div>
 

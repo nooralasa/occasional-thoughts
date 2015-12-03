@@ -236,11 +236,11 @@ $(function () {
   });
 
   $("#r2").click(function(){
-          $(".specific").show(50);
+          $(".specific").show("slow");
   });
 
   $("#r1").click(function(){
-          $(".specific").hide(50);
+          $(".specific").hide("slow");
   });
 
 });
