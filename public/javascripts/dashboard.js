@@ -162,19 +162,10 @@ $(function () {
     // if($('[id="tgl1"]').is(':checked')) {
       // if(document.getElementById("tgl1").checked){
     if(partCheckedButton==1){
-      $("#previous").hide(10);
-      $("#finish").hide(10);
-      $("#privacyForm").hide(10);
-
       $("#blk-1").show(50);
-      $("#done").show(50);
     }
 
     if(partCheckedButton==2){
-      $("#previous").hide(10);
-      $("#finish").hide(10);
-      $("#blk-2").hide(10);
-      $("#privacyForm").hide(10);
 
       $("#blk-3").show(50);
       $("#done").show(50);

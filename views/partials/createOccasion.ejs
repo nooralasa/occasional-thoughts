@@ -10,225 +10,226 @@
               <div class="modal-dialog">
 
               <!-- Modal content-->
-              <div class="modal-content" style="padding:20px">
+              <div class="modal-content">
                 
 
-                 <form role="form" action="" method="post" class="registration-form">
-                            
-                            
-                            <fieldset>
+                  <form role="form" action="" method="post" class="registration-form">
+                    
+                    
+                    <fieldset>
+                        <div class="form-top">
+                          <div class="form-top-left">
+                            <h3>Create an Occasion!</h3>
+                          </div>
+                          <div class="form-top-right">
+                            <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+                          </div>
+                        </div>
 
-                              <div class="form-top">
-                                
-                                <div class="form-top-left">
-                                  <h3>Create an Occasion!</h3>
-                                </div>
-                                <div class="form-top-right">
-                                  <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
-                                </div>
-                                </div>
+                        <span class="navigation select"> 1. General</span>
+                        <span class="navigation"> 2. Publishing</span>
+                        <span class="navigation"> 3. Privacy Settings</span>
+                        <span class="navigation"> 4. Invite</span>
+                        <hr>
 
-                                <span style="color:#000000; margin:10px; position:relative; right:10%; font-weight:bold; color:#337ab7"> 1. General</span>
-                                <span style="color:#000000; margin:10px; position:relative; right:10%"> 2. Publishing</span>
-                                <span style="color:#000000; margin:10px; position:relative; right:10%"> 3. Privacy Settings</span>
-                                <hr style="margin-top:5px; margin-bottom:5px">
-
-                                <div class="form-bottom">
-
-
-
-                                 <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-gift"></span>
-                                    </span>
-                                    <input type="text" name="title" placeholder="Title" class="form-first-name form-control" id="form-first-name">
-                                  </div>
-                                </div>
-
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-pencil"></span>
-                                    </span>
-                                    <textarea id="description" placeholder="Description (Optional)" cols="50" rows="20" class="form-first-name form-control" id="form-first-name"></textarea>
-                                  </div>
-                                </div>
-
-                                <div id = "preview"style="display:none; width: 100%; height: 200px; border: 3px solid #DDDDDD; margin-bottom:15px">
-                                  <img id = "previewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" style = "max-width:100%; max-height:100%; margin-left:auto; margin-right:auto" class="img-responsive" alt="">
-                                </div>
-
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-picture"></span>
-                                    </span>
-
-                                    <input name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
-                                    <span class="input-group-btn">
-                                      <a id="upload" class="btn btn-primary">Preview</a>
-                                    </span>
-                              
-                              
-                                  </div>
-                                </div>
-
-                                <div>
-                                  
-                                </div>
-
-
+                        <div class="form-bottom">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-gift"></span>
+                              </span>
+                              <input type="text" name="title" placeholder="Title" class="form-first-name form-control" id="form-first-name">
                             </div>
-                            <a id="next" class="btn btn-primary next" style = "position:relative; left:40%; margin:8px">Next</a>
-                          </fieldset>
-                          
-                          <fieldset>
-                              <div class="form-top">
-                                <div class="form-top-left">
-                                  <h3>Create an Occasion</h3>
-                                </div>
-                                <div class="form-top-right">
-                                  <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
-                                </div>
-                                </div>
-
-                                <span style="color:#000000; margin:10px; position:relative; right:10%"> 1. General</span>
-                                <span style="color:#000000; margin:10px; position:relative; right:10%; font-weight:bold; color:#337ab7"> 2. Publishing</span>
-                                <span style="color:#000000; margin:10px; position:relative; right:10%"> 3. Privacy Settings</span>
-                                <hr style="margin-top:5px; margin-bottom:5px">
-
-                                <div class="form-bottom">
-                                  
-
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-th"></span><span> Publishing Date</span>
-                                    </span>
-                                    <input type="date" name="pubDate" placeholder="Enter a date" class="form-first-name form-control" id="pubDate">
-                                    
-                                  </div>
-                                </div>
-
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-time"></span><span> Publishing Time</span>
-                                    </span>
-                                    <input type="time" name="pubTime" placeholder="Enter a date" class="form-first-name form-control" id="pubTime">
-                                    
-                                  </div>
-                                </div>
-
-                                <div>
-                                  <p style="color:#000000; font-size:16px"> Who can view the published occasion?</p> 
-                                  <div>
-                                    <div class="checkbox">
-                                      <label><input id="r1" type="radio" name="Rtogler" value="1">Anyone with a link</label>
-                                      <label><input id="r2" type="radio" name="Rtogler" value="2">Only Specific People</label>
-                                    </div>
-                                  </div>
-
-                                  <div class= "specific" style="display:none; position:relative; left:10%">
-                                    <!-- <div class="checkbox">
-                                      <label><input type="checkbox" name="Ctogler" value="3">All Participants (People who added thoughts)</label>
-                                      <label><input type="checkbox" name="Ctogler" value="3">Only the following recipients</label>
-                                    </div> -->
-                                  </div>
-
-                                  <div class="form-group specific" style="display:none;">
-                                      <div class="input-group">
-                                        <span class="input-group-addon">
-                                          <span class="glyphicon glyphicon-user"></span>
-                                        </span>
-                                        <input id="recipientShare" class="form-control" placeholder="Select Friends" />
-                                      </div>
-                                    </div>
-
-                                    <div id="recipients">
-
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <a class="btn btn-primary next" style = "position:relative; margin:8px; left:50%">Next</a>
-                            <a class="btn btn-primary previous" style = "position:relative; margin:8px; right:45%">Previous</a>
-
-                          </fieldset>
-
-                          <fieldset>
-                              <div class="form-top">
-                                <div class="form-top-left">
-                                  <h3>Create an Occasion</h3>
-                                </div>
-                                <div class="form-top-right">
-                                  <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
-                                </div>
-                                </div>
-
-                                <span style="color:#000000; margin:10px; position:relative; right:10%"> 1. General</span>
-                                <span style="color:#000000; margin:10px; position:relative; right:10%"> 2. Publishing</span>
-                                <span style="color:#000000; margin:10px; position:relative; right:10%; font-weight:bold; color:#337ab7"> 3. Privacy Settings</span>
-                                <hr style="margin-top:5px; margin-bottom:5px">
-
-                                <div class="form-bottom">
-                                <div id = "privacyForm" class="form-group email">
-                                  <p style = "color:#000000; font-size:20px"> Who can add a thought? </p>
-                                  <label id = "tgl1" class="checkbox-inline"><input type="radio" name = "toggler" value="1">Anyone with a link</label>
-                                  <label id = "tgl2" class="checkbox-inline"><input type="radio" name = "toggler" value="2">Only specific people</label>
-                                </div>
-
-                                <div id="blk-1" class="toHide" style="display:none">
-                                    <p style="color:#000000; font-size:16px"> Here is your public link to the occasion</p> 
-                                    <div class="form-group">
-                                    <div class="input-group">
-                                      <span class="input-group-addon">
-                                        <span> Public Link: </span>
-                                      </span>
-                                      <input id="copy-link" name="publicLink"  class="form-first-name form-control" value="http://occasionalthoughts.herokuapp.com/occasions/565fb7d44b1c4ff736e35dd7">
-                                    </div>
-                                    </div>
-
-                                    <p style="color:#000000; font-size:16px"> Share it with your facebook friends!</p> 
-
-                                    <a id="fb-share" class="btn btn-block btn-social btn-facebook">
-                                      <span class="fa fa-facebook"></span> Share link with Facebook Messenger
-                                    </a>
-                                </div>
-
-
-                                <div id="blk-2" class="toHide" style="display:none">
-                                    <p style="color:#000000; font-size:16px" class="email"> Select friends to invite to your occasion:</p> 
-                                    <div class="form-group email">
-                                      <div class="input-group">
-                                        <span class="input-group-addon">
-                                          <span class="glyphicon glyphicon-user"></span>
-                                        </span>
-                                        <input id="participantShare" name="friends" class="form-control" placeholder="Select Friends" />
-                                      </div>
-                                    </div>
-
-                                    <div id="participants" class = "email">
-                                    </div>  
-                              </div>
-
-                              <div id="blk-3" class="toHide" style="display:none">
-                                    <p style="color:#000000; font-size:20px"> Congratulations!</p> 
-                                    <p style="color:#000000; font-size:16px"> Your occasion has been created and the specified people have been invited to add their thoughts.</p> 
-                              </div>
-
                           </div>
 
-                            <a id="finish" class="btn btn-primary" style = "display:none; position:relative; margin:8px; left:40%">Finish</a>
-                            <a id="done" class="btn btn-primary" style = "display:none; position:relative; margin:8px;">Done!</a>
-                            <a id="previous" class="btn btn-primary previous" style = "position:relative; margin:8px; right:40%">Previous</a>
+                          <div class="form-group">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                              </span>
+                              <textarea id="description" placeholder="Description" cols="50" rows="20" class="form-first-name form-control" id="form-first-name"></textarea>
+                            </div>
+                          </div>
 
-                          </fieldset>
+                          <div id = "preview">
+                            <img id = "previewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" class="img-responsive" alt="">
+                          </div>
+
+                          <div class="form-group">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-picture"></span>
+                              </span>
+
+                              <input name="coverPhoto" placeholder="Cover Photo URL (Optional)" class="form-first-name form-control" id="url">
+                              <span class="input-group-btn">
+                                <a id="upload" class="btn btn-primary">Preview</a>
+                              </span>
+                            </div>
+                          </div>
+                      </div>
+                      <a id="next" class="btn btn-primary next">Next</a>
+                  </fieldset>
+                  
+
+                  <fieldset>
+                      <div class="form-top">
+                        <div class="form-top-left">
+                          <h3>Create an Occasion</h3>
+                        </div>
+                        <div class="form-top-right">
+                          <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+                        </div>
+                        </div>
+
+                        <span class="navigation"> 1. General</span>
+                        <span class="navigation select"> 2. Publishing</span>
+                        <span class="navigation"> 3. Privacy Settings</span>
+                        <span class="navigation"> 4. Invite</span>
+                        <hr>
+
+                        <div class="form-bottom">
                           
-                        
-                        </form>
+
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-th"></span><span> Publishing Date</span>
+                            </span>
+                            <input type="date" name="pubDate" placeholder="Enter a date" class="form-first-name form-control" id="pubDate">
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <span class="glyphicon glyphicon-time"></span><span> Publishing Time</span>
+                            </span>
+                            <input type="time" name="pubTime" placeholder="Enter a date" class="form-first-name form-control" id="pubTime">
+                          </div>
+                        </div>
+
+                        <div>
+                          <p class="heading-1"> Who can view the published occasion?</p> 
+                          <div>
+                            <div class="checkbox">
+                              <label><input id="r1" type="radio" name="Rtogler" value="1">Anyone with a link</label>
+                              <label><input id="r2" type="radio" name="Rtogler" value="2">Only Specific People</label>
+                            </div>
+                          </div>
+
+                          <div class="form-group specific" style="display:none;">
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  <span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <input id="recipientShare" class="form-control" placeholder="Select Friends" />
+                              </div>
+                          </div>
+
+                          <div id="recipients">
+                          </div>
+                        </div>
+                    </div>
+
+                    <a id = "next-2" class="btn btn-primary next">Next</a>
+                    <a id ="previous1" class="btn btn-primary previous">Previous</a>
+
+                  </fieldset>
+
+
+                  <fieldset>
+                      <div class="form-top">
+                        <div class="form-top-left">
+                          <h3>Create an Occasion</h3>
+                        </div>
+                        <div class="form-top-right">
+                          <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+                        </div>
+                      </div>
+
+                      <span class="navigation"> 1. General</span>
+                      <span class="navigation"> 2. Publishing</span>
+                      <span class="navigation select"> 3. Privacy Settings</span>
+                      <span class="navigation"> 4. Invite</span>
+                      <hr>
+
+                      <div class="form-bottom">
+                        <div id = "privacyForm" class="form-group email">
+                          <p class="heading-2"> Who can add a thought? </p>
+                          <label id = "tgl1" class="checkbox-inline"><input type="radio" name = "toggler" value="1">Anyone with a link</label>
+                          <label id = "tgl2" class="checkbox-inline"><input type="radio" name = "toggler" value="2">Only specific people</label>
+                        </div>
+
+                        <div id="blk-2" class="toHide" style="display:none">
+                            <p class="email heading-1"> Select friends to invite to your occasion:</p> 
+                            <div class="form-group email">
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  <span class="glyphicon glyphicon-user"></span>
+                                </span>
+                                <input id="participantShare" name="friends" class="form-control" placeholder="Select Friends" />
+                              </div>
+                            </div>
+                            <div id="participants" class = "email">
+                            </div>  
+                        </div>
+                      </div>
+
+                    <a id="finish" class="btn btn-primary next">Finish</a>
+                    <a id="previous2" class="btn btn-primary previous">Previous</a>
+
+                  </fieldset>
+
+
+
+                   </fieldset>
+                  
+                  <fieldset>
+                      <div class="form-top">
+                        <div class="form-top-left">
+                          <h3>Create an Occasion</h3>
+                        </div>
+                        <div class="form-top-right">
+                          <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+                        </div>
+                      </div>
+
+                      <span class="navigation"> 1. General</span>
+                      <span class="navigation"> 2. Publishing</span>
+                      <span class="navigation"> 3. Privacy Settings</span>
+                      <span class="navigation select"> 4. Invite</span>
+                      <hr>
+
+                      <div class="form-bottom">
+
+                        <div id="blk-1" class="toHide" style="display:none">
+                            <p class="heading-1"> Here is your public link to the occasion</p> 
+                            <div class="form-group">
+                              <div class="input-group">
+                                <span class="input-group-addon">
+                                  <span> Public Link: </span>
+                                </span>
+                                <input id="copy-link" name="publicLink"  class="form-first-name form-control" value="http://occasionalthoughts.herokuapp.com/occasions/565fb7d44b1c4ff736e35dd7">
+                              </div>
+                            </div>
+ 
+                            <p class="heading-1"> Share it with your facebook friends!</p> 
+                            <a id="fb-share" class="btn btn-block btn-social btn-facebook">
+                              <span class="fa fa-facebook"></span> Share link with Facebook Messenger
+                            </a>
+                        </div>
+                        <div id="blk-3" class="toHide" style="display:none">
+                            <p class="heading-2"> Congratulations!</p> 
+                            <p class="heading-1"> Your occasion has been created and the specified people have been invited to add their thoughts.</p> 
+                        </div>
+                      </div>
+
+                    <a id="done" class="btn btn-primary">Done!</a>
+
+                  </fieldset>
+                  
+                </form>
 
 
               </div>

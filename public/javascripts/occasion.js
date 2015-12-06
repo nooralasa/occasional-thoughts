@@ -50,25 +50,38 @@ $(document).on('click', '#add-thought', function(evt) {
 
 });
 
+/*photo needs to be added*/
+
   $(document).on('click', '.edit-thought', function(evt) {
     evt.preventDefault();
     console.log("edit thought")
     var occasion_id = $("input[name=occasionId]").val();
+    console.log(occasion_id);
     var thought_id = $(this).parent().parent().attr('id');
-    console.log(thought_id);
     var modal = document.getElementById('editThoughtModal');
-  //console.log(modal);
-    $.get(
-    '/occasions/'+ occasion_id,
-    helpers.getFormData(modal)
-  ).done(function(response) {
+
     $('#editThoughtModal').modal('show')
     document.getElementById("edited-thought").value =  $('#message_'+thought_id).text();
-
-
-  }).fail(function(responseObject) {
-    var response = $.parseJSON(responseObject.responseText);
-    $('.error').text(response.err);
-  });
-  
+    $('input[name="edit-thought-id"]').val(thought_id);
+    $('input[name="occasion-id"]').val(occasion_id);
 });
+
+  $(document).on('click', '#done-edit-thought', function(evt){
+    evt.preventDefault();
+     var thought_id = $('input[name="edit-thought-id"]').val();
+     var occasion_id = $('input[name="occasion-id"]').val();
+     var editedMessage = document.getElementById("edited-thought").value;
+
+    $.post("/occasions/"+ occasion_id+"/thoughts/" +thought_id, 
+    {message: editedMessage, 
+      photo: "",
+      isPublic: true}
+    ).done(function(response) {
+      $('#editThoughtModal').modal('hide');
+      $('#message_'+thought_id).text(editedMessage);
+      //something for the photo
+    }).fail(function(responseObject){
+      var response = $.parseJSON(responseObject.responseText);
+      $('.error').text(response.err);
+    })
+  })
