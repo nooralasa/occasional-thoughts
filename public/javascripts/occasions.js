@@ -33,27 +33,42 @@ $(document).on('click', '.delete-occasion', function(evt) {
 
 $(document).on('click', '.edit-occasion', function(evt) {
   evt.preventDefault();
-  console.log("Edit occasion");
   var description= $(this).parent().find('p').text();
   var title = $(this).parent().find('h3').text();
   var url = $(this).parent().find('img src').text();
-
   var modal = document.getElementById('editOccasionModal');
-  console.log(modal);
-    $.get(
-    '/occasions',
-    helpers.getFormData(modal)
-  ).done(function(response) {
-    $('#editOccasionModal').modal('show');
-    document.getElementById('edited-description').value = description;
-    document.getElementById('edited-title').value = title;
-    console.log(document.getElementById('url').value, "val url");
+  var occasion_id = $(this).parent().attr('id');
 
-
-  }).fail(function(responseObject) {
-    var response = $.parseJSON(responseObject.responseText);
-    $('.error').text(response.err);
-
-  });
+  $('#editOccasionModal').modal('show');
+  document.getElementById('edited-description').value = description;
+  document.getElementById('edited-title').value = title;
+  document.getElementById('url').value = url; 
+  $('input[name="edit-occasion-id"]').val(occasion_id);
 });
 
+$(document).on('click', '#done-edit-occasion', function(evt) {
+  evt.preventDefault();
+  var id = $('input[name="edit-occasion-id"]').val();
+  console.log("done edit", id);
+  var editedTitle = $('#edited-title').val();
+  var editedDescription  = $('#edited-description').val();
+  var editedPhoto = $('#url').val();
+
+  $.post(
+    '/occasions/'+id, 
+    {title: editedTitle, 
+      description: editedDescription, 
+      coverPhoto: editedPhoto}
+  ).done(function(response) {
+    $('#editOccasionModal').modal('hide');
+    $('#'+id).find('p').text(editedDescription);
+    $('#'+id).find('h3').text(editedTitle);
+    $('#'+id).find('img src').text(editedPhoto);
+
+
+
+
+  }).fail(function(responseObject){
+    console.log('failed!');
+  });
+})
