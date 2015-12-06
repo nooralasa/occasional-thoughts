@@ -105,7 +105,9 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                         callback(err1);
                                       } else {
                                         // then schedule to send email at pubDate
-                                        schedule.scheduleJob(pubTime, function () {
+                                        console.log("pubTime: ",pubTime);
+                                        console.log(typeof pubTime);
+                                        schedule.scheduleJob(new Date(pubTime), function () {
                                           console.log("I'm definitely in here");
                                           self
                                             .findById(occasion._id)
