@@ -52,7 +52,11 @@
       <a href="/occasions/<%=user.participatedOccasions[i]._id%>">
       
         <li style = "position:relative" id="<%=user.participatedOccasions[i]._id%>">
-          <img src="http://lorempixum.com/100/100/nature/4"/>
+          <% if (user.viewableOccasions[i].coverPhoto == ""){ %>
+            <img src="http://lorempixum.com/100/100/nature/4" />
+          <% } else { %>
+            <img src="<%=user.viewableOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
+          <% } %>
           <h3><%=user.participatedOccasions[i].title%></h3>
           <p align= "left" ><%=user.participatedOccasions[i].description%> </p>
         </li>

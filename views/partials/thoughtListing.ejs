@@ -62,9 +62,15 @@
                 <img src="<%=occasion.thoughts[i].photo%>">
              <% }%>
             </div>
+
+
+            <% if (user.name == occasion.thoughts[i].creator) { %>
             <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-trash"></span>
             </div>
+            <% } %>
+            
+
             <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-pencil"></span>
             </div>
