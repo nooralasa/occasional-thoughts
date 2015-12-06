@@ -35,14 +35,15 @@ $(document).on('click', '.edit-occasion', function(evt) {
   evt.preventDefault();
   var description= $(this).parent().find('p').text();
   var title = $(this).parent().find('h3').text();
-  var url = $(this).parent().find('img src').text();
+  var lastUrl = $(this).parent().find('img').attr('src');
+  console.log("Last Url", lastUrl)
   var modal = document.getElementById('editOccasionModal');
   var occasion_id = $(this).parent().attr('id');
 
   $('#editOccasionModal').modal('show');
   document.getElementById('edited-description').value = description;
   document.getElementById('edited-title').value = title;
-  document.getElementById('url').value = url; 
+  document.getElementById('url').value = lastUrl; 
   $('input[name="edit-occasion-id"]').val(occasion_id);
 });
 
@@ -53,6 +54,7 @@ $(document).on('click', '#done-edit-occasion', function(evt) {
   var editedTitle = $('#edited-title').val();
   var editedDescription  = $('#edited-description').val();
   var editedPhoto = $('#url').val();
+  console.log("new url", editedPhoto);
 
   $.post(
     '/occasions/'+id, 
@@ -63,7 +65,7 @@ $(document).on('click', '#done-edit-occasion', function(evt) {
     $('#editOccasionModal').modal('hide');
     $('#'+id).find('p').text(editedDescription);
     $('#'+id).find('h3').text(editedTitle);
-    $('#'+id).find('img src').text(editedPhoto);
+    $('#'+id).find('img').attr('src', editedPhoto);
 
   }).fail(function(responseObject){
     console.log('failed!');

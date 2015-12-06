@@ -136,6 +136,7 @@ $(function () {
     var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
     console.log(datetime);
     console.log(datetime.toLocaleString());
+    console.log($('input[name=coverPhoto]').val());
     //create the occasion
     $.post('/occasions', {
       title: $('input[name=title]').val(),

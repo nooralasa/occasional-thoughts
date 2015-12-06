@@ -35,6 +35,7 @@ occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescriptio
       if (err) {
         callback(err);
       } else {
+        console.log(occasion);
         callback(null, occasion);
       }
     }
@@ -224,31 +225,33 @@ occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occas
         if (er) {
           callback(er);
         } else {
-          occasion.removeParticipants(removeParticipants, function (e) {
-            if (e) {
-              callback(e);
-            } else {
-              occasion.addParticipants(newParticipants, function (error) {
-                if (error) {
-                  callback(error);
-                } else {
-                  occasion.removeRecipients(removeRecipients, function (error1) {
-                    if (error1) {
-                      callback(error1);
-                    } else {
-                      occasion.addRecipients(newRecipients, function (error2) {
-                        if (error2) {
-                          callback(error2);
-                        } else {
-                          callback(null);
-                        }
-                      });
-                    }
-                  });
-                }
-              });
-            }
-          });
+          callback(null);
+
+          // occasion.removeParticipants(removeParticipants, function (e) {
+          //   if (e) {
+          //     callback(e);
+          //   } else {
+          //     occasion.addParticipants(newParticipants, function (error) {
+          //       if (error) {
+          //         callback(error);
+          //       } else {
+          //         occasion.removeRecipients(removeRecipients, function (error1) {
+          //           if (error1) {
+          //             callback(error1);
+          //           } else {
+          //             occasion.addRecipients(newRecipients, function (error2) {
+          //               if (error2) {
+          //                 callback(error2);
+          //               } else {
+          //                 callback(null);
+          //               }
+          //             });
+          //           }
+          //         });
+          //       }
+          //     });
+          //   }
+          // });
         }
       });
 
@@ -259,7 +262,7 @@ occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occas
 occasionSchema.methods.editOccasionDetails = function (occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
   this.title = occasionTitle;
   this.description = occasionDescription;
-  this.coverPhoto = occasionDescription;
+  this.coverPhoto = occasionCoverPhoto;
   this.save();
   callback(null);
 }
