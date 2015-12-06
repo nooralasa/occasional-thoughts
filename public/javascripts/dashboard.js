@@ -109,6 +109,7 @@ $(function () {
     console.log("finish button pressed");
     var partCheckedButton = $('input[name=toggler]:checked').val();
     var recCheckedButton = $('input[name=Rtoggler]:checked').val();
+    console.log('partCheckedButton: ',partCheckedButton);
 
     //check if public participants
       //check if public recipients
@@ -134,8 +135,8 @@ $(function () {
       participants: participantsList,
       recipients: recipientsList,
       publishTime: datetime,
-      participantIsPublic: false,
-      recipientIsPublic: false
+      participantIsPublic: partCheckedButton==1,
+      recipientIsPublic: recCheckedButton==1
     }).done(function () {
       console.log('done');
       console.log("I'm here here here here");
