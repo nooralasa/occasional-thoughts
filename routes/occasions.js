@@ -44,6 +44,7 @@ var requireParticipationPermission = function (req, res, next) {
       if (canView) {
         next();
       } else {
+        console.log('participant 404');
         utils.sendErrResponse(res, 404, 'Resource not found.');
       }
     });
@@ -65,6 +66,7 @@ var requireOccasionOwnership = function (req, res, next) {
     if (isCreator) {
       next();
     } else {
+      console.log('occ own 404');
       utils.sendErrResponse(res, 404, 'Resource not found.');
     }
   });
@@ -75,6 +77,7 @@ var requireThoughtOwnership = function (req, res, next) {
     if (isCreator) {
       next();
     } else {
+      console.log('thought own 404')
       utils.sendErrResponse(res, 404, 'Resource not found.');
     }
   });

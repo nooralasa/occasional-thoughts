@@ -16,8 +16,8 @@ $(function () {
       $.get("https://graph.facebook.com/v2.5/me/friends", 
             { access_token: currentUser.token }, 
             function (fbFriends, status){
-            	console.log(fbFriends.data);
-            	friendData = fbFriends.data;
+              console.log(fbFriends.data);
+              friendData = fbFriends.data;
               var friendNames = fbFriends.data.map(function (friend) {
                 return friend.name;
               });
@@ -41,16 +41,16 @@ $(function () {
 
       console.log(friendData);
       var result = $.grep(friendData, function (obj){ 
-      	return obj.name === input; 
+        return obj.name === input; 
       });
 
       console.log(result);
       if (result.length === 1) {
-      	participantsList.push(result[0].id);
+        participantsList.push(result[0].id);
         $('#participants').append("<div><label>"+result[0].name+"</label></div>");
         $('#participantShare').val('');
       } else {
-      	alert('name error!');
+        alert('name error!');
       }
     }
   });
