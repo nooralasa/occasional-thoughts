@@ -65,9 +65,6 @@ $(document).on('click', '#done-edit-occasion', function(evt) {
     $('#'+id).find('h3').text(editedTitle);
     $('#'+id).find('img src').text(editedPhoto);
 
-
-
-
   }).fail(function(responseObject){
     console.log('failed!');
   });
