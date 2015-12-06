@@ -1,9 +1,10 @@
-#thought {
-  color:#000000;
-}
 .ui-autocomplete {
   z-index: 5000;
 }
 label {
   color: black;
+}
+
+.btn-lg{
+	margin:10px;
 }

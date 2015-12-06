@@ -24,6 +24,8 @@
   <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" href="assets/css/form-elements.css">
   <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="stylesheets/dashboard.css">
+  <link rel="stylesheet" href="stylesheets/createOccasion.css">
 
   <link rel="shortcut icon" href="assets/ico/favicon.png">
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/ico/apple-touch-icon-144-precomposed.png">
@@ -49,7 +51,7 @@
             <h2>Welcome <%=name%>!</h1>
 
             <a id="createOccasion" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createOccasionModal">Create New Occasion!</a>
-            <a href="/occasions" class="btn btn-primary btn-lg" stlye="margin-left:10px">My Occasions</a>
+            <a href="/occasions" class="btn btn-primary btn-lg">My Occasions</a>
 
             <% include partials/createOccasion.ejs %>
            
