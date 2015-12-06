@@ -134,8 +134,7 @@ $(function () {
     console.log('part: ', participantsList);
 
     var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
-    console.log(datetime);
-    console.log(datetime.toLocaleString());
+    console.log(recipientsList);
     //create the occasion
     $.post('/occasions', {
       title: $('input[name=title]').val(),
