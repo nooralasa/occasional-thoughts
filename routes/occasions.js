@@ -25,11 +25,11 @@ var requireViewPermission = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     req.occasion.canView(req.session.passport.user.id, function (err, canView) {
-      console.log(canView);
+      console.log('canview ' + canView);
       if (canView) {
         next();
       } else {
-        console.log('in 404');
+        console.log('view 404');
         utils.sendErrResponse(res, 404, 'Resource not found.');
       }
     });
@@ -75,6 +75,7 @@ var requireOccasionOwnership = function (req, res, next) {
 var requireThoughtOwnership = function (req, res, next) {
   req.thought.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
+      console.log('is thought creator');
       next();
     } else {
       console.log('thought own 404')
@@ -101,7 +102,7 @@ var requireContent = function (req, res, next) {
 */
 
 router.param('occasionId', function (req, res, next, occasionId) {
-  Occasion.populateOccasion(occasionId, function (err, occasion) {
+  Occasion.populateOccasion(occasionId, req.session.passport.user.id, function (err, occasion) {
     if (err) {
       console.log(err);
       utils.sendErrResponseGivenError(res, err);
@@ -134,14 +135,16 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
 // Register the middleware handlers above.
 router.all('*', requireLogin);
 
+router.post('/:occasionId/thoughts/:thoughtId', requireThoughtOwnership);
+router.delete('/:occasionId/thoughts/:thoughtId', requireThoughtOwnership);
+
+router.post('/:occasionId/thoughts', requireParticipationPermission);
+
 router.get('/:occasionId', requireViewPermission);
 router.post('/:occasionId', requireOccasionOwnership);
 router.delete('/:occasionId', requireOccasionOwnership);
 
-router.post('/:occasionId/thought', requireParticipationPermission);
 
-router.post('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
-router.delete('/:occasionId/thought/:thoughtId', requireThoughtOwnership);
 
 router.post('*', requireContent);
 
