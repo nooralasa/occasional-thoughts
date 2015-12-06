@@ -122,20 +122,10 @@ $(function () {
       //else private recipients
          //post with participants: List of participants,recipients:List of recipients
 
-    //public pre-publishing
-    if(partCheckedButton==1) {
-        participantsList = ["966588576732829"];
-    };
-
-    //public post publishing
-    if (recCheckedButton==1) {
-      recipientsList = ["966588576732829"];
-    };
     console.log('part: ', participantsList);
 
     var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
-    console.log(datetime);
-    console.log(datetime.toLocaleString());
+    console.log(recipientsList);
     //create the occasion
     $.post('/occasions', {
       title: $('input[name=title]').val(),
@@ -153,7 +143,7 @@ $(function () {
         var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
         console.log(occasionId);
         //ToDo: edit to specific occasion
-        // $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       }); 
     }).fail(function () {
       console.log("It failed miserably");
@@ -180,9 +170,10 @@ $(function () {
       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
       console.log(occasionId);
 
-      window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865'
-      +'&link=http://occasionalthoughts.herokuapp.com/occasions/'
-      +'&redirect_uri=http://occasionalthoughts.herokuapp.com/');
+      window.location.replace('http://www.facebook.com/dialog/send?'
+        +'app_id=929113373843865'
+        +'&link=http://occasionalthoughts.herokuapp.com/occasions/'+occasionId
+        +'&redirect_uri=https://occasionalthoughts.herokuapp.com/');
     });
   });
 

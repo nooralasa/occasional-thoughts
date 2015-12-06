@@ -59,35 +59,43 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
           callback(er);
         } else {
           // then find ids of participants
-          User.findAllByFbid(participants, function (error, friends) {
+          User.findAllByFbid(participants, function (error, participantFriends) {
             if (error) {
               callback(error);
             } else {
+              //then add that occasion to each participant's participated list
+              participantFriends.forEach(function (friend) {
+                friend.addParticipatedOccasionId(occasion._id, function (error4) {
+                  if (error4) {
+                    console.log(error4);
+                  }
+                });
+              });
               // then add these ids to the participant list
-              var friendIds = friends.map(function (friend) {
+              var participantFriendIds = participantFriends.map(function (friend) {
                 return friend._id;
               });
-              console.log('friendIds: ', friendIds);
-              occasion.addParticipants(friendIds, function (error1) {
+              occasion.addParticipants(participantFriendIds, function (error1) {
                 if (error1) {
                   callback(error1);
                 } else {
-                  //then add that occasion to each participant's viewable list
-                  friends.forEach( function (friend) {
-                    friend.addViewableOccasionId(occasion._id, function (error4) {
-                      if (error4) {
-                        callback(error4);
-                      } 
-                    });
-                  }); 
+
                   // then find ids of recipients
                   User.findAllByFbid(recipients, function (error0, recipientFriends) {
                     if (error0) {
                       callback(error0);
                     } else {
+                      //then add that occasion to each recipient's received list
+                      recipientFriends.forEach(function (friend) {
+                        friend.addParticipatedOccasionId(occasion._id, function (error5) {
+                          if (error5) {
+                            console.log(error5);
+                          }
+                        });
+                      }); 
                       // then add these ids to the recipients list
-                      var recipientFriendIds = recipientFriends.map(function (recp) {
-                        return recp._id;
+                      var recipientFriendIds = recipientFriends.map(function (friend) {
+                        return friend._id;
                       });
                       occasion.addRecipients(recipientFriendIds, function (error2) {
                         if (error2) {
@@ -99,7 +107,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                               callback(e)
                             } else {
                               // then send the emails
-                              var invitationEmails = friends.map(function (friend) {
+                              var invitationEmails = participantFriends.map(function (friend) {
                                 return friend.email;
                               });
                               email_client.sendInvitationEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, invitationEmails, function (err1, result) {
@@ -107,10 +115,11 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                   callback(err1);
                                 } else {
                                   // then schedule to send email at pubDate
+                                  var newDate = new Date(pubTime);
                                   console.log("pubTime: ",pubTime);
-                                  console.log(typeof pubTime);
-                                  schedule.scheduleJob(new Date(pubTime), function () {
-                                    console.log("I'm definitely in here");
+                                  console.log(typeof newDate);
+                                  schedule.scheduleJob(newDate, function () {
+                                    console.log("in scheduled job");
                                     self
                                       .findById(occasion._id)
                                       .populate('recipients')
@@ -126,20 +135,11 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                             console.log(err2);
                                             console.log(result);
                                           });
-                                          updatedOccasion.recipients.forEach( function (recfriend) {
-                                            console.log('recfriend: ', recfriend);
-                                            recfriend.addViewableOccasionId(occasion._id, function (error5) {
-                                              if (error5) {
-                                                callback(error5);
-                                              } 
-                                            });
-                                          });
                                         }
                                       }
                                     );
                                   });
                                   //then send back ok
-                                  //ToDo: then add the occasion to each participant's list
                                   callback(null);
                                 }
                               });
@@ -152,7 +152,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                 }
               });
             }
-          });          
+          });
         }
       });
     }

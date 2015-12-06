@@ -9,11 +9,12 @@
   <p class="intro-text"><%=occasion.title%></p>
 
   <%if (!occasion.isPublished()) { %>
-      <div style= "background:#EFECEC; padding:12px; margin-bottom:10px">
-        <div style= "background:#EFECEC; color:#000000">
-          <p>Share a thought!</p>
-        </div>
-        <form class="registration-form" role="form" >
+      <div class="panel panel-default add-box">
+      <!-- <div class="panel panel-default"> -->
+        <!-- <div class="panel-body"> -->
+        <div class="panel-body">
+          <p>Share a thought!</p>        
+          <form class="registration-form" role="form" >
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
@@ -48,24 +49,31 @@
 
           <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
         </form>
+        </div>
+
       </div>
   
 
   <% } %>
 
   <div id= "thoughts">
-    <ul id = "thought-list" style="position:relative; width:600px; left:9%">
+    <ul id = "thought-list">
 
       <% var numThoughts = occasion.thoughts.length%>
       <% for (var i=0; i<numThoughts; i++) { %>
-      <div id ="<%=occasion.thoughts[i]._id%>" class = "thought-box">
-          <li class ="thought">
-            <img src="<%=occasion.thoughts[i].creator.profilePicture%>">
-            <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
-            <p id="message_<%=occasion.thoughts[i]._id%>" align= "left" > <%=occasion.thoughts[i].message%></p>
-            <div class="photoThought">
-              <% if(occasion.thoughts[i].photo !== ""){ %>
-                <img src="<%=occasion.thoughts[i].photo%>">
+      <li class ="thought">
+        <div id ="<%=occasion.thoughts[i]._id%>" class = "thought-box panel panel-default">
+          <div class ="panel-body">
+            <div class="col-xs-12">
+              <img class="thoughtProfilePicture" src="<%=occasion.thoughts[i].creator.profilePicture%>">
+              <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
+            </div>
+            <div class="col-xs-12">
+              <p class="thoughtMessage" id="message_<%=occasion.thoughts[i]._id%>" align= "left" > <%=occasion.thoughts[i].message%></p>
+            </div>
+            <div class="thoughtPhotoDiv col-xs-12">
+              <% if(occasion.thoughts[i].photo){ %>
+                <img class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
              <% }%>
             </div>
             <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
@@ -74,8 +82,9 @@
             <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-pencil"></span>
             </div>
-          </li>
-      </div>
+          </div>
+        </div>
+      </li>
       <% } %>
     </ul>
   </div>
