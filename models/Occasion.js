@@ -77,79 +77,78 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                     friend.addViewableOccasionId(occasion._id, function (error4) {
                       if (error4) {
                         callback(error4);
-                      } else {
-                        // then find ids of recipients
-                        User.findAllByFbid(recipients, function (error0, recipientFriends) {
-                          if (error0) {
-                            callback(error0);
-                          } else {
-                            // then add these ids to the recipients list
-                            var recipientFriendIds = recipientFriends.map(function (recp) {
-                              return recp._id;
-                            });
-                            occasion.addRecipients(recipientFriendIds, function (error2) {
-                              if (error2) {
-                                callback(error2);
-                              } else {
-                                // then add that occasion to the user's created list
-                                user.addCreatedOccasionId(occasion._id, function (e) {
-                                  if (e) {
-                                    callback(e)
-                                  } else {
-                                    // then send the emails
-                                    var invitationEmails = friends.map(function (friend) {
-                                      return friend.email;
-                                    });
-                                    email_client.sendInvitationEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, invitationEmails, function (err1, result) {
-                                      if (err1) {
-                                        callback(err1);
-                                      } else {
-                                        // then schedule to send email at pubDate
-                                        console.log("pubTime: ",pubTime);
-                                        console.log(typeof pubTime);
-                                        schedule.scheduleJob(new Date(pubTime), function () {
-                                          console.log("I'm definitely in here");
-                                          self
-                                            .findById(occasion._id)
-                                            .populate('recipients')
-                                            .exec(function (error3, updatedOccasion) {
-                                              if (error3) {
-                                                console.log(error3);
-                                              } else {
-                                                var recipientEmails = updatedOccasion.recipients.map(function (recp) {
-                                                  return recp.email;
-                                                });
-                                                email_client.sendPublishEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, [user.email].concat(recipientEmails), function (err2, result) {
-                                                  console.log('email sent');
-                                                  console.log(err2);
-                                                  console.log(result);
-                                                });
-                                                updatedOccasion.recipients.forEach( function (recfriend) {
-                                                  console.log('recfriend: ', recfriend);
-                                                  recfriend.addViewableOccasionId(occasion._id, function (error5) {
-                                                    if (error5) {
-                                                      callback(error5);
-                                                    } 
-                                                  });
-                                                });
-                                              }
-                                            }
-                                          );
-                                        });
-                                        //then send back ok
-                                        //ToDo: then add the occasion to each participant's list
-                                        callback(null);
-                                      }
-                                    });
-                                  }
-                                });
-                              }
-                            });
-                          }
-                        }); 
-                      }
+                      } 
                     });
-                  }); //end of my code        
+                  }); 
+                  // then find ids of recipients
+                  User.findAllByFbid(recipients, function (error0, recipientFriends) {
+                    if (error0) {
+                      callback(error0);
+                    } else {
+                      // then add these ids to the recipients list
+                      var recipientFriendIds = recipientFriends.map(function (recp) {
+                        return recp._id;
+                      });
+                      occasion.addRecipients(recipientFriendIds, function (error2) {
+                        if (error2) {
+                          callback(error2);
+                        } else {
+                          // then add that occasion to the user's created list
+                          user.addCreatedOccasionId(occasion._id, function (e) {
+                            if (e) {
+                              callback(e)
+                            } else {
+                              // then send the emails
+                              var invitationEmails = friends.map(function (friend) {
+                                return friend.email;
+                              });
+                              email_client.sendInvitationEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, invitationEmails, function (err1, result) {
+                                if (err1) {
+                                  callback(err1);
+                                } else {
+                                  // then schedule to send email at pubDate
+                                  console.log("pubTime: ",pubTime);
+                                  console.log(typeof pubTime);
+                                  schedule.scheduleJob(new Date(pubTime), function () {
+                                    console.log("I'm definitely in here");
+                                    self
+                                      .findById(occasion._id)
+                                      .populate('recipients')
+                                      .exec(function (error3, updatedOccasion) {
+                                        if (error3) {
+                                          console.log(error3);
+                                        } else {
+                                          var recipientEmails = updatedOccasion.recipients.map(function (recp) {
+                                            return recp.email;
+                                          });
+                                          email_client.sendPublishEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, [user.email].concat(recipientEmails), function (err2, result) {
+                                            console.log('email sent');
+                                            console.log(err2);
+                                            console.log(result);
+                                          });
+                                          updatedOccasion.recipients.forEach( function (recfriend) {
+                                            console.log('recfriend: ', recfriend);
+                                            recfriend.addViewableOccasionId(occasion._id, function (error5) {
+                                              if (error5) {
+                                                callback(error5);
+                                              } 
+                                            });
+                                          });
+                                        }
+                                      }
+                                    );
+                                  });
+                                  //then send back ok
+                                  //ToDo: then add the occasion to each participant's list
+                                  callback(null);
+                                }
+                              });
+                            }
+                          });
+                        }
+                      });
+                    }
+                  }); // End of User.Find          
                 }
               });
             }
