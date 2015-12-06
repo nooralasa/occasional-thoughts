@@ -37,10 +37,10 @@
       <% var numThoughts = occasion.thoughts.length%>
       <% for (var i=0; i<numThoughts; i++) { %>
       <div id ="<%=occasion.thoughts[i]._id%>" class = "thought-box">
-          <li class ="thought" id="<%=occasion.thoughts[i]._id%>">
+          <li class ="thought">
             <img src="<%=occasion.thoughts[i].creator.profilePicture%>">
             <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
-            <p align= "left" > <%=occasion.thoughts[i].message%></p>
+            <p id="message_<%=occasion.thoughts[i]._id%>" align= "left" > <%=occasion.thoughts[i].message%></p>
 
             <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
               <span class="ui-icon ui-icon-trash"></span>

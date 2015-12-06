@@ -215,10 +215,11 @@ router.post('/:occasionId', function (req, res) {
                         req.body.title, 
                         req.body.description, 
                         req.body.coverPhoto, 
-                        req.body.removeParticipants, 
-                        req.body.newParticipants, 
-                        req.body.removeRecipients, 
-                        req.body.newRecipients,
+                        [],[],[],[],
+                        // req.body.removeParticipants, 
+                        // req.body.newParticipants, 
+                        // req.body.removeRecipients, 
+                        // req.body.newRecipients,
                         function (err) {
                           if (err) {
                             utils.sendErrResponseGivenError(res, err);
