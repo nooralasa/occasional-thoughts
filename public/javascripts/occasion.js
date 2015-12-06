@@ -1,4 +1,5 @@
 
+
 $(window).load(function(){
  $('.coverContainer').find('img').each(function(){
   var imgClass = (this.width/this.height > 1) ? 'wide' : 'tall';
@@ -53,7 +54,8 @@ $(document).on('click', '#add-thought', function(evt) {
     evt.preventDefault();
     console.log("edit thought")
     var occasion_id = $("input[name=occasionId]").val();
-    console.log(occasion_id);
+    var thought_id = $(this).parent().parent().attr('id');
+    console.log(thought_id);
     var modal = document.getElementById('editThoughtModal');
   //console.log(modal);
     $.get(
@@ -61,6 +63,9 @@ $(document).on('click', '#add-thought', function(evt) {
     helpers.getFormData(modal)
   ).done(function(response) {
     $('#editThoughtModal').modal('show')
+    document.getElementById("edited-thought").value =  $('#message_'+thought_id).text();
+
+
   }).fail(function(responseObject) {
     var response = $.parseJSON(responseObject.responseText);
     $('.error').text(response.err);
