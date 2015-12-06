@@ -65,7 +65,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
             } else {
               //then add that occasion to each participant's participated list
               participantFriends.forEach(function (friend) {
-                friends.addParticipatedOccasionId(occasion._id, function (error4) {
+                friend.addParticipatedOccasionId(occasion._id, function (error4) {
                   if (error4) {
                     console.log(error4);
                   }
@@ -107,7 +107,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                               callback(e)
                             } else {
                               // then send the emails
-                              var invitationEmails = friends.map(function (friend) {
+                              var invitationEmails = participantFriends.map(function (friend) {
                                 return friend.email;
                               });
                               email_client.sendInvitationEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, invitationEmails, function (err1, result) {

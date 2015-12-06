@@ -14,14 +14,6 @@ var email = (function () {
       to: []
     };
 
-    console.log('toAddresses: ', toAddresses);
-    console.log(toAddresses instanceof Array);
-    if (toAddresses.length==0 || !(toAddresses instanceof Array)) {
-    	console.log("Why am I in here?");
-    	console.log("because:", !(toAddresses instanceof Array));
-    	toAddresses = ["noemail@idk.com"];
-    };
-
     toAddresses.forEach( function (em) {
       message.to.push({
         email: em,
@@ -61,6 +53,7 @@ var email = (function () {
   }
 
   _email.sendPublishEmails = function (user_name, user_email, link, emails, callback) {
+  	console.log("I'm emailing Noor!");
     var text = '<p>Hello there!<br>'
                 +user_name+' sent you an eCard for an occasion! Follow this link to view the thoughts.<br>'
                 +'<a href="'+link+'">'+link+'</a>'
