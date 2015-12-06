@@ -111,7 +111,7 @@ userSchema.methods.addReceivedOccasionId = function (occasionId, callback) {
   callback(null);
 }
 
-userSchema.statics.removeOccasionFromAll = function (occasionId, creatorId, participantIds, callback) {
+userSchema.statics.removeOccasionFromAll = function (occasionId, creatorId, participantIds, recipientIds, callback) {
   var self = this;
 
   self.findById(creatorId, function (err, creator) {
