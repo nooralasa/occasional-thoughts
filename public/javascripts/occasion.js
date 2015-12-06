@@ -15,10 +15,11 @@ $(document).on('click', '#add-thought', function(evt) {
   var id = $("input[name=occasionId]").val();
   var name = $("input[name=userName]").val();
   var photo = $("input[name=profilePicture]").val();
-  //var isPublic = document.getElementById().value;
+  var thoughtPicture = $("input[name=thoughtPicture]").val(); 
+  console.log("Picture: ", thoughtPicture)
   $.post('/occasions/'+id+"/thoughts", 
     {message: message, 
-      photo:"",
+      photo:thoughtPicture,
       isPublic: true}
     ).done(function(response) {
       $('#thought-list').append( 
@@ -49,6 +50,21 @@ $(document).on('click', '#add-thought', function(evt) {
   });
 
 });
+
+  $(document).on('click', '#upload', function(evt) {
+    console.log("upload button clicked")
+      var url = $('#url').val();
+      console.log(url)
+      $('#previewImg').attr('src', url);
+      $("#preview").show(50);
+  });
+
+  // $("#upload").click(function(){
+  //   console.log("sfdsafdsafssafadfasf")
+  //       if($('#url').val()!=""){
+  //         $("#preview").show(50);
+  //       }
+  // });
 
   $(document).on('click', '.edit-thought', function(evt) {
     evt.preventDefault();

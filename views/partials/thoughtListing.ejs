@@ -9,12 +9,16 @@
   <p class="intro-text"><%=occasion.title%></p>
 
   <%if (!occasion.isPublished()) { %>
+      <div style= "background:#EFECEC; padding:12px; margin-bottom:10px">
+        <div style= "background:#EFECEC; color:#000000">
+          <p>Share a thought!</p>
+        </div>
         <form class="registration-form" role="form" >
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
               </span>
-              <textarea id="thought-message" name = "message" placeholder="Add a thought!" cols="50" rows="5" class="form-first-name form-control"></textarea>
+              <textarea id="thought-message" name = "message" placeholder="Add a message" cols="50" rows="5" class="form-first-name form-control"></textarea>
 
 
               <!--<input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />-->
@@ -24,31 +28,33 @@
               <input name="profilePicture" value="<%=user.profilePicture%>" type="hidden">
             </div>
           </div>
+
+          <div id = "preview">
+            <img id = "previewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" class="img-responsive" alt="">
+          </div>
+
           <div class="form-group">
             <div class="input-group">
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-picture"></span>
               </span>
 
-              <input name="coverPhoto" placeholder="Add a picture" class="form-first-name form-control" id="url">
+              <input name="thoughtPicture" placeholder="Add a picture (url)" class="form-first-name form-control" id="url">
               <span class="input-group-btn">
                 <a id="upload" class="btn btn-primary">Preview</a>
               </span>
             </div>
           </div>
 
-          <div id = "preview" style= "display:none">
-            <img id = "previewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" class="img-responsive" alt="">
-          </div>
-
           <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
         </form>
+      </div>
   
 
   <% } %>
 
   <div id= "thoughts">
-    <ul id = "thought-list" >
+    <ul id = "thought-list" style="position:relative; width:600px; left:9%">
 
       <% var numThoughts = occasion.thoughts.length%>
       <% for (var i=0; i<numThoughts; i++) { %>
