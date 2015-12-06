@@ -20,7 +20,7 @@
   <header class="intro"> 
     <div class="intro-body">
       <div class = "coverContainer">
-        <%if (occasion.coverPhoto !== undefined) {%>
+        <%if (occasion.coverPhoto) {%>
           <img src= <%= occasion.coverPhoto%>>
         <% } else { %>
           <img src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >

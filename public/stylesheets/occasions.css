@@ -32,6 +32,11 @@ span.ui-icon {
   border: transparent;
 }
 
+.occasion-thumbnail{
+  max-width: 100px;
+  max-height: 100px;
+}
+
 .ui-corner-all:hover {
   background: #eee;
   cursor: pointer;
@@ -71,6 +76,11 @@ ul {
   width: 600px;
 }
 
+#occasions{
+  background: -webkit-linear-gradient(left,  #737373, silver);
+  padding: 10px;
+}
+
 h3 {
   font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
 }
@@ -89,6 +99,10 @@ li {
   padding: 0px;
   overflow: auto;
   margin: 10px;
+}
+
+.li_occasion{
+  min-height: 100px;
 }
 
 li:hover {
