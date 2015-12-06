@@ -76,12 +76,18 @@
                 <img class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
              <% }%>
             </div>
-            <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-              <span class="ui-icon ui-icon-trash"></span>
-            </div>
-            <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-              <span class="ui-icon ui-icon-pencil"></span>
-            </div>
+
+            <% if (user.name == occasion.thoughts[i].creator.name || user.name == occasion.creator.name ) { %>
+              <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+                <span class="ui-icon ui-icon-trash"></span>
+              </div>
+            <% } %>
+
+            <% if (user.name == occasion.thoughts[i].creator.name ) { %>
+              <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+                <span class="ui-icon ui-icon-pencil"></span>
+              </div>
+            <% } %>
           </div>
         </div>
       </li>

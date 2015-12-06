@@ -16,8 +16,8 @@ $(function () {
       $.get("https://graph.facebook.com/v2.5/me/friends", 
             { access_token: currentUser.token }, 
             function (fbFriends, status){
-              console.log(fbFriends.data);
-              friendData = fbFriends.data;
+            	console.log(fbFriends.data);
+            	friendData = fbFriends.data;
               var friendNames = fbFriends.data.map(function (friend) {
                 return friend.name;
               });
@@ -41,16 +41,16 @@ $(function () {
 
       console.log(friendData);
       var result = $.grep(friendData, function (obj){ 
-        return obj.name === input; 
+      	return obj.name === input; 
       });
 
       console.log(result);
       if (result.length === 1) {
-        participantsList.push(result[0].id);
+      	participantsList.push(result[0].id);
         $('#participants').append("<div><label>"+result[0].name+"</label></div>");
         $('#participantShare').val('');
       } else {
-        alert('name error!');
+      	alert('name error!');
       }
     }
   });
@@ -110,22 +110,13 @@ $(function () {
     var partCheckedButton = $('input[name=toggler]:checked').val();
     var recCheckedButton = $('input[name=Rtoggler]:checked').val();
 
-    //check if public participants
-      //check if public recipients
-        //post with participants:["public"],recipients:["public"]
-      //else private recipients
-        //populate correct recipients list.
-        //post with participants:["public"],recipients:List of recipients
-    //else private participants
-      //check if public recipients
-        //post with participants: List of participants,recipients:["public"]
-      //else private recipients
-         //post with participants: List of participants,recipients:List of recipients
+    console.log('partCheckedButton: ',partCheckedButton);
+    console.log('recCheckedButton: ',recCheckedButton);
 
     console.log('part: ', participantsList);
 
     var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
-
+    console.log(recipientsList);
     //create the occasion
     $.post('/occasions', {
       title: $('input[name=title]').val(),
@@ -134,8 +125,8 @@ $(function () {
       participants: participantsList,
       recipients: recipientsList,
       publishTime: datetime,
-      participantIsPublic: false,
-      recipientIsPublic: false
+      participantIsPublic: partCheckedButton==1,
+      recipientIsPublic: recCheckedButton==1
     }).done(function () {
       console.log('done');
       console.log("I'm here here here here");
