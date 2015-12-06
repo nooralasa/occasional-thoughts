@@ -380,6 +380,31 @@ occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
 
 occasionSchema.methods.canView = function (userId, callback) {
   var self = this;
+
+  self.isCreator(userId, function (err, isCreator) {
+    if (isCreator) {
+      callback(null, true);
+    } else {
+      if (self.isPublished()) {
+        if (self.recipientIsPublic) {
+          callback(null, true);
+        } else {
+          self.isRecipient(userId, function (er, isRecipient) {
+            callback(null, isRecipient);
+          });
+        }
+      } else {
+        if (self.participantIsPublic) {
+          callback(null, true);
+        } else {
+          self.isParticipant(userId, function (er, isParticipant) {
+            callback(null, isParticipant);
+          });
+        }
+      }
+    }
+  });
+
   self.isParticipant(userId, function (err, isParticipant) {
     if (isParticipant) {
       callback(null, true);
@@ -388,9 +413,6 @@ occasionSchema.methods.canView = function (userId, callback) {
         if (isRecipient) {
           callback(null, true);
         } else {
-          self.isCreator(userId, function (er, isCreator) {
-            callback(null, isCreator);
-          });
         }
       });
     }
