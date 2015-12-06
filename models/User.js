@@ -7,7 +7,8 @@ var userSchema = mongoose.Schema({
   name: String,
   profilePicture: String,
   createdOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
-  viewableOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
+  participatedOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}],
+  receivedOccasions: [{type: mongoose.Schema.Types.ObjectId, ref: 'Occasion'}]
 });
 
 userSchema.statics.createNewUser = function (email, token, fbid, name, profilePicture, callback) {
@@ -26,7 +27,8 @@ userSchema.statics.createNewUser = function (email, token, fbid, name, profilePi
           name: name,
           profilePicture: profilePicture,
           createdOccasions: [],
-          viewableOccasions: []
+          participatedOccasions: [],
+          receivedOccasions: []
         }, 
         function (er, newUser) {
           if (er) {
@@ -97,8 +99,14 @@ userSchema.methods.addCreatedOccasionId = function (occasionId, callback) {
   callback(null);
 }
 
-userSchema.methods.addViewableOccasionId = function (occasionId, callback) {
-  this.viewableOccasions.push(occasionId);
+userSchema.methods.addParticipatedOccasionId = function (occasionId, callback) {
+  this.participatedOccasions.push(occasionId);
+  this.save();
+  callback(null);
+}
+
+userSchema.methods.addReceivedOccasionId = function (occasionId, callback) {
+  this.receivedOccasions.push(occasionId);
   this.save();
   callback(null);
 }
@@ -118,13 +126,24 @@ userSchema.statics.removeOccasionFromAll = function (occasionId, creatorId, part
 
       self.findAllById(participantIds, function (er, participants) {
         participants.forEach(function (participant) {
-          var index = participant.createdOccasions.indexOf(occasionId);
+          var index = participant.participatedOccasions.indexOf(occasionId);
           if (index != -1){
-             creator.viewableOccasions.splice(index, 1);
+             participant.participatedOccasions.splice(index, 1);
           }
           participant.save();
         });
-        callback(null);
+
+        self.findAllById(recipientIds, function (e, recipients) {
+          recipients.forEach(function (recipient) {
+            var index = recipient.receivedOccasions.indexOf(occasionId);
+            if (index != -1){
+               recipient.receivedOccasions.splice(index, 1);
+            }
+            recipient.save();
+          });
+          
+          callback(null);
+        });
       });
     }
   });
@@ -133,8 +152,8 @@ userSchema.statics.removeOccasionFromAll = function (occasionId, creatorId, part
 userSchema.statics.findAllOccasions = function (userId, callback) {
   this
     .findById(userId)
-    .select('name createdOccasions viewableOccasions')
-    .populate('createdOccasions viewableOccasions')
+    .select('name createdOccasions participatedOccasions receivedOccasions')
+    .populate('createdOccasions participatedOccasions receivedOccasions')
     .exec(function (err, user) {
       if (err) {
         callback(err);
@@ -154,13 +173,5 @@ userSchema.methods.updateProfilePicture = function (newUrl, callback) {
   this.save();
   callback(null);
 }
-
-// userSchema.methods.getCreatedOccasionIds = function (callback) {
-//   callback(null, this.createdOccasion);
-// }
-
-// userSchema.methods.getViewableOccasionIds = function (callback) {
-//   callback(null, this.viewableOccasion);
-// }
 
 module.exports = mongoose.model("User", userSchema);

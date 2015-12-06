@@ -42,19 +42,19 @@
 
 
   <div class="col-md-8 col-md-offset-2">
-    <% var numOccasions = user.viewableOccasions.length%>
+    <% var numOccasions = user.participatedOccasions.length%>
     <% if (numOccasions != 0){ %>
-      <p class="intro-text">Other Occasions Viewable By <%=user.name%></p>
+      <p class="intro-text">Other Occasions Participated by <%=user.name%></p>
     <% } %>
     <ul>
       <% for(var i=0; i< numOccasions; i++) { %>
 
-      <a href="/occasions/<%=user.viewableOccasions[i]._id%>">
+      <a href="/occasions/<%=user.participatedOccasions[i]._id%>">
       
-        <li style = "position:relative" id="<%=user.viewableOccasions[i]._id%>">
+        <li style = "position:relative" id="<%=user.participatedOccasions[i]._id%>">
           <img src="http://lorempixum.com/100/100/nature/4"/>
-          <h3><%=user.viewableOccasions[i].title%></h3>
-          <p align= "left" ><%=user.viewableOccasions[i].description%> </p>
+          <h3><%=user.participatedOccasions[i].title%></h3>
+          <p align= "left" ><%=user.participatedOccasions[i].description%> </p>
         </li>
       </a>
       <% } %>
