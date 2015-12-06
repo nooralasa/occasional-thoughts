@@ -42,7 +42,7 @@ var email = (function () {
     	console.log(e);
       callback(e);
     });
-  }
+  };
 
 
   _email.sendInvitationEmails = function (user_name, user_email, link, emails, callback) {
