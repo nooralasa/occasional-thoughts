@@ -111,18 +111,6 @@ $(function () {
     var recCheckedButton = $('input[name=Rtoggler]:checked').val();
     console.log('partCheckedButton: ',partCheckedButton);
 
-    //check if public participants
-      //check if public recipients
-        //post with participants:["public"],recipients:["public"]
-      //else private recipients
-        //populate correct recipients list.
-        //post with participants:["public"],recipients:List of recipients
-    //else private participants
-      //check if public recipients
-        //post with participants: List of participants,recipients:["public"]
-      //else private recipients
-         //post with participants: List of participants,recipients:List of recipients
-
     console.log('part: ', participantsList);
 
     var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
