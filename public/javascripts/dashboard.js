@@ -109,7 +109,9 @@ $(function () {
     console.log("finish button pressed");
     var partCheckedButton = $('input[name=toggler]:checked').val();
     var recCheckedButton = $('input[name=Rtoggler]:checked').val();
+
     console.log('partCheckedButton: ',partCheckedButton);
+    console.log('recCheckedButton: ',recCheckedButton);
 
     console.log('part: ', participantsList);
 
