@@ -1,4 +1,5 @@
 
+
 $(window).load(function(){
  $('.coverContainer').find('img').each(function(){
   var imgClass = (this.width/this.height > 1) ? 'wide' : 'tall';
@@ -14,7 +15,6 @@ $(document).on('click', '#add-thought', function(evt) {
   var id = $("input[name=occasionId]").val();
   var name = $("input[name=userName]").val();
   var photo = $("input[name=profilePicture]").val();
-  //"http://cdn.toonvectors.com/images/40/14323/toonvectors-14323-140.jpg"
   //var isPublic = document.getElementById().value;
   $.post('/occasions/'+id+"/thoughts", 
     {message: message, 
@@ -37,7 +37,7 @@ $(document).on('click', '#add-thought', function(evt) {
     evt.preventDefault();
     console.log("Delete thought")
     var occasion_id = $("input[name=occasionId]").val();
-    var thought_id = $(this).parent().attr('id');
+    var thought_id = $(this).parent().parent().attr('id');
     console.log("thought Id", thought_id);
     
     $.ajax({
@@ -50,8 +50,25 @@ $(document).on('click', '#add-thought', function(evt) {
 
 });
 
-  $(document).on('click', '#edit-thought', function(evt) {
+  $(document).on('click', '.edit-thought', function(evt) {
     evt.preventDefault();
     console.log("edit thought")
-  
+    var occasion_id = $("input[name=occasionId]").val();
+    var thought_id = $(this).parent().parent().attr('id');
+    console.log(thought_id);
+    var modal = document.getElementById('editThoughtModal');
+  //console.log(modal);
+    $.get(
+    '/occasions/'+ occasion_id,
+    helpers.getFormData(modal)
+  ).done(function(response) {
+    $('#editThoughtModal').modal('show')
+    document.getElementById("edited-thought").value =  $('#message_'+thought_id).text();
+
+
+  }).fail(function(responseObject) {
+    var response = $.parseJSON(responseObject.responseText);
+    $('.error').text(response.err);
   });
+  
+});

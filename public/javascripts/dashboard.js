@@ -153,7 +153,7 @@ $(function () {
         var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
         console.log(occasionId);
         //ToDo: edit to specific occasion
-        $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
+        // $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       }); 
     }).fail(function () {
       console.log("It failed miserably");
@@ -190,8 +190,8 @@ $(function () {
       console.log(occasionId);
 
       window.location.replace('http://www.facebook.com/dialog/send?app_id=929113373843865'
-      +'&link=http://occasionalthoughts.herokuapp.com/occasions/'+occasionId
-      +'&redirect_uri=http://occasionalthoughts.herokuapp.com/occasions');
+      +'&link=http://occasionalthoughts.herokuapp.com/occasions/'
+      +'&redirect_uri=http://occasionalthoughts.herokuapp.com/');
     });
   });
 
@@ -219,7 +219,11 @@ $(function () {
   });
 
   $("#done").click(function(){
-          $('#createOccasionModal').modal('hide');
+    $('#createOccasionModal').modal('hide');
+    $('#createOccasionModal').on('hidden.bs.modal', function(){
+      $(this).find('form')[0].reset();
+      window.location.replace('/');
+    });
   });
 
   $("#emailBtn").click(function(){
