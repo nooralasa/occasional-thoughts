@@ -1,7 +1,6 @@
 // Wrap in an immediately invoked function expression.
 (function() {
   $(document).on('submit', '#myOccasionsBtn', function(evt) {
-    console.log("CLICKED CREATE OCCASION")
     evt.preventDefault();
     $.get(
       '/occasions',
@@ -18,10 +17,7 @@
 
 $(document).on('click', '.delete-occasion', function(evt) {
   evt.preventDefault();
-  console.log("Delete occasion")
   var occasion_id = $(this).parent().attr('id');
-
-  console.log("occasion id is", occasion_id);
   $.ajax({
     url: '/occasions/'+occasion_id,
     type: 'DELETE',
@@ -36,7 +32,6 @@ $(document).on('click', '.edit-occasion', function(evt) {
   var description= $(this).parent().find('p').text();
   var title = $(this).parent().find('h3').text();
   var lastUrl = $(this).parent().find('img').attr('src');
-  console.log("Last Url", lastUrl)
   var modal = document.getElementById('editOccasionModal');
   var occasion_id = $(this).parent().attr('id');
 
@@ -50,11 +45,9 @@ $(document).on('click', '.edit-occasion', function(evt) {
 $(document).on('click', '#done-edit-occasion', function(evt) {
   evt.preventDefault();
   var id = $('input[name="edit-occasion-id"]').val();
-  console.log("done edit", id);
   var editedTitle = $('#edited-title').val();
   var editedDescription  = $('#edited-description').val();
   var editedPhoto = $('#url').val();
-  console.log("new url", editedPhoto);
 
   $.post(
     '/occasions/'+id, 
