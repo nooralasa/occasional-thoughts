@@ -73,7 +73,7 @@
             </div>
             <div class="thoughtPhotoDiv col-xs-12">
               <% if(occasion.thoughts[i].photo){ %>
-                <img class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
+                <img class="thoughtPhoto" id="photo_<%=occasion.thoughts[i]._id%>" src="<%=occasion.thoughts[i].photo%>">
              <% }%>
             </div>
             <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
