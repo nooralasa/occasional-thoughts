@@ -16,7 +16,6 @@ $(document).on('click', '#add-thought', function(evt) {
   var name = $("input[name=userName]").val();
   var photo = $("input[name=profilePicture]").val();
   var thoughtPicture = $("input[name=thoughtPicture]").val(); 
-  console.log("Picture: ", thoughtPicture);
   $.post('/occasions/'+id+"/thoughts", 
     {message: message, 
       photo:thoughtPicture,
@@ -37,10 +36,8 @@ $(document).on('click', '#add-thought', function(evt) {
 
 $(document).on('click', '.delete-thought', function(evt) {
   evt.preventDefault();
-  console.log("Delete thought")
   var occasion_id = $("input[name=occasionId]").val();
   var thought_id = $(this).parent().parent().attr('id');
-  console.log("thought Id", thought_id);
   
   $.ajax({
     url: '/occasions/'+occasion_id+'/thoughts/'+thought_id,
@@ -52,15 +49,12 @@ $(document).on('click', '.delete-thought', function(evt) {
 });
 
 $(document).on('click', '#upload', function(evt) {
-  console.log("upload button clicked")
     var url = $('#url').val();
-    console.log(url)
     $('#previewImg').attr('src', url);
     $("#preview").show(50);
 });
 
 $(document).on('click', '#editPreviewBtn', function(evt) {
-  console.log("upload button clicked")
     var url = $('#editUrl').val();
     $('#editPreviewImg').attr('src', url);
     $("#editPreview").show(50);
@@ -69,9 +63,7 @@ $(document).on('click', '#editPreviewBtn', function(evt) {
 
 $(document).on('click', '.edit-thought', function(evt) {
   evt.preventDefault();
-  console.log("edit thought")
   var occasion_id = $("input[name=occasionId]").val();
-  console.log(occasion_id);
   var thought_id = $(this).parent().parent().attr('id');
   if ($('#photo_'+thought_id).attr('src')!= undefined){
     var lastUrl = $('#photo_'+thought_id).attr('src');  
