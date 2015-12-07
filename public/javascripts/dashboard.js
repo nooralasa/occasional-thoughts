@@ -1,3 +1,9 @@
+/**
+  Includes backend functionality of all buttons on the index.ejs and dashboard.ejs pages
+  specifcally the create new occsion modal. 
+  Also includes the auto complete code for selecting users from facebook friend list 
+**/
+
 $(function () {
 
   var friendData = [];
@@ -94,8 +100,6 @@ $(function () {
       alert('failed yo');
     });
 
-    // if($('[id="tgl1"]').is(':checked')) {
-      // if(document.getElementById("tgl1").checked){
     if(partCheckedButton==1){
       $("#blk-1").show(50);
     }
@@ -111,8 +115,6 @@ $(function () {
   $('#fb-share').click(function (evt) {
     $.get("/users/current",function (data) {
       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-
-      console.log('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       window.location.replace('http://www.facebook.com/dialog/send?'
         +'app_id=929113373843865'
         +'&link=http://occasionalthoughts.herokuapp.com/'

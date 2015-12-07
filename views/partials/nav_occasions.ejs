@@ -6,7 +6,7 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
           <i class="fa fa-bars"></i>
         </button>
-
+        <!--App logo-->
         <% include logo.ejs %>
 
       </div>
@@ -16,8 +16,10 @@
             <a href="#page-top"></a>
           </li>
           <li>
+            <!--Sign Out-->
             <a class="page-scroll" href="/logout">Sign Out</a>
           </li>
+          <!--Welcome, User! -->
           <li><a href="#"><span class="glyphicon glyphicon-user"></span> <%=user.name%></a></li>
         </ul>
       </div>
