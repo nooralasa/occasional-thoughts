@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var User = require('./User');
 var email_client = require('../utils/email_client');
 var schedule = require('node-schedule');
-var baselink = 'http://localhost:3000';
+var baselink = 'http://occasionalthoughts.herokuapp.com';
 
 var occasionSchema = mongoose.Schema({
   title: String,
@@ -88,7 +88,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                     } else {
                       //then add that occasion to each recipient's received list
                       recipientFriends.forEach(function (friend) {
-                        friend.addParticipatedOccasionId(occasion._id, function (error5) {
+                        friend.addReceivedOccasionId(occasion._id, function (error5) {
                           if (error5) {
                             console.log(error5);
                           }
@@ -160,7 +160,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
   });
 }
 
-occasionSchema.statics.populateOccasion = function (occasionId, callback) {
+occasionSchema.statics.populateOccasion = function (occasionId, userId, callback) {
   this
     .findById(occasionId)
     .populate({
@@ -172,6 +172,14 @@ occasionSchema.statics.populateOccasion = function (occasionId, callback) {
       if (err) {
         callback(err);
       } else if (occasion) {
+        // filter only when not published, not public, and is participant
+        if (!occasion.isPublished() && !occasion.participantIsPublic && !occasion.creator.equals(userId)) {
+          console.log('filtering thoughts');
+          occasion.thoughts = occasion.thoughts.filter(function (thought) {
+            return thought.creator.equals(userId);
+          });
+        }
+        console.log(occasion);
         callback(null, occasion);
       } else {
         callback({code: 404, msg: 'Resource not found.'});
@@ -388,6 +396,7 @@ occasionSchema.methods.canView = function (userId, callback) {
       callback(null, true);
     } else {
       if (self.isPublished()) {
+        console.log('ispublished');
         if (self.recipientIsPublic) {
           callback(null, true);
         } else {
@@ -396,10 +405,12 @@ occasionSchema.methods.canView = function (userId, callback) {
           });
         }
       } else {
+        console.log('notpublished');
         if (self.participantIsPublic) {
           callback(null, true);
         } else {
           self.isParticipant(userId, function (er, isParticipant) {
+            console.log('isparticipant ' + isParticipant);
             callback(null, isParticipant);
           });
         }
