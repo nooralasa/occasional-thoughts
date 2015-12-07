@@ -7,14 +7,9 @@ var User = require('../models/User');
 var Occasion = require('../models/Occasion');
 var Thought = require('../models/Thought');
 
-/*
-  Require authentication on ALL access to /notes/*
-  Clients which are not logged in will receive a 403 error code.
-*/
 var requireLogin = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     res.redirect('/auth/facebook/occasions'+req.params[0]);
-    // utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     next(); 
   }
@@ -59,16 +54,6 @@ var requireParticipationPermission = function (req, res, next) {
   }
 };
 
-/*
-  Require ownership whenever accessing a particular note
-  This means that the client accessing the resource must be logged in
-  as the user that originally created the note. Clients who are not owners 
-  of this particular resource will receive a 404.
-
-  Why 404? We don't want to distinguish between notes that don't exist at all
-  and notes that exist but don't belong to the client. This way a malicious client
-  that is brute-forcing urls should not gain any information.
-*/
 var requireOccasionOwnership = function (req, res, next) {
   req.occasion.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
@@ -108,10 +93,6 @@ var requireThoughtOwnershipOrOccasionCreator = function (req, res, next) {
   });
 };
 
-/*
-  For create and edit requests, require that the request body
-  contains a 'content' field. Send error code 400 if not.
-*/
 var requireContent = function (req, res, next) {
   if (!req.body.title && !req.body.message) {
     utils.sendErrResponse(res, 400, 'Content required in request.');
@@ -119,11 +100,6 @@ var requireContent = function (req, res, next) {
     next();
   }
 };
-
-/*
-  Grab a note from the store whenever one is referenced with an ID in the
-  request path (any routes defined with :note as a paramter).
-*/
 
 router.param('occasionId', function (req, res, next, occasionId) {
   Occasion.populateOccasion(occasionId, req.session.passport.user.id, function (err, occasion) {
