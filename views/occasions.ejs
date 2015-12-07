@@ -8,7 +8,6 @@
     
     <!-- Importing dependencies -->
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
-    <script src="/javascripts/index.js"></script>
     <script src="/javascripts/occasions.js"></script>
     <link href="/stylesheets/occasions.css" rel="stylesheet" type="text/css">
     <link href="/bootstrap/css/bootstrap-social.css" rel="stylesheet" type="text/css">
@@ -46,14 +45,14 @@
     <% include partials/nav_occasions.ejs %>
 
     <!-- Intro Header -->
-    <header class="intro">
+    <div class="intro">
       <div class="intro-body">
         <!-- Container to hold icons for all occasions -->
         <div class="container">
           <% include partials/occasionListing.ejs %>
         </div>
       </div>
-    </header>
+    </div>
     
     <!-- Boostrap Theme JavaScript -->
     <% include partials/footer.ejs %>

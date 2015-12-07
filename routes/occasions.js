@@ -41,7 +41,7 @@ var requireParticipationPermission = function (req, res, next) {
   } else {
     if (req.occasion.isPublished()) {
       console.log('participant 404 - event published');
-      utils.sendErrResponse(res, 404, 'Resource not found.');
+      res.render('404');
     } else {
       if (req.occasion.participantIsPublic) {
         next();
@@ -101,7 +101,7 @@ var requireThoughtOwnershipOrOccasionCreator = function (req, res, next) {
           next();
         } else {
           console.log('thought own 404')
-          utils.sendErrResponse(res, 404, 'Resource not found.');
+          res.render('404');
         }
       });
     }
@@ -128,8 +128,7 @@ var requireContent = function (req, res, next) {
 router.param('occasionId', function (req, res, next, occasionId) {
   Occasion.populateOccasion(occasionId, req.session.passport.user.id, function (err, occasion) {
     if (err) {
-      console.log(err);
-      utils.sendErrResponseGivenError(res, err);
+      res.render('404');
     } else {
       req.occasion = occasion;
       next();
@@ -141,7 +140,7 @@ router.param('occasionId', function (req, res, next, occasionId) {
 router.param('thoughtId', function (req, res, next, thoughtId) {
   Thought.getThought(thoughtId, function (err, thought) {
     if (err) {
-      utils.sendErrResponseGivenError(res, err);
+      res.render('404');
     } else {
       var inOccasion = req.occasion.thoughts.filter(function (currentThought) {
         return currentThought._id.equals(thought._id);
@@ -150,7 +149,7 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
         req.thought = thought;
         next();
       } else {
-        utils.sendErrResponseGivenError(res, { code: 403, msg: "Thought does not belong to Occasion"});
+        res.render('404');
       }
     }
   });
@@ -206,7 +205,7 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
-  Occasion.createOccasion(req.body.title, 
+  Occasion.addOccasionEntry(req.body.title, 
                           req.body.description, 
                           req.body.coverPhoto, 
                           req.body.participants, 
@@ -245,7 +244,6 @@ router.post('/:occasionId', function (req, res) {
                         req.body.title, 
                         req.body.description, 
                         req.body.coverPhoto, 
-                        [],[],[],[],
                         function (err) {
                           if (err) {
                             utils.sendErrResponseGivenError(res, err);
@@ -277,10 +275,7 @@ router.delete('/:occasionId', function (req, res) {
 
 // add new thought
 router.post('/:occasionId/thoughts', function (req, res) {
-  console.log(req.body);
-  console.log('hello?');
-  // User.addParticipatedOccasionId()
-  Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
+  Thought.addThoughtEntry(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {

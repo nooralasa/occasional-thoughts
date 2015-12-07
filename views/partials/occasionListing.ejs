@@ -13,16 +13,13 @@
 <% include editOccasion.ejs %>
 
 <div class="row">
-  <div class="col-md-8 col-md-offset-2">
+  <div class="col-md-8 col-md-offset-2 createdOccasions">
     <p class="intro-text"><%=user.name%>'s Occasions</p>
-
-    <%if (user.createdOccasions.length>0){ %>
+    <% var numCreatedOccasions = user.createdOccasions.length;  %>
+    <% if (numCreatedOccasions>0){ %>
     <ul id="occasions">
-      <% var numOccasions = user.createdOccasions.length %>
-      <% for (var i=0; i< numOccasions; i++) { %>
-
+      <% for (var i=0; i< numCreatedOccasions; i++) { %>
       <a href="/occasions/<%=user.createdOccasions[i]._id%>">
-
         <li class="li_occasion" style = "position:relative" id="<%=user.createdOccasions[i]._id%>">
           <% if (!user.createdOccasions[i].coverPhoto){ %>
             <img src="http://lorempixum.com/100/100/nature/4" />
@@ -35,61 +32,56 @@
             <span class="ui-icon ui-icon-trash"></span>
           </div>
           <div class="edit-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-          
           <span class="ui-icon ui-icon-pencil"></span>
           </div>
-
         </li> 
       </a>
       <% } %>
     </ul>
     <% } %>
-  
   </div>
 
+  <% var numParticipatedOccasions = user.participatedOccasions.length;  %>
+  <% if (numParticipatedOccasions>0){ %>
+    <div class="col-md-8 col-md-offset-2 intermediateOccasions">
+      <p class="intro-text">Occations I Contributed to</p>
+      <ul id="occasions">
+        <% for (var i=0; i< numParticipatedOccasions; i++) { %>
+        <a href="/occasions/<%=user.participatedOccasions[i]._id%>">
+          <li class="li_occasion" style = "position:relative" id="<%=user.participatedOccasions[i]._id%>">
+            <% if (!user.participatedOccasions[i].coverPhoto){ %>
+              <img src="http://lorempixum.com/100/100/nature/4" />
+            <% } else { %>
+              <img src="<%=user.participatedOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
+            <% } %>
+            <h3><%=user.participatedOccasions[i].title%></h3>
+            <p align= "left" ><%=user.participatedOccasions[i].description%> </p>
+          </li> 
+        </a>
+        <% } %>
+      </ul>
+    </div>
+  <% } %>
 
-  <div class="col-md-8 col-md-offset-2">
-    <% var numOccasions = user.participatedOccasions.length%>
-    <% if (numOccasions != 0){ %>
-      <p class="intro-text">Occations I contributed to</p>
-    <% } %>
-    <ul>
-      <% for(var i=0; i< numOccasions; i++) { %>
-
-      <a href="/occasions/<%=user.participatedOccasions[i]._id%>">
-      
-        <li style = "position:relative" id="<%=user.participatedOccasions[i]._id%>">
-          <% if (!user.viewableOccasions[i].coverPhoto){ %>
-            <img src="http://lorempixum.com/100/100/nature/4" />
-          <% } else { %>
-            <img src="<%=user.viewableOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
-          <% } %>
-          <h3><%=user.participatedOccasions[i].title%></h3>
-          <p align= "left" ><%=user.participatedOccasions[i].description%> </p>
-        </li>
-      </a>
-      <% } %>
-    </ul>
-  </div>
-
-  <div class="col-md-8 col-md-offset-2">
-    <% var numOccasions = user.receivedOccasions.length%>
-    <% if (numOccasions != 0){ %>
-      <p class="intro-text">Collages I can view</p>
-    <% } %>
-    <ul>
-      <% for(var i=0; i< numOccasions; i++) { %>
-
-      <a href="/occasions/<%=user.receivedOccasions[i]._id%>">
-      
-        <li style = "position:relative" id="<%=user.receivedOccasions[i]._id%>">
-          <img src="http://lorempixum.com/100/100/nature/4"/>
-          <h3><%=user.receivedOccasions[i].title%></h3>
-          <p align= "left" ><%=user.receivedOccasions[i].description%> </p>
-        </li>
-      </a>
-      <% } %>
-    </ul>
-  </div>
-
+  <% var numReceivedOccasions = user.receivedOccasions.length; %>
+  <% if (numReceivedOccasions>0){ %>
+    <div class="col-md-8 col-md-offset-2 intermediateOccasions">
+      <p class="intro-text">Collages Sent to Me</p>
+      <ul id="occasions">
+        <% for (var i=0; i< numReceivedOccasions; i++) { %>
+        <a href="/occasions/<%=user.receivedOccasions[i]._id%>">
+          <li class="li_occasion" style = "position:relative" id="<%=user.receivedOccasions[i]._id%>">
+            <% if (!user.receivedOccasions[i].coverPhoto){ %>
+              <img src="http://lorempixum.com/100/100/nature/4" />
+            <% } else { %>
+              <img src="<%=user.receivedOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
+            <% } %>
+            <h3><%=user.receivedOccasions[i].title%></h3>
+            <p align= "left" ><%=user.receivedOccasions[i].description%> </p>
+          </li> 
+        </a>
+        <% } %>
+      </ul>
+    </div>
+  <% } %>
 </div>
