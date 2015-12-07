@@ -8,15 +8,12 @@ $(function () {
 
   $.get("/users/current", function (userData) {
     if (!userData.success) {
-      console.log('failed in getting user data');
       alert('failed in getting user data');
     } else {
       currentUser = userData.content.user;
-      console.log(currentUser);
       $.get("https://graph.facebook.com/v2.5/me/friends", 
             { access_token: currentUser.token }, 
             function (fbFriends, status){
-            	console.log(fbFriends.data);
             	friendData = fbFriends.data;
               var friendNames = fbFriends.data.map(function (friend) {
                 return friend.name;
@@ -39,12 +36,10 @@ $(function () {
       e.preventDefault();
       var input = $('#participantShare').val();
 
-      console.log(friendData);
       var result = $.grep(friendData, function (obj){ 
       	return obj.name === input; 
       });
 
-      console.log(result);
       if (result.length === 1) {
       	participantsList.push(result[0].id);
         $('#participants').append("<div><label>"+result[0].name+"</label></div>");
@@ -74,49 +69,11 @@ $(function () {
     }
   });
 
-  // $('#angus-notif').click(function (evt) {
-  //   console.log("submit post request for specific friends");
-  //   $.post('/occasions', {
-  //     title: $('input[name=title]').val(),
-  //     description: $('input[name=description]').val(),
-  //     coverPhoto: $('input[name=coverPhoto]').val(),
-  //     participants: addedFriends
-  //   }).done(function () {
-  //     console.log('done');
-  //     $.get("/users/current",function (data) {
-  //       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-  //       console.log(occasionId);
-  //       $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
-  //     });
-
-  //     //window.location.replace('/occasions');
-  //   }).fail(function () {
-  //     alert('failed');
-  //   });
-
-
-  //   // console.log('here');    
-  //   // $.post("https://graph.facebook.com/v2.5/"+currentUser.fbid+"/notifications", 
-  //   //         { access_token: currentUser.token, template: "hi", href: "http://localhost:3000" }, 
-  //   //         function (data, status){
-  //   //           console.log(data);
-  //   //           console.log(status);
-  //   //         }
-  //   // );
-  // });
-
   $('#finish').click(function (evt) {
-    console.log("finish button pressed");
     var partCheckedButton = $('input[name=toggler]:checked').val();
     var recCheckedButton = $('input[name=Rtoggler]:checked').val();
 
-    console.log('partCheckedButton: ',partCheckedButton);
-    console.log('recCheckedButton: ',recCheckedButton);
-
-    console.log('part: ', participantsList);
-
     var datetime = Date.parse($('#pubDate').val() + ' ' + $('#pubTime').val());
-    console.log(recipientsList);
     //create the occasion
     $.post('/occasions', {
       title: $('input[name=title]').val(),
@@ -128,16 +85,12 @@ $(function () {
       participantIsPublic: partCheckedButton==1,
       recipientIsPublic: recCheckedButton==1
     }).done(function () {
-      console.log('done');
-      console.log("I'm here here here here");
       $.get("/users/current",function (data) {
         var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-        console.log(occasionId);
         //ToDo: edit to specific occasion
         $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       }); 
     }).fail(function () {
-      console.log("It failed miserably");
       alert('failed yo');
     });
 
@@ -156,11 +109,10 @@ $(function () {
   });
 
   $('#fb-share').click(function (evt) {
-    console.log('fb-share pressed');
     $.get("/users/current",function (data) {
       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
-      console.log(occasionId);
 
+      console.log('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       window.location.replace('http://www.facebook.com/dialog/send?'
         +'app_id=929113373843865'
         +'&link=http://occasionalthoughts.herokuapp.com/occasions/'+occasionId
@@ -169,14 +121,11 @@ $(function () {
   });
 
   $('form').submit(function (evt) {
-    console.log("submit button pressed");
     window.location.replace('/occasions');
   });
 
   $(document).on('click', '#upload', function(evt) {
-    console.log("upload button clicked")
       var url = $('#url').val();
-      console.log(url)
       $('#previewImg').attr('src', url);
   });
 

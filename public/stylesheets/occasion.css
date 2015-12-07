@@ -4,17 +4,13 @@
   border: transparent;
 }
 
-* {margin: 0; padding: 0;}
-body{
-}
-
-div {
-
-}
-
-ul {
+#thought-list {
   list-style-type: none;
-  /*width: 650px;*/
+  padding: 0;
+}
+
+#thought {
+  list-style-type: none;
 }
 
 .edit-thought{
@@ -60,7 +56,7 @@ h3 {
   margin-bottom: 0;
 }
 
-li {
+.li_occasion {
   padding: 0px;
   overflow: auto;
 }
