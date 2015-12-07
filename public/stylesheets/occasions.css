@@ -43,16 +43,13 @@ span.ui-icon {
   font: bold 20px/1.5 Helvetica, Verdana, sans-serif;
 }
 
-.page-scroll{
-  height:20px;
-}
 
 #sign{
   height:20px;
 }
 
 #occasions{
-  background: -webkit-linear-gradient(left,  #737373, silver);
+  background-color: #ddd;
   padding: 10px;
   list-style-type: none;
   width: 600px;
