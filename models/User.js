@@ -158,10 +158,13 @@ userSchema.statics.findAllOccasions = function (userId, callback) {
       if (err) {
         callback(err);
       } else {
+        user.participatedOccasions = user.participatedOccasions.filter(function (occ) {
+          return !occ.isPublished();
+        });
+        user.receivedOccasions = user.receivedOccasions.filter(function (occ) {
+          return occ.isPublished();
+        });
         callback(null, user)
-        /*angus*/
-        // render ejs
-        // utils.sendSuccessResponse(res, { user: user });
       }
     }
   );
