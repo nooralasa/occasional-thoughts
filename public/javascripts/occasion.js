@@ -59,6 +59,13 @@ $(document).on('click', '#upload', function(evt) {
     $("#preview").show(50);
 });
 
+$(document).on('click', '#editPreviewBtn', function(evt) {
+  console.log("upload button clicked")
+    var url = $('#editUrl').val();
+    $('#editPreviewImg').attr('src', url);
+    $("#editPreview").show(50);
+});
+
 
 $(document).on('click', '.edit-thought', function(evt) {
   evt.preventDefault();
@@ -66,10 +73,15 @@ $(document).on('click', '.edit-thought', function(evt) {
   var occasion_id = $("input[name=occasionId]").val();
   console.log(occasion_id);
   var thought_id = $(this).parent().parent().attr('id');
+  if ($('#photo_'+thought_id).attr('src')!= undefined){
+    var lastUrl = $('#photo_'+thought_id).attr('src');  
+  } else lastUrl = "";
+  
   var modal = document.getElementById('editThoughtModal');
 
   $('#editThoughtModal').modal('show')
   document.getElementById("edited-thought").value =  $('#message_'+thought_id).text();
+  document.getElementById("editUrl").value = lastUrl;
   $('input[name="edit-thought-id"]').val(thought_id);
   $('input[name="occasion-id"]').val(occasion_id);
 });
@@ -79,15 +91,17 @@ $(document).on('click', '#done-edit-thought', function(evt){
   var thought_id = $('input[name="edit-thought-id"]').val();
   var occasion_id = $('input[name="occasion-id"]').val();
   var editedMessage = document.getElementById("edited-thought").value;
+  var editedThoughtPhoto = document.getElementById("editUrl").value;
 
   $.post("/occasions/"+ occasion_id+"/thoughts/" +thought_id, 
     {message: editedMessage, 
-    photo: "",
+    photo: editedThoughtPhoto,
     isPublic: true}
   ).done(function(response) {
     $('#editThoughtModal').modal('hide');
     $('#message_'+thought_id).text(editedMessage);
-    //something for the photo
+    $('#photo_'+thought_id).attr('src', editedThoughtPhoto);
+
   }).fail(function(responseObject){
     var response = $.parseJSON(responseObject.responseText);
     $('.error').text(response.err);

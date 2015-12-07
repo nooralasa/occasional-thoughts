@@ -19,7 +19,7 @@
       <a href="/occasions/<%=user.createdOccasions[i]._id%>">
 
         <li class="li_occasion" style = "position:relative" id="<%=user.createdOccasions[i]._id%>">
-          <% if (user.createdOccasions[i].coverPhoto == ""){ %>
+          <% if (!user.createdOccasions[i].coverPhoto){ %>
             <img src="http://lorempixum.com/100/100/nature/4" />
           <% } else { %>
             <img src="<%=user.createdOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
