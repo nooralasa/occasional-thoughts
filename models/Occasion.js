@@ -88,7 +88,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                     } else {
                       //then add that occasion to each recipient's received list
                       recipientFriends.forEach(function (friend) {
-                        friend.addParticipatedOccasionId(occasion._id, function (error5) {
+                        friend.addReceivedOccasionId(occasion._id, function (error5) {
                           if (error5) {
                             console.log(error5);
                           }
