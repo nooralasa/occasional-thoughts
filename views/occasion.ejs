@@ -19,12 +19,29 @@
   <!-- Intro Header -->
   <header class="intro"> 
     <div class="intro-body">
-      <div class = "coverContainer">
-        <%if (occasion.coverPhoto) {%>
-          <img src= <%= occasion.coverPhoto%>>
-        <% } else { %>
-          <img src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >
-        <%}%>
+
+
+      
+
+      <div  class="container">
+        <div class="row">
+
+          <div class = "coverPhoto panel panel-default">
+            <div class = "panel-body">
+              <div class="col-xs-12">
+                <p class=""><%=occasion.title%></p>
+              </div>
+              <div class="col-xs-12">
+                <%if (occasion.coverPhoto) {%>
+                  <img class = "coverPicture" src= <%= occasion.coverPhoto%>>
+                <% } else { %>
+                  <img class = "coverPicture" src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >
+                <%}%>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       <div  class="container">

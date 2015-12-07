@@ -142,3 +142,12 @@ h3 {
   position:relative;
 }
 
+.coverPhoto{
+  margin-top:6%;
+  color: black;
+}
+
+.coverPicture{
+  width:90%;
+  height:300px;
+}
