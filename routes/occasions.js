@@ -275,14 +275,7 @@ router.delete('/:occasionId', function (req, res) {
 
 // add new thought
 router.post('/:occasionId/thoughts', function (req, res) {
-<<<<<<< HEAD
-  console.log(req.body);
-  console.log('hello?');
-  // User.addParticipatedOccasionId()
   Thought.addThoughtEntry(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
-=======
-  Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
->>>>>>> 27028157506f025bad82db12a55c058e0d7b7f03
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {
