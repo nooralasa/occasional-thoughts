@@ -1,10 +1,25 @@
 // @author: Noor
+//This helper function sends emails by using mandril
 var email = (function () {
+  //requiring the mandrill client to be used for sending emails.
   var mandrill = require('mandrill-api/mandrill');
   var mandrill_client = new mandrill.Mandrill('JNFGVolztHUoggyWoUO31Q');
 
+  //the email obj to be exported
   var _email = {};
 
+  /**
+   * sends an email by using mandrill
+   *
+   * @constructor
+   * @param {String} fromName the name of the user sending the email
+   * @param {String} fromAddress the email of the user sending the email
+   * @param {String} toAddresses a list of emails that we need to email
+   * @param {String} innerText the body of the message
+   * @param {String} subject the subject of the email to be sent 
+   * @param {function} callback a function to be called at the end of the query
+   *
+   */
   var sendEmail = function (fromName, fromAddress, toAddresses, innerText, subject, callback) {
     var message = {
       html: innerText,
