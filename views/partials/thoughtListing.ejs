@@ -72,18 +72,17 @@
               <p class="thoughtMessage" id="message_<%=occasion.thoughts[i]._id%>" align= "left" > <%=occasion.thoughts[i].message%></p>
             </div>
             <div class="thoughtPhotoDiv col-xs-12">
-              <% if(occasion.thoughts[i].photo){ %>
-                <img class="thoughtPhoto" id="photo_<%=occasion.thoughts[i]._id%>" src="<%=occasion.thoughts[i].photo%>">
-             <% }%>
+              <% if (occasion.thoughts[i].photo){ %>
+                <img class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
+              <% }%>
             </div>
-
-            <% if (user.name == occasion.thoughts[i].creator.name || user.name == occasion.creator.name ) { %>
+            <% if (occasion.thoughts[i].creator._id.equals(user.id) || occasion.creator.equals(user.id)) { %>
               <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
                 <span class="ui-icon ui-icon-trash"></span>
               </div>
             <% } %>
 
-            <% if (user.name == occasion.thoughts[i].creator.name ) { %>
+            <% if (occasion.thoughts[i].creator._id.equals(user.id)) { %>
               <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
                 <span class="ui-icon ui-icon-pencil"></span>
               </div>
