@@ -74,6 +74,7 @@ h3 {
   padding: 0px;
   overflow: auto;
   margin: 10px;
+  position: relative;
 }
 
 .li_occasion{

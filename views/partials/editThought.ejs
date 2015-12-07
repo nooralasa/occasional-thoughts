@@ -3,79 +3,68 @@
 <!-- Creates model for Editing a Thought-->
 <!-- @author: Usman--> 
 
- <!-- Register Modal -->
+ <!-- Edit Thought Modal -->
 
-            <div id="editThoughtModal" class="modal fade" role="dialog">
-              <div class="modal-dialog">
+<div id="editThoughtModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
 
-              <!-- Modal content-->
-              <div class="modal-content" style="padding:20px">
-                
+  <!-- Modal content-->
+    <div class="modal-content" style="padding:20px">
+         <form role="form" action="" method="post" class="registration-form">
 
-                 <form role="form" action="" method="post" class="registration-form">
-                            
-                            <fieldset>
-                              <div class="form-top">
-                                <div class="form-top-left">
-                                  <h3>Edit Your Thought</h3>
-                                </div>
-                                <div class="form-top-right">
-                                  <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
-                                </div>
-                                </div>
-                                <div class="form-bottom">
+                <fieldset>
+                  <div class="form-top">
+                    <div class="form-top-left">
+                      <h3>Edit Your Thought</h3>
+                    </div>
+                    <div class="form-top-right">
+                      <img id = "logo" src="/img/OccasionalThoughts_logo_blue.png"class="img-responsive" alt="">
+                    </div>
+                    </div>
+                    <div class="form-bottom">
 
+                      <!-- Edit Thought Message-->
+                      <div class="form-group">
+                        <div class="input-group">
+                          <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                          </span>
+                          <textarea id="edited-thought" cols="50" rows="10" class="form-first-name form-control" id="form-first-name"></textarea>
+                        </div>
+                      </div>
+                    </div>
 
+                    <div>
+                    <!--Hidden input elements carry thought and occasion ids-->
+                      <input type="hidden" name="edit-thought-id">
+                      <input type="hidden" name="occasion-id">
+                    </div>
 
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-pencil"></span>
-                                    </span>
-                                    <textarea id="edited-thought" cols="50" rows="10" class="form-first-name form-control" id="form-first-name"></textarea>
-                                  </div>
-                                </div>
+                     <!--Preview image url --> 
+                    <div id = "editPreview"style="display:none; width: 100%; height: 200px; border: 3px solid #DDDDDD; margin-bottom:15px">
+                      <img id = "editPreviewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" style = "max-width:100%; max-height:100%; margin-left:auto; margin-right:auto" class="img-responsive" alt="">
+                    </div>
 
+                    <div class="form-group">
+                      <div class="input-group">
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-picture"></span>
+                        </span>
 
-                                </div>
-
-                                <div>
-                                  <input type="hidden" name="edit-thought-id">
-                                  <input type="hidden" name="occasion-id">
-                                </div>
-
-                                <div id = "editPreview"style="display:none; width: 100%; height: 200px; border: 3px solid #DDDDDD; margin-bottom:15px">
-                                  <img id = "editPreviewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" style = "max-width:100%; max-height:100%; margin-left:auto; margin-right:auto" class="img-responsive" alt="">
-                                </div>
-
-                                <div class="form-group">
-                                  <div class="input-group">
-                                    <span class="input-group-addon">
-                                      <span class="glyphicon glyphicon-picture"></span>
-                                    </span>
-
-                                    <input name="coverPhoto" class="form-first-name form-control" id="editUrl">
-                                    <span class="input-group-btn">
-                                      <a id="editPreviewBtn" class="btn btn-primary">Preview</a>
-                                    </span>
-                                  </div>
-                                </div>
-
-                                
-
-                            </div>
-                            <a id="done-edit-thought" class="btn btn-primary" style = "position:relative; margin:8px;">Done!</a>
-                          </fieldset>
-                          
+                        <!-- Upload image url -->
+                        <input name="coverPhoto" class="form-first-name form-control" id="editUrl">
+                        <span class="input-group-btn">
+                          <a id="editPreviewBtn" class="btn btn-primary">Preview</a>
+                        </span>
+                      </div>
+                    </div>
+                </div>
+                <a id="done-edit-thought" class="btn btn-primary" style = "position:relative; margin:8px;">Done!</a>
+              </fieldset>
+            </form>
 
 
-                          
-                          
-                        
-                        </form>
+    </div>
 
-
-              </div>
-
-              </div>
-              </div>
+  </div>
+  </div>
