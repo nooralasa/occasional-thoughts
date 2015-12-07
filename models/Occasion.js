@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var User = require('./User');
 var email_client = require('../utils/email_client');
 var schedule = require('node-schedule');
-var baselink = 'http://localhost:3000';
+var baselink = 'http://occasionalthoughts.herokuapp.com';
 
 var occasionSchema = mongoose.Schema({
   title: String,
