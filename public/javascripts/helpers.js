@@ -1,4 +1,4 @@
-// Packaged helper methods.
+// Packaged helper methods. (Taken from Fritter Sample Code)
 //
 // Here, just one which takes the content of an HTML 
 // form (passed in as an argument) and converts the 

@@ -1,4 +1,9 @@
-// Wrap in an immediately invoked function expression.
+/**
+  Includes backend functionality of all buttons in the myOccasion page.
+  Specifically covers the request to the backend pertaining the editing 
+  and deletion of created occasions.
+**/
+
 (function() {
   $(document).on('submit', '#myOccasionsBtn', function(evt) {
     evt.preventDefault();
