@@ -83,11 +83,27 @@ var requireOccasionOwnership = function (req, res, next) {
 var requireThoughtOwnership = function (req, res, next) {
   req.thought.isCreator(req.session.passport.user.id, function (err, isCreator) {
     if (isCreator) {
-      console.log('is thought creator');
       next();
     } else {
       console.log('thought own 404')
       res.render('404');
+    }
+  });
+};
+
+var requireThoughtOwnershipOrOccasionCreator = function (req, res, next) {
+  req.occasion.isCreator(req.session.passport.user.id, function (er, isOccCreator) {
+    if (isOccCreator) {
+      next();
+    } else {
+      req.thought.isCreator(req.session.passport.user.id, function (err, isCreator) {
+        if (isCreator) {
+          next();
+        } else {
+          console.log('thought own 404')
+          utils.sendErrResponse(res, 404, 'Resource not found.');
+        }
+      });
     }
   });
 };
@@ -144,7 +160,7 @@ router.param('thoughtId', function (req, res, next, thoughtId) {
 router.all('*', requireLogin);
 
 router.post('/:occasionId/thoughts/:thoughtId', requireThoughtOwnership);
-router.delete('/:occasionId/thoughts/:thoughtId', requireThoughtOwnership);
+router.delete('/:occasionId/thoughts/:thoughtId', requireThoughtOwnershipOrOccasionCreator);
 
 router.post('/:occasionId/thoughts', requireParticipationPermission);
 
