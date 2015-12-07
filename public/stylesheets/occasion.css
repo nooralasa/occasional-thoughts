@@ -4,7 +4,12 @@
   border: transparent;
 }
 
-.occasions {
+#thought-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#thought {
   list-style-type: none;
 }
 
