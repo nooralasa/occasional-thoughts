@@ -1,17 +1,18 @@
 <!DOCTYPE html>
+<!-- Displays the home page, including information about the app and a way to login with facebook -->
 <html lang="en">
-
 <head>
 
+  <!--Including common dependencies -->
   <% include partials/header.ejs %> 
 
   <link href="/stylesheets/index.css" rel="stylesheet" type="text/css">
   <script src="/javascripts/index.js"></script>
-
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
 
+<!-- Including navigation bar that is displayed on top of the page-->
  <% include partials/nav_index.ejs %>
 
   <!-- Intro Header -->
@@ -20,21 +21,23 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 col-md-offset-2">
-            <!-- <h1 class="brand-heading">Occasional Thoughts</h1> -->
+            <!--App Logo -->
             <img src="img/OccasionalThoughts.png"class="img-responsive" alt="">
             <p class="intro-text">Celebrate with your friends!</p>
+            <!--Login button-->
             <a id="login" class="btn btn-primary btn-xl" href="/auth/facebook">Log in with Facebook</a>
-
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </header>
 
+  <!--About the app-->
   <% include partials/about.ejs %>
+  <!--Contact-->
   <% include partials/contact.ejs %>
+  <!--Boostrap Theme Javascript -->
  <% include partials/footer.ejs %>
 
 </body>

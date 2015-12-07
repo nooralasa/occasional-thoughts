@@ -1,24 +1,29 @@
 <!DOCTYPE html>
+<!-- Displays thoughts by participants in a single occasion. Depending on whether or not it is published the page will or will not contain a text box for a participant to enter their thoughts in -->
+
 <html lang="en">
 
 <head>
-
+  <!--Including common dependencies -->
   <% include partials/header.ejs %> 
 
+  <!--CSS-->
   <link href="/stylesheets/occasion.css" rel="stylesheet" type="text/css">
-
+  
+  <!-- Javascript files containing methods -->
   <script src="/javascripts/index.js"></script>
   <script src="/javascripts/occasion.js"></script>
 
 </head>
 
 <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-
+  <!-- Including navigation bar at the top of the page -->
   <% include partials/nav_occasions.ejs %>
   
   <!-- Intro Header -->
   <header class="intro"> 
     <div class="intro-body">
+      <!-- Inserting placeholder cover photo in the page if one is not provided by the creator of occasion-->
       <div class = "coverContainer">
         <%if (occasion.coverPhoto) {%>
           <img src= <%= occasion.coverPhoto%>>
@@ -29,7 +34,7 @@
 
       <div  class="container">
         <div class="row">
-
+          <!--Inserting thought elements -->
           <% include partials/thoughtListing.ejs %> 
 
         </div>
@@ -37,7 +42,7 @@
     </div>
   </header>
   
-  <!-- Custom Theme JavaScript -->
+  <!-- Bootstrap Theme JavaScript -->
   <script src="/bootstrap/js/grayscale.js"></script>
   <% include partials/footer.ejs %>
 

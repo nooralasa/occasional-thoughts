@@ -1,17 +1,18 @@
 <!-- Adds thought list items on an occasion page -->
 <!-- @author: Suniyya --> 
-<!-- To DO change repeated ids to classes --> 
 
+<!--CSS -->
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.theme.css" type="text/css" />
 <link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.base.css" type="text/css" />
+
+<!--Modal to enable editing of a thought -->
 <% include editThought.ejs %>
 <div class="col-md-8 col-md-offset-2">
   <p class="intro-text"><%=occasion.title%></p>
 
+  <!-- Adds textbox for adding thoughts if occasion is not yet published -->
   <%if (!occasion.isPublished()) { %>
       <div class="panel panel-default add-box">
-      <!-- <div class="panel panel-default"> -->
-        <!-- <div class="panel-body"> -->
         <div class="panel-body">
           <p>Share a thought!</p>        
           <form class="registration-form" role="form" >
@@ -20,16 +21,13 @@
               <span class="input-group-addon"><span class="glyphicon glyphicon-envelope"></span>
               </span>
               <textarea id="thought-message" name = "message" placeholder="Add a message" cols="50" rows="5" class="form-first-name form-control"></textarea>
-
-
-              <!--<input id = "thought-message" name = "message" type="text" class="form-control" style="height: 200px" placeholder="Add a thought" />-->
-              
+              <!--Hidden input elements to hold occasion and user details -->          
               <input name="occasionId" value="<%=occasion._id%>" type="hidden">
               <input name="userName" value="<%=user.name%>" type="hidden">
               <input name="profilePicture" value="<%=user.profilePicture%>" type="hidden">
             </div>
           </div>
-
+          <!--Enables preview of image urls -->
           <div id = "preview">
             <img id = "previewImg" src="http://simpleicon.com/wp-content/uploads/camera.png" class="img-responsive" alt="">
           </div>
@@ -39,7 +37,7 @@
               <span class="input-group-addon">
                 <span class="glyphicon glyphicon-picture"></span>
               </span>
-
+              <!-- Textbox to hold image url -->
               <input name="thoughtPicture" placeholder="Add a picture (url)" class="form-first-name form-control" id="url">
               <span class="input-group-btn">
                 <a id="upload" class="btn btn-primary">Preview</a>
@@ -47,6 +45,7 @@
             </div>
           </div>
 
+          <!--Submit thought -->
           <button id = "add-thought" type = "submit" class="btn btn-sm btn-primary btn-block" value = "Submit">SUBMIT</button>
         </form>
         </div>
@@ -56,26 +55,35 @@
 
   <% } %>
 
+  <!-- Displayed thoughts -->
   <div id= "thoughts">
     <ul id = "thought-list">
 
       <% var numThoughts = occasion.thoughts.length%>
+
       <% for (var i=0; i<numThoughts; i++) { %>
+
       <li class ="thought">
         <div id ="<%=occasion.thoughts[i]._id%>" class = "thought-box panel panel-default">
           <div class ="panel-body">
             <div class="col-xs-12">
+
+              <!--Participant profile picture -->
               <img class="thoughtProfilePicture" src="<%=occasion.thoughts[i].creator.profilePicture%>">
               <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
             </div>
             <div class="col-xs-12">
+              <!-- Participant Message -->
               <p class="thoughtMessage" id="message_<%=occasion.thoughts[i]._id%>" align= "left" > <%=occasion.thoughts[i].message%></p>
             </div>
+            <!-- Picture associated with thought -->
             <div class="thoughtPhotoDiv col-xs-12">
               <% if (occasion.thoughts[i].photo){ %>
                 <img class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
               <% }%>
             </div>
+            <!--Selectively displayes delete and edit icons next to each thought -->
+            
             <% if (occasion.thoughts[i].creator._id.equals(user.id) || occasion.creator.equals(user.id)) { %>
               <div  class="delete-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
                 <span class="ui-icon ui-icon-trash"></span>
@@ -86,11 +94,14 @@
               <div class="edit-thought ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
                 <span class="ui-icon ui-icon-pencil"></span>
               </div>
+           
             <% } %>
           </div>
         </div>
       </li>
+
       <% } %>
+
     </ul>
   </div>
 </div>
