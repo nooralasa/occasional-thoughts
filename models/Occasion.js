@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var User = require('./User');
 var email_client = require('../utils/email_client');
 var schedule = require('node-schedule');
-var baselink = 'http://localhost:3000';
+var baselink = 'http://occasionalthoughts.herokuapp.com';
 
 var occasionSchema = mongoose.Schema({
   title: String,
@@ -88,7 +88,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                     } else {
                       //then add that occasion to each recipient's received list
                       recipientFriends.forEach(function (friend) {
-                        friend.addParticipatedOccasionId(occasion._id, function (error5) {
+                        friend.addReceivedOccasionId(occasion._id, function (error5) {
                           if (error5) {
                             console.log(error5);
                           }
