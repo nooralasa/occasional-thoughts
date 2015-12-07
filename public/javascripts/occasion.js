@@ -1,4 +1,8 @@
-
+/**
+  Includes backend functionality of all buttons in the occasion page
+  Specifically covers the request to the backend pertaining the editing 
+  and deletion of thoughts. 
+**/
 
 $(window).load(function(){
   $('.coverContainer').find('img').each(function(){
