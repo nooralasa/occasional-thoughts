@@ -112,6 +112,7 @@ $(function () {
     $.get("/users/current",function (data) {
       var occasionId = data.content.user.createdOccasions[data.content.user.createdOccasions.length-1];
 
+      console.log('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       window.location.replace('http://www.facebook.com/dialog/send?'
         +'app_id=929113373843865'
         +'&link=http://occasionalthoughts.herokuapp.com/occasions/'+occasionId
