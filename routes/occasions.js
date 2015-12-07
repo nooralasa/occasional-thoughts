@@ -40,14 +40,23 @@ var requireParticipationPermission = function (req, res, next) {
   if (!req.session.passport || !req.session.passport.user) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
-    req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
-      if (canView) {
+    if (req.occasion.isPublished()) {
+      console.log('participant 404 - event published');
+      utils.sendErrResponse(res, 404, 'Resource not found.');
+    } else {
+      if (req.occasion.participantIsPublic) {
         next();
       } else {
-        console.log('participant 404');
-        utils.sendErrResponse(res, 404, 'Resource not found.');
+        req.occasion.isParticipantOrCreator(req.session.passport.user.id, function (err, canView) {
+          if (canView) {
+            next();
+          } else {
+            console.log('participant 404');
+            utils.sendErrResponse(res, 404, 'Resource not found.');
+          }
+        });
       }
-    });
+    }
   }
 };
 
@@ -253,6 +262,9 @@ router.delete('/:occasionId', function (req, res) {
 
 // add new thought
 router.post('/:occasionId/thoughts', function (req, res) {
+  console.log(req.body);
+  console.log('hello?');
+  // User.addParticipatedOccasionId()
   Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
