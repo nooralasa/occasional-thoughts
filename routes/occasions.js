@@ -206,7 +206,7 @@ router.get('/', function (req, res) {
     - err: on failure, an error message
 */
 router.post('/', function (req, res) {
-  Occasion.createOccasion(req.body.title, 
+  Occasion.addOccasionEntry(req.body.title, 
                           req.body.description, 
                           req.body.coverPhoto, 
                           req.body.participants, 
@@ -245,7 +245,6 @@ router.post('/:occasionId', function (req, res) {
                         req.body.title, 
                         req.body.description, 
                         req.body.coverPhoto, 
-                        [],[],[],[],
                         function (err) {
                           if (err) {
                             utils.sendErrResponseGivenError(res, err);
@@ -280,7 +279,7 @@ router.post('/:occasionId/thoughts', function (req, res) {
   console.log(req.body);
   console.log('hello?');
   // User.addParticipatedOccasionId()
-  Thought.createThought(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
+  Thought.addThoughtEntry(req.body.message, req.body.photo, req.body.isPublic, req.occasion._id, req.session.passport.user.id, function (err) {
     if (err) {
       utils.sendErrResponseGivenError(res, err);
     } else {

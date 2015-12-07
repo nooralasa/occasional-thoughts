@@ -1,23 +1,45 @@
 var mongoose = require("mongoose");
 var User = require('./User');
+
+//The following three variables are used for scheduling emails
 var email_client = require('../utils/email_client');
 var schedule = require('node-schedule');
 var baselink = 'http://occasionalthoughts.herokuapp.com';
 
+//This is how an occasion is represented in our database. 
 var occasionSchema = mongoose.Schema({
-  title: String,
-  description: String, 
-  coverPhoto: String, //not sure what this is for now
+  title: String, //the title of the occasion
+  description: String, //the description of the event
+  coverPhoto: String,  //the cover photo passed in as a url
+  // The creator, participants and recipients of an occasion are invariant.
+  // They don't change after an occasion is created
   creator: {type: mongoose.Schema.Types.ObjectId, ref: 'User'}, 
   participants: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
   recipients: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}], 
+  //These two booleans allow the implementation of public links
   participantIsPublic: Boolean,
   recipientIsPublic: Boolean,
+  //Thoughts are populated by participants and the creator only
   thoughts: [{type: mongoose.Schema.Types.ObjectId, ref: 'Thought'}],
+  //The occasion will be automatically published at the publishTime 
   publishTime: {type: Date},
   createTime: {type: Date, default: Date.now} //auto timestamp
 });
 
+/**
+ * creates the occasion within the schema
+ *
+ * @constructor
+ * @param {String} occasionTitle the title of the occasion 
+ * @param {String} occasionDescription the description of the occasion
+ * @param {String} occasionCoverPhoto the url to the cover photo of the occasion
+ * @param {String} userId the id of the (current) user who created the occasion
+ * @param {String} pubTime the UTC datetime that the occasion was created at
+ * @param {Boolean} participantIsPublic an indicator suggesting that the occasion is public before publishing
+ * @param {Boolean} recipientIsPublic an indicator suggesting that the occasion is public after publishing
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, userId, pubTime, participantIsPublic, recipientIsPublic, callback) {
   this.create(
     {
@@ -35,17 +57,29 @@ occasionSchema.statics.addOccasion = function (occasionTitle, occasionDescriptio
       if (err) {
         callback(err);
       } else {
-        console.log(occasion);
         callback(null, occasion);
       }
     }
   );
 }
 
-occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, recipients, participantIsPublic, recipientIsPublic, userId, pubTime, callback) {
+/**
+ * adds the occasion to the database and handels all the necessary steps to successfully setup the occasion entry
+ *
+ * @param {String} occasionTitle the title of the occasion 
+ * @param {String} occasionDescription the description of the occasion
+ * @param {String} occasionCoverPhoto the url to the cover photo of the occasion
+ * @param {Array} participants list of String userIds of the participants of this occasion
+ * @param {Array} recipients list of String userIds of the recipients of this occasion
+ * @param {Boolean} participantIsPublic an indicator suggesting that the occasion is public before publishing
+ * @param {Boolean} recipientIsPublic an indicator suggesting that the occasion is public after publishing
+ * @param {String} userId the id of the (current) user who created the occasion
+ * @param {String} pubTime the UTC datetime that the occasion was created at
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
+occasionSchema.statics.addOccasionEntry = function (occasionTitle, occasionDescription, occasionCoverPhoto, participants, recipients, participantIsPublic, recipientIsPublic, userId, pubTime, callback) {
   var self = this;
-
-  console.log("Recipients are: "+recipients);
 
   // check if user id is valid
   User.findById(userId, function (err, user) {
@@ -54,7 +88,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
     } else if (!user) {
       callback({code: 404, msg: 'Invalid user'});
     } else {
-      // then create event
+      // then create occasion
       self.addOccasion(occasionTitle, occasionDescription, occasionCoverPhoto, user._id, pubTime, participantIsPublic, recipientIsPublic, function (er, occasion) {
         if (er) {
           callback(er);
@@ -117,10 +151,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                 } else {
                                   // then schedule to send email at pubDate
                                   var newDate = new Date(pubTime);
-                                  console.log("pubTime: ",pubTime);
-                                  console.log(typeof newDate);
                                   schedule.scheduleJob(newDate, function () {
-                                    console.log("in scheduled job");
                                     self
                                       .findById(occasion._id)
                                       .populate('recipients')
@@ -133,8 +164,6 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                                           });
                                           email_client.sendPublishEmails(user.name, user.email, baselink+"/occasions/"+occasion._id, [user.email].concat(recipientEmails), function (err2, result) {
                                             console.log('email sent');
-                                            console.log(err2);
-                                            console.log(result);
                                           });
                                         }
                                       }
@@ -149,7 +178,7 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
                         }
                       });
                     }
-                  }); // End of User.Find          
+                  });       
                 }
               });
             }
@@ -160,6 +189,14 @@ occasionSchema.statics.createOccasion = function (occasionTitle, occasionDescrip
   });
 }
 
+/**
+ * returns all the thoughts that the current user can view
+ *
+ * @param {String} occasionId the id of the occasion in concern
+ * @param {String} userId the id of the user viewing the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.statics.populateOccasion = function (occasionId, userId, callback) {
   this
     .findById(occasionId)
@@ -174,7 +211,6 @@ occasionSchema.statics.populateOccasion = function (occasionId, userId, callback
       } else if (occasion) {
         // filter only when not published, not public, and is participant
         if (!occasion.isPublished() && !occasion.participantIsPublic && !occasion.creator.equals(userId)) {
-          console.log('filtering thoughts');
           occasion.thoughts = occasion.thoughts.filter(function (thought) {
             return thought.creator.equals(userId);
           });
@@ -188,6 +224,13 @@ occasionSchema.statics.populateOccasion = function (occasionId, userId, callback
   );
 }
 
+/**
+ * returns the relevant occasion by querying its id
+ *
+ * @param {String} occasionId the id of the occasion in concern
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.statics.getOccasion = function (occasionId, callback) {
   this.findOne({ '_id': occasionId }, function (err, occasion) {
     if (err) {
@@ -198,6 +241,13 @@ occasionSchema.statics.getOccasion = function (occasionId, callback) {
   });
 }
 
+/**
+ * soft delete of the identified occasion
+ *
+ * @param {String} occasionId the id of the occasion in concern
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.statics.removeOccasion = function (occasionId, callback) {
   var self = this;
   self.getOccasion(occasionId, function (err, occasion) {
@@ -210,20 +260,23 @@ occasionSchema.statics.removeOccasion = function (occasionId, callback) {
         } else {
           // soft delete 
           callback(null);
-          // self.remove({ '_id': occasionId }, function (e) {
-          //   if (e) {
-          //     callback(e);
-          //   } else {
-          //     callback(null);
-          //   }
-          // });
         }
       })
     }
   });
 }
 
-occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occasionDescription, occasionCoverPhoto, removeParticipants, newParticipants, removeRecipients, newRecipients, callback) {
+/**
+ * edits the occasion of concern
+ *
+ * @param {String} occasionId the id of the occasion in concern
+ * @param {String} occasionTitle the updated title of the occasion 
+ * @param {String} occasionDescription the updated description of the occasion
+ * @param {String} occasionCoverPhoto the updated url to the cover photo of the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
+occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
   var self = this;
   self.getOccasion(occasionId, function (err, occasion) {
     if (err) {
@@ -234,32 +287,6 @@ occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occas
           callback(er);
         } else {
           callback(null);
-
-          // occasion.removeParticipants(removeParticipants, function (e) {
-          //   if (e) {
-          //     callback(e);
-          //   } else {
-          //     occasion.addParticipants(newParticipants, function (error) {
-          //       if (error) {
-          //         callback(error);
-          //       } else {
-          //         occasion.removeRecipients(removeRecipients, function (error1) {
-          //           if (error1) {
-          //             callback(error1);
-          //           } else {
-          //             occasion.addRecipients(newRecipients, function (error2) {
-          //               if (error2) {
-          //                 callback(error2);
-          //               } else {
-          //                 callback(null);
-          //               }
-          //             });
-          //           }
-          //         });
-          //       }
-          //     });
-          //   }
-          // });
         }
       });
 
@@ -267,6 +294,15 @@ occasionSchema.statics.editOccasion = function (occasionId, occasionTitle, occas
   });
 }
 
+/**
+ * edits the occasion of concern
+ *
+ * @param {String} occasionTitle the updated title of the occasion 
+ * @param {String} occasionDescription the updated description of the occasion
+ * @param {String} occasionCoverPhoto the updated url to the cover photo of the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.editOccasionDetails = function (occasionTitle, occasionDescription, occasionCoverPhoto, callback) {
   this.title = occasionTitle;
   this.description = occasionDescription;
@@ -275,14 +311,13 @@ occasionSchema.methods.editOccasionDetails = function (occasionTitle, occasionDe
   callback(null);
 }
 
-// add people
-occasionSchema.methods.addParticipant = function (userId, callback) {
-  this.participants.push(userId);
-  this.save();
-  console.log(this.participants);
-  callback(null);
-}
-
+/**
+ * adds a list of users as participants to an occasion
+ *
+ * @param {Array} userIds a list of user ids for the participants to be added
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.addParticipants = function (userIds, callback) {
   var self = this;
   userIds.forEach(function (userId) {
@@ -292,28 +327,13 @@ occasionSchema.methods.addParticipants = function (userIds, callback) {
   callback(null);
 }
 
-occasionSchema.methods.removeAllParticipants = function (callback) {
-  var self = this;
-  self.participants = [];
-  self.save();
-  callback(null);
-}
-
-occasionSchema.methods.removeParticipants = function (userIds, callback) {
-  var self = this;
-  self.participants = self.participants.filter(function (userId, index, arr) {
-    return arr.indexOf(userId) >= 0;
-  });
-  self.save();
-  callback(null);
-}
-
-occasionSchema.methods.addRecipient = function (userId, callback) {
-  this.recipients.push(userId);
-  this.save();
-  callback(null);
-}
-
+/**
+ * adds a list of users as recipients to an occasion
+ *
+ * @param {Array} userIds a list of user ids for the recipients to be added
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.addRecipients = function (userIds, callback) {
   var self = this;
   userIds.forEach(function (userId) {
@@ -323,28 +343,16 @@ occasionSchema.methods.addRecipients = function (userIds, callback) {
   callback(null);
 }
 
-occasionSchema.methods.removeRecipients = function (userIds, callback) {
-  var self = this;
-  self.recipients = self.recipients.filter(function (userId, index, arr) {
-    return arr.indexOf(userId) >= 0;
-  });
-  self.save();
-  callback(null);
-}
-
-occasionSchema.methods.removeAllRecipients = function (callback) {
-  var self = this;
-  self.recipients = [];
-  self.save();
-  callback(null);
-}
-
-
-// checks if is authorized to view
+/**
+ * returns true if the user is a participant of this occasion
+ *
+ * @param {String} userId the id of the user viewing the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.isParticipant = function (userId, callback) {
   var self = this;
-  // console.log('userId: ',userId);
-  // console.log('participants: ',self.participants);
+
   var strs = self.participants.filter(function (id) {
     console.log('id: ',id._id);
     return id._id.equals(userId);
@@ -352,10 +360,15 @@ occasionSchema.methods.isParticipant = function (userId, callback) {
   callback(null, strs.length >= 1);
 }
 
+/**
+ * returns true if the user is a recipient of this occasion
+ *
+ * @param {String} userId the id of the user viewing the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.isRecipient = function (userId, callback) {
   var self = this;
-  console.log('userId: ',userId);
-  console.log('recipients: ',self.recipients);
   var strs = self.recipients.filter(function (id) {
     console.log('id: ',id);
     return id.equals(userId);
@@ -363,15 +376,28 @@ occasionSchema.methods.isRecipient = function (userId, callback) {
   callback(null, strs.length >= 1);
 }
 
+/**
+ * returns true if the user is the creator of the occasion
+ *
+ * @param {String} userId the id of the user viewing the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.isCreator = function (userId, callback) {
   var self = this;
   callback(null, self.creator.equals(userId));
 }
 
+/**
+ * returns true if the user is a creator of or a prticipant in this occasion
+ *
+ * @param {String} userId the id of the user viewing the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
   var self = this;
   self.isParticipant(userId, function (err, isParticipant) {
-    console.log(isParticipant);
     if (isParticipant) {
       callback(null, true);
     } else {
@@ -388,6 +414,15 @@ occasionSchema.methods.isParticipantOrCreator = function (userId, callback) {
   });
 }
 
+/**
+ * returns true if the user has permission to view the occasion
+ * this method checks whether the occasion is public or not pre 
+ * and post publishing and assgins permissions accordingly
+ *
+ * @param {String} userId the id of the user viewing the occasion
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.canView = function (userId, callback) {
   var self = this;
 
@@ -396,7 +431,6 @@ occasionSchema.methods.canView = function (userId, callback) {
       callback(null, true);
     } else {
       if (self.isPublished()) {
-        console.log('ispublished');
         if (self.recipientIsPublic) {
           callback(null, true);
         } else {
@@ -405,12 +439,10 @@ occasionSchema.methods.canView = function (userId, callback) {
           });
         }
       } else {
-        console.log('notpublished');
         if (self.participantIsPublic) {
           callback(null, true);
         } else {
           self.isParticipant(userId, function (er, isParticipant) {
-            console.log('isparticipant ' + isParticipant);
             callback(null, isParticipant);
           });
         }
@@ -434,7 +466,13 @@ occasionSchema.methods.canView = function (userId, callback) {
 
 
 
-// add thought
+/**
+ * adds a thought to the occasion's list of thoughts
+ *
+ * @param {String} thoughtId the id of the thought to be added 
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.addThought = function (thoughtId, callback) {
   if (this.isPublished()) {
     callback({code: 403, msg: "Occasion already published."})
@@ -445,6 +483,13 @@ occasionSchema.methods.addThought = function (thoughtId, callback) {
   }
 }
 
+/**
+ * soft deletes a thought from an occasion's list of thoughts
+ *
+ * @param {String} thoughtId the id of the thought to be added 
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.removeThought = function (thoughtId, callback) {
   if (this.isPublished()) {
     callback({code: 403, msg: "Occasion already published."})
@@ -458,12 +503,15 @@ occasionSchema.methods.removeThought = function (thoughtId, callback) {
   }
 }
 
+/**
+ * returns true if the occasion is published
+ *
+ * @param {function} callback a function to be called at the end of the query
+ *
+ */
 occasionSchema.methods.isPublished = function (callback) {
   return Date.now() > this.publishTime;
 }
 
-// When we 'require' this model in another file (e.g. routes),
-// we specify what we are importing form this file via module.exports.
-// Here, we are 'exporting' the mongoose model object created from
-// the specified schema.
+// Exporting the mongoose object to be used elsewhere in the code
 module.exports = mongoose.model("Occasion", occasionSchema);
