@@ -150,7 +150,7 @@ occasionSchema.statics.addOccasionEntry = function (occasionTitle, occasionDescr
                                   callback(err1);
                                 } else {
                                   // then schedule to send email at pubDate
-                                  var newDate = new Date(pubTime);
+                                  var newDate = new Date(pubTime/1000);
                                   schedule.scheduleJob(newDate, function () {
                                     self
                                       .findById(occasion._id)
