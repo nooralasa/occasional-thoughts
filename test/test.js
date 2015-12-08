@@ -132,7 +132,7 @@ describe('User', function () {
     });
   });
 
-  describe('addViewableOccasionId()', function () {
+  describe('addReceivedOccasionId()', function () {
     it("should add an occasion id to the user's list of viewable occasions", function (done) {
       User.findOne({email: 'user1'}, function (err, user1) {
         Occasion.create(

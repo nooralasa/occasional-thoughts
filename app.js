@@ -42,7 +42,6 @@ passport.serializeUser(function (user, done) {
 });
 
 passport.deserializeUser(function (user, done) {
-  // console.log('in deserialize user: ', user);
   done(null, user);
 });
 
@@ -59,7 +58,6 @@ passport.use(new FacebookStrategy({
   },
   function (accessToken, refreshToken, profile, done) {
     process.nextTick(function () {
-      console.log(profile);
       User.findByFbid(profile.id, function (err, user) {
         if (err)
           done(err);
@@ -80,50 +78,8 @@ passport.use(new FacebookStrategy({
 var app = express();
 
 
-//Mandrill Emailing test
-
-
-// var message = {
-//     "html": "<p>Hello. This is Noor emailing you.</p>",
-//     "subject": "Mandrill Emailing works",
-//     "from_email": "nooralasa@gmail.com",
-//     "from_name": "Noor Eddin Amer",
-//     "to": [{
-//             "email": "namer@mit.edu",
-//             "name": "Noor Eddin Amer",
-//             "type": "to"
-//         }],
-//     "headers": {
-//         "Reply-To": "nooralasa@gmail.com"
-//     },
-//     "important": false,
-// };
-// var async = false;
-// var ip_pool = null;
-// var send_at = null;
-// mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function(result) {
-//     console.log(result);
-    
-//     [{
-//             "email": "recipient.email@example.com",
-//             "status": "sent",
-//             "reject_reason": "hard-bounce",
-//             "_id": "abc123abc123abc123abc123abc123"
-//         }]
-    
-// }, function(e) {
-//     // Mandrill returns the error as an object with name and message keys
-//     console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-//     // A mandrill error occurred: Unknown_Subaccount - No subaccount exists with the id 'customer-123'
-// });
-
-
-
-//Test is over
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-// app.engine('html', require('ejs').renderFile)
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -136,29 +92,6 @@ app.use(session({ secret : '6170', resave : true, saveUninitialized : true }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-// Authentication middleware. This function
-// is called on _every_ request and populates
-// the req.currentUser field with the logged-in
-// user object based off the username provided
-// in the session variable (accessed by the
-// encrypted cookied).
-
-// app.use(function (req, res, next) {
-//   if (req.session.passport/*.username*/) {
-//     console.log(req.session);
-//     User.findByEmail(req.session.username, function (err, user) {
-//       if (user) {
-//         req.currentUser = user;
-//       } else {
-//         req.session.destroy();
-//       }
-//       next();
-//     });
-//   } else {
-//     next();
-//   }
-// });
 
 // Map paths to imported route handlers
 app.use('/', index);

@@ -1,10 +1,6 @@
 <!-- Adds thought list items on an occasion page -->
 <!-- @author: Suniyya --> 
 
-<!--CSS -->
-<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.theme.css" type="text/css" />
-<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.base.css" type="text/css" />
-
 <!--Modal to enable editing of a thought -->
 <% include editThought.ejs %>
 <div class="col-md-8 col-md-offset-2">
@@ -70,17 +66,19 @@
 
               <!--Participant profile picture -->
               <img class="thoughtProfilePicture" src="<%=occasion.thoughts[i].creator.profilePicture%>">
-              <h3 align="left"><%=occasion.thoughts[i].creator.name %></h3>
+              <p class="username" align="left"><%=occasion.thoughts[i].creator.name %></h3>
             </div>
             <div class="col-xs-12">
               <!-- Participant Message -->
-              <p class="thoughtMessage" id="message_<%=occasion.thoughts[i]._id%>" align= "left" > <%=occasion.thoughts[i].message%></p>
+              <p class="thoughtMessage" id="message_<%=occasion.thoughts[i]._id%>" align= "left"><%=occasion.thoughts[i].message%></p>
             </div>
             <!-- Picture associated with thought -->
             <div class="thoughtPhotoDiv col-xs-12">
               <% if (occasion.thoughts[i].photo){ %>
-                <img class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
-              <% }%>
+                <img id="thoughtPhoto_<%=occasion.thoughts[i]._id%>" class="thoughtPhoto" src="<%=occasion.thoughts[i].photo%>">
+              <% } else { %>
+                <img id="thoughtPhoto_<%=occasion.thoughts[i]._id%>" class="thoughtPhoto" src="">
+              <% } %>
             </div>
             <!--Selectively displayes delete and edit icons next to each thought -->
             

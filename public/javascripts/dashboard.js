@@ -97,7 +97,7 @@ $(function () {
         $('#copy-link').val('http://occasionalthoughts.herokuapp.com/occasions/'+occasionId);
       }); 
     }).fail(function () {
-      alert('failed yo');
+      alert('AJAX failed.');
     });
 
     if(partCheckedButton==1){

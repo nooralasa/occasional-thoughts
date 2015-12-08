@@ -13,3 +13,7 @@
   background: transparent;
   border: transparent;
 }
+
+.navbar-header {
+  margin-top: 10px;
+}

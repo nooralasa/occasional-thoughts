@@ -1,10 +1,6 @@
 <!-- Adds occasion list items to the Occasions page-->
 <!-- @author:Suniyya-->
 
-<!--CSS -->
-<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.theme.css" type="text/css" />
-<link rel="stylesheet" href="http://jquery-ui.googlecode.com/svn/tags/latest/themes/base/jquery.ui.base.css" type="text/css" />
-
 <!--Javascript methods-->
 <script src="/javascripts/dashboard.js"></script>
 <script src="assets/js/scripts.js"></script>
@@ -13,35 +9,37 @@
 <% include editOccasion.ejs %>
 
 <div class="row">
-  <div class="col-md-8 col-md-offset-2 createdOccasions">
+  <div class="col-md-8 col-md-offset-2 createdOccasions ">
     <p class="intro-text"><%=user.name%>'s Occasions</p>
     <!--Occasions created by user -->
     <% var numCreatedOccasions = user.createdOccasions.length;  %>
     <% if (numCreatedOccasions>0){ %>
-    <ul id="occasions">
-      <% for (var i=0; i< numCreatedOccasions; i++) { %>
-      <a href="/occasions/<%=user.createdOccasions[i]._id%>">
-        <li class="li_occasion" id="<%=user.createdOccasions[i]._id%>">
-          <% if (!user.createdOccasions[i].coverPhoto){ %>
+    <div class="occasionsPanel panel panel-default">
+      <ul class="occasionUl">
+        <% for (var i=0; i< numCreatedOccasions; i++) { %>
+        <a href="/occasions/<%=user.createdOccasions[i]._id%>">
+          <li class="li_occasion panel panel-default" id="<%=user.createdOccasions[i]._id%>">
+            <% if (!user.createdOccasions[i].coverPhoto){ %>
 
-          <!--Occasion cover photo (placeholder image if cover not present) -->
-            <img src="http://lorempixum.com/100/100/nature/4" />
-          <% } else { %>
-            <img src="<%=user.createdOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
-          <% } %>
-          
-          <h3><%=user.createdOccasions[i].title%></h3>
-          <p align= "left" ><%=user.createdOccasions[i].description%> </p>
-          <div class="delete-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-trash"></span>
-          </div>
-          <div class="edit-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
-            <span class="ui-icon ui-icon-pencil"></span>
-          </div>
-        </li> 
-      </a>
-      <% } %>
-    </ul>
+            <!--Occasion cover photo (placeholder image if cover not present) -->
+              <img src="http://i.imgur.com/DH7hlPK.jpg" class="occasion-thumbnail"/>
+            <% } else { %>
+              <img src="<%=user.createdOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
+            <% } %>
+            
+            <h3><%=user.createdOccasions[i].title%></h3>
+            <p align= "left" ><%=user.createdOccasions[i].description%> </p>
+            <div class="delete-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+              <span class="ui-icon ui-icon-trash"></span>
+            </div>
+            <div class="edit-occasion ui-state-default ui-corner-all" title=".ui-icon-carat-1-n">
+              <span class="ui-icon ui-icon-pencil"></span>
+            </div>
+          </li> 
+        </a>
+        <% } %>
+      </ul>
+    </div>
     <% } %>
   </div>
 
@@ -50,24 +48,26 @@
   <% if (numParticipatedOccasions>0){ %>
     <div class="col-md-8 col-md-offset-2 intermediateOccasions">
       <p class="intro-text">Occations I Contributed to</p>
-      <ul id="occasions">
-        <% for (var i=0; i< numParticipatedOccasions; i++) { %>
-        <a href="/occasions/<%=user.participatedOccasions[i]._id%>">
-          <li class="li_occasion" style = "position:relative" id="<%=user.participatedOccasions[i]._id%>">
-            <% if (!user.participatedOccasions[i].coverPhoto){ %>
+      <div class="occasionsPanel panel panel-default">
+        <ul class="occasionUl">
+          <% for (var i=0; i< numParticipatedOccasions; i++) { %>
+          <a href="/occasions/<%=user.participatedOccasions[i]._id%>">
+            <li class="li_occasion panel panel-default" style = "position:relative" id="<%=user.participatedOccasions[i]._id%>">
+              <% if (!user.participatedOccasions[i].coverPhoto){ %>
 
-            <!--Occasion cover photo/ placeholder thumbnail -->
-              <img src="http://lorempixum.com/100/100/nature/4" />
-            <% } else { %>
-              <img src="<%=user.participatedOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
-            <% } %>
-           
-            <h3><%=user.participatedOccasions[i].title%></h3>
-            <p align= "left" ><%=user.participatedOccasions[i].description%> </p>
-          </li> 
-        </a>
-        <% } %>
-      </ul>
+              <!--Occasion cover photo/ placeholder thumbnail -->
+                <img src="http://i.imgur.com/DH7hlPK.jpg" class="occasion-thumbnail"/>
+              <% } else { %>
+                <img src="<%=user.participatedOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
+              <% } %>
+             
+              <h3><%=user.participatedOccasions[i].title%></h3>
+              <p align= "left" ><%=user.participatedOccasions[i].description%> </p>
+            </li> 
+          </a>
+          <% } %>
+        </ul>
+      </div>
     </div>
   <% } %>
 
@@ -76,24 +76,26 @@
   <% if (numReceivedOccasions>0){ %>
     <div class="col-md-8 col-md-offset-2 intermediateOccasions">
       <p class="intro-text">Collages Sent to Me</p>
-      <ul id="occasions">
-        <% for (var i=0; i< numReceivedOccasions; i++) { %>
-        <a href="/occasions/<%=user.receivedOccasions[i]._id%>">
-          <li class="li_occasion" style = "position:relative" id="<%=user.receivedOccasions[i]._id%>">
-            <% if (!user.receivedOccasions[i].coverPhoto){ %>
+      <div class="occasionsPanel panel panel-default">
+        <ul class="occasionUl">
+          <% for (var i=0; i< numReceivedOccasions; i++) { %>
+          <a href="/occasions/<%=user.receivedOccasions[i]._id%>">
+            <li class="li_occasion panel panel-default" style = "position:relative" id="<%=user.receivedOccasions[i]._id%>">
+              <% if (!user.receivedOccasions[i].coverPhoto){ %>
 
-            <!--Occasion cover photo/ placeholder thumbnail -->
-              <img src="http://lorempixum.com/100/100/nature/4" />
-            <% } else { %>
-              <img src="<%=user.receivedOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
-            <% } %>
+              <!--Occasion cover photo/ placeholder thumbnail -->
+                <img src="http://i.imgur.com/DH7hlPK.jpg" class="occasion-thumbnail"/>
+              <% } else { %>
+                <img src="<%=user.receivedOccasions[i].coverPhoto%>" class="occasion-thumbnail"/>
+              <% } %>
 
-            <h3><%=user.receivedOccasions[i].title%></h3>
-            <p align= "left" ><%=user.receivedOccasions[i].description%> </p>
-          </li> 
-        </a>
-        <% } %>
-      </ul>
+              <h3><%=user.receivedOccasions[i].title%></h3>
+              <p align= "left" ><%=user.receivedOccasions[i].description%> </p>
+            </li> 
+          </a>
+          <% } %>
+        </ul>
+      </div>
     </div>
   <% } %>
 </div>

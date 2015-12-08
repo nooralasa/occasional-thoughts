@@ -2,61 +2,64 @@
 <!-- Displays thoughts by participants in a single occasion. Depending on whether or not it is published the page will or will not contain a text box for a participant to enter their thoughts in -->
 
 <html lang="en">
+  <head>
+    <!--Including common dependencies -->
+    <% include partials/header.ejs %> 
 
-<head>
-  <!--Including common dependencies -->
-  <% include partials/header.ejs %> 
+    <script src="/javascripts/occasion.js"></script>
+    <link href="/stylesheets/occasion.css" rel="stylesheet" type="text/css">
+    <link href="/stylesheets/dashboard.css" rel="stylesheet" type="text/css">
 
-  <!--CSS-->
-  <link href="/stylesheets/occasion.css" rel="stylesheet" type="text/css">
-  <script src="/javascripts/occasion.js"></script>
 
-</head>
+  </head>
 
-<body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
-  <!-- Including navigation bar at the top of the page -->
-  <% include partials/nav_occasions.ejs %>
-  
-  <!-- Intro Header -->
-  <header class="intro"> 
-    <div class="intro-body">
+  <body id="page-top" data-spy="scroll" data-target=".navbar-fixed-top">
+    <!-- Including navigation bar at the top of the page -->
+    <% include partials/nav_occasions.ejs %>
+    
+    <!-- Intro Header -->
+    <div class="intro"> 
+      <div class="intro-body">
 
-      <div  class="container">
-        <div class="row">
+        <div class="container">
+          <div class="row">
 
-          <div class = "coverPhoto panel panel-default">
-            <div class = "panel-body">
-              <div class="col-xs-12">
-                <p class=""><%=occasion.title%></p>
-              </div>
-              <div class="col-xs-12">
-                <%if (occasion.coverPhoto) {%>
-                  <img class = "coverPicture" src= <%= occasion.coverPhoto%>>
-                <% } else { %>
-                  <img class = "coverPicture" src = "http://coverjunction.s3.amazonaws.com/2011/304/9198f9d5-4d65-4bd7-b5ff-85e1d22a01bd.jpg" >
-                <%}%>
+            <div class = "coverPhoto panel panel-default">
+              <div class = "panel-body">
+                <div class="col-xs-12">
+                  <h3 class=""><%=occasion.title%></p>
+                </div>
+                <div class="col-xs-12">
+                  <%if (occasion.coverPhoto) {%>
+                    <img class = "coverPicture" src= <%= occasion.coverPhoto%>>
+                  <% } else { %>
+                    <img class="coverPicture" src="http://i.imgur.com/DH7hlPK.jpg" >
+                  <%}%>
+                </div>
+                <div class="col-xs-12">
+                  <p class="occasionDescription"><%=occasion.description%></p>
+                </div>
               </div>
             </div>
+
           </div>
-
         </div>
-      </div>
 
-      <div  class="container">
-        <div class="row">
-          <!--Inserting thought elements -->
-          <% include partials/thoughtListing.ejs %> 
+        <div  class="container">
+          <div class="row">
+            <!--Inserting thought elements -->
+            <% include partials/thoughtListing.ejs %> 
 
+          </div>
         </div>
       </div>
     </div>
-  </header>
-  
-  <!-- Bootstrap Theme JavaScript -->
-  <script src="/bootstrap/js/grayscale.js"></script>
-  <% include partials/footer.ejs %>
+    
+    <!-- Bootstrap Theme JavaScript -->
+    <script src="/bootstrap/js/grayscale.js"></script>
+    <% include partials/footer.ejs %>
 
-</body>
+  </body>
 
 </html>
 

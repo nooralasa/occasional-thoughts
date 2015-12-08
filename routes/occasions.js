@@ -20,7 +20,6 @@ var requireViewPermission = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     req.occasion.canView(req.session.passport.user.id, function (err, canView) {
-      console.log('canview ' + canView);
       if (canView) {
         next();
       } else {
@@ -35,7 +34,6 @@ var requireParticipationPermission = function (req, res, next) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
   } else {
     if (req.occasion.isPublished()) {
-      console.log('participant 404 - event published');
       res.render('404');
     } else {
       if (req.occasion.participantIsPublic) {
@@ -45,7 +43,6 @@ var requireParticipationPermission = function (req, res, next) {
           if (canView) {
             next();
           } else {
-            console.log('participant 404');
             res.render('404');
           }
         });
@@ -59,7 +56,6 @@ var requireOccasionOwnership = function (req, res, next) {
     if (isCreator) {
       next();
     } else {
-      console.log('occ own 404');
       res.render('404');
     }
   });
@@ -70,7 +66,6 @@ var requireThoughtOwnership = function (req, res, next) {
     if (isCreator) {
       next();
     } else {
-      console.log('thought own 404')
       res.render('404');
     }
   });
@@ -85,7 +80,6 @@ var requireThoughtOwnershipOrOccasionCreator = function (req, res, next) {
         if (isCreator) {
           next();
         } else {
-          console.log('thought own 404')
           res.render('404');
         }
       });

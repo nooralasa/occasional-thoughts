@@ -23,8 +23,8 @@ span.ui-icon {
 }
 
 .occasion-thumbnail{
-  max-width: 100px;
-  max-height: 100px;
+  width: 150px;
+  height: 100px;
 }
 
 .ui-corner-all:hover {
@@ -48,11 +48,11 @@ span.ui-icon {
   height:20px;
 }
 
-#occasions{
-  background-color: #ddd;
+.occasionsPanel{
+  background-color: rgba(255,255,255,.5);
   padding: 10px;
   list-style-type: none;
-  width: 600px;
+  min-width: 600px;
   margin:auto;
 }
 
@@ -71,6 +71,7 @@ h3 {
 }
 
 .li_occasion {
+  list-style-type: none;
   padding: 0px;
   overflow: auto;
   margin: 10px;
@@ -84,6 +85,11 @@ h3 {
 .li_occasion:hover {
   background: #eee;
   cursor: pointer;
+}
+
+.occasionUl {
+  list-style-type: none;
+  padding-left: 0;
 }
 
 h3{

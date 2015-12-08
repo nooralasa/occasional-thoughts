@@ -12,3 +12,7 @@ label {
 .btn-lg{
 	margin:10px;
 }
+
+.nav a {
+  font-size: 14px;
+}

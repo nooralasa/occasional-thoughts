@@ -14,7 +14,7 @@ $(window).load(function(){
 
 $(document).on('click', '#add-thought', function(evt) {
   evt.preventDefault();
-  var message = document.getElementById('thought-message').value;
+  var message = $('#thought-message').val();
   $('#thought-message').val('');
   var id = $("input[name=occasionId]").val();
   var name = $("input[name=userName]").val();
@@ -69,15 +69,13 @@ $(document).on('click', '.edit-thought', function(evt) {
   evt.preventDefault();
   var occasion_id = $("input[name=occasionId]").val();
   var thought_id = $(this).parent().parent().attr('id');
-  if ($('#photo_'+thought_id).attr('src')!= undefined){
-    var lastUrl = $('#photo_'+thought_id).attr('src');  
-  } else lastUrl = "";
   
   var modal = document.getElementById('editThoughtModal');
 
   $('#editThoughtModal').modal('show')
-  document.getElementById("edited-thought").value =  $('#message_'+thought_id).text();
-  document.getElementById("editUrl").value = lastUrl;
+  $("#edited-thought").val($('#message_'+thought_id).text());
+  $("#editUrl").val($('#thoughtPhoto_'+thought_id).attr('src'));
+
   $('input[name="edit-thought-id"]').val(thought_id);
   $('input[name="occasion-id"]').val(occasion_id);
 });
@@ -86,10 +84,10 @@ $(document).on('click', '#done-edit-thought', function(evt){
   evt.preventDefault();
   var thought_id = $('input[name="edit-thought-id"]').val();
   var occasion_id = $('input[name="occasion-id"]').val();
-  var editedMessage = document.getElementById("edited-thought").value;
-  var editedThoughtPhoto = document.getElementById("editUrl").value;
+  var editedMessage = $("#edited-thought").val();
+  var editedThoughtPhoto = $("#editUrl").val();
 
-  $.post("/occasions/"+ occasion_id+"/thoughts/" +thought_id, 
+  $.post("/occasions/"+ occasion_id+"/thoughts/"+thought_id, 
     {message: editedMessage, 
     photo: editedThoughtPhoto,
     isPublic: true}
@@ -97,7 +95,7 @@ $(document).on('click', '#done-edit-thought', function(evt){
     $('#editThoughtModal').modal('hide');
     $('#message_'+thought_id).text(editedMessage);
     $('#photo_'+thought_id).attr('src', editedThoughtPhoto);
-
+    window.location.reload();
   }).fail(function(responseObject){
     var response = $.parseJSON(responseObject.responseText);
     $('.error').text(response.err);

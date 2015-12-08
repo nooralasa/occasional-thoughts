@@ -215,7 +215,6 @@ occasionSchema.statics.populateOccasion = function (occasionId, userId, callback
             return thought.creator.equals(userId);
           });
         }
-        console.log(occasion);
         callback(null, occasion);
       } else {
         callback({code: 404, msg: 'Resource not found.'});
@@ -353,9 +352,8 @@ occasionSchema.methods.addRecipients = function (userIds, callback) {
 occasionSchema.methods.isParticipant = function (userId, callback) {
   var self = this;
 
-  var strs = self.participants.filter(function (id) {
-    console.log('id: ',id._id);
-    return id._id.equals(userId);
+  var strs = self.participants.filter(function (participant) {
+    return participant._id.equals(userId);
   });
   callback(null, strs.length >= 1);
 }
@@ -370,7 +368,6 @@ occasionSchema.methods.isParticipant = function (userId, callback) {
 occasionSchema.methods.isRecipient = function (userId, callback) {
   var self = this;
   var strs = self.recipients.filter(function (id) {
-    console.log('id: ',id);
     return id.equals(userId);
   });
   callback(null, strs.length >= 1);

@@ -39,14 +39,10 @@ var email = (function () {
     var async = false;
     var ip_pool = null;
     var send_at = null;
-
-    console.log(message);
     
     mandrill_client.messages.send({"message": message, "async": async, "ip_pool": ip_pool, "send_at": send_at}, function (result) {
-    	console.log(result);
       callback(null, result);
     }, function (e) {
-    	console.log(e);
       callback(e);
     });
   };
